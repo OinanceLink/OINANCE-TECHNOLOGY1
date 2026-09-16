@@ -22,6 +22,13 @@ const supabaseClient =
 
 
 /* =========================
+   NEWS STORAGE
+========================= */
+
+let allNewsArticles = [];
+
+
+/* =========================
    PAGE START
 ========================= */
 
@@ -33,9 +40,11 @@ document.addEventListener(
 
     updateYear();
 
-    loadNews();
+    setupNewsCategories();
 
     setupNewsletter();
+
+    loadNews();
 
   }
 );
@@ -171,8 +180,6 @@ async function loadNews() {
           }
         );
 
-     allNewsArticles = data || [];
-
 
     if (error) {
 
@@ -186,41 +193,19 @@ async function loadNews() {
     }
 
 
+    allNewsArticles =
+      data || [];
+
+
     /* =========================
        NO ARTICLES
     ========================= */
 
     if (
-      !data ||
-      data.length === 0
+      !allNewsArticles.length
     ) {
 
-      newsGrid.innerHTML = `
-
-        <article class="news-placeholder">
-
-          <div class="placeholder-image"></div>
-
-          <div class="placeholder-content">
-
-            <span>
-              OINANCE NEWS
-            </span>
-
-            <h3>
-              OINANCE News is coming soon.
-            </h3>
-
-            <p>
-              Articles published through the
-              OINANCE Dashboard will appear here.
-            </p>
-
-          </div>
-
-        </article>
-
-      `;
+      showNoArticles();
 
       return;
 
@@ -228,166 +213,10 @@ async function loadNews() {
 
 
     /* =========================
-       DISPLAY ARTICLES
+       SHOW ALL ARTICLES
     ========================= */
 
-    newsGrid.innerHTML = "";
-
-
-    data.forEach(
-      function (article) {
-
-        const card =
-          document.createElement(
-            "article"
-          );
-
-
-        card.className =
-          "news-card";
-
-
-        card.style.cursor =
-          "pointer";
-
-
-        /* =========================
-           OPEN FULL ARTICLE
-        ========================= */
-
-        card.addEventListener(
-          "click",
-          function () {
-
-            window.location.href =
-              "article.html?id=" +
-              encodeURIComponent(
-                article.id
-              );
-
-          }
-        );
-
-
-        /* =========================
-           IMAGE
-        ========================= */
-
-        const image =
-          article.image_url
-
-            ? `
-              <img
-                src="${escapeHTML(
-                  article.image_url
-                )}"
-                alt="${escapeHTML(
-                  article.title
-                )}"
-                class="news-image"
-              >
-            `
-
-            : `
-              <div
-                class="placeholder-image"
-              ></div>
-            `;
-
-
-        /* =========================
-           DATE
-        ========================= */
-
-        const date =
-          new Date(
-            article.created_at
-          ).toLocaleDateString(
-            "en-US",
-            {
-              year: "numeric",
-              month: "long",
-              day: "numeric"
-            }
-          );
-
-
-        /* =========================
-           ARTICLE CARD
-        ========================= */
-
-        card.innerHTML = `
-
-          ${image}
-
-          <div class="news-content">
-
-            <span class="news-category">
-
-              ${escapeHTML(
-                article.category ||
-                "OINANCE NEWS"
-              )}
-
-            </span>
-
-
-            <h3>
-
-              ${escapeHTML(
-                article.title
-              )}
-
-            </h3>
-
-
-            <p>
-
-              ${escapeHTML(
-                article.story
-              )}
-
-            </p>
-
-
-            <div class="news-meta">
-
-              <span>
-
-                ${escapeHTML(
-                  article.author ||
-                  "OINANCE Editorial"
-                )}
-
-              </span>
-
-
-              <span>
-
-                ${date}
-
-              </span>
-
-            </div>
-
-
-            <div class="news-read-more">
-
-              Read Full Article →
-
-            </div>
-
-          </div>
-
-        `;
-
-
-        newsGrid.appendChild(
-          card
-        );
-
-      }
-    );
+    displayNewsByCategory("All");
 
 
   } catch (error) {
@@ -398,6 +227,393 @@ async function loadNews() {
     );
 
   }
+
+}
+
+
+/* =========================
+   NO ARTICLES MESSAGE
+========================= */
+
+function showNoArticles() {
+
+  const newsGrid =
+    document.getElementById(
+      "newsGrid"
+    );
+
+
+  if (!newsGrid) {
+    return;
+  }
+
+
+  newsGrid.innerHTML = `
+
+    <article class="news-placeholder">
+
+      <div class="placeholder-image"></div>
+
+      <div class="placeholder-content">
+
+        <span>
+          OINANCE NEWS
+        </span>
+
+        <h3>
+          OINANCE News is coming soon.
+        </h3>
+
+        <p>
+          Articles published through the
+          OINANCE Dashboard will appear here.
+        </p>
+
+      </div>
+
+    </article>
+
+  `;
+
+}
+
+
+/* =========================
+   NEWS CATEGORY FILTER
+========================= */
+
+function setupNewsCategories() {
+
+  const categoryButtons =
+    document.querySelectorAll(
+      ".category-button"
+    );
+
+
+  if (!categoryButtons.length) {
+    return;
+  }
+
+
+  categoryButtons.forEach(
+    function (button) {
+
+      button.addEventListener(
+        "click",
+        function () {
+
+          const selectedCategory =
+            button.getAttribute(
+              "data-category"
+            );
+
+
+          categoryButtons.forEach(
+            function (btn) {
+
+              btn.classList.remove(
+                "active"
+              );
+
+            }
+          );
+
+
+          button.classList.add(
+            "active"
+          );
+
+
+          displayNewsByCategory(
+            selectedCategory
+          );
+
+        }
+      );
+
+    }
+  );
+
+}
+
+
+/* =========================
+   DISPLAY NEWS BY CATEGORY
+========================= */
+
+function displayNewsByCategory(
+  category
+) {
+
+  const newsGrid =
+    document.getElementById(
+      "newsGrid"
+    );
+
+
+  if (!newsGrid) {
+    return;
+  }
+
+
+  let filteredArticles;
+
+
+  if (
+    category === "All"
+  ) {
+
+    filteredArticles =
+      allNewsArticles;
+
+  } else {
+
+    filteredArticles =
+      allNewsArticles.filter(
+        function (article) {
+
+          return (
+            (article.category || "")
+              .trim()
+              .toLowerCase() ===
+            category
+              .trim()
+              .toLowerCase()
+          );
+
+        }
+      );
+
+  }
+
+
+  newsGrid.innerHTML = "";
+
+
+  /* =========================
+     NO CATEGORY ARTICLES
+  ========================= */
+
+  if (
+    !filteredArticles.length
+  ) {
+
+    newsGrid.innerHTML = `
+
+      <article class="news-placeholder">
+
+        <div class="placeholder-image"></div>
+
+        <div class="placeholder-content">
+
+          <span>
+            OINANCE NEWS
+          </span>
+
+          <h3>
+            No articles in this category yet.
+          </h3>
+
+          <p>
+            Check back soon for new
+            OINANCE News.
+          </p>
+
+        </div>
+
+      </article>
+
+    `;
+
+    return;
+
+  }
+
+
+  /* =========================
+     CREATE NEWS CARDS
+  ========================= */
+
+  filteredArticles.forEach(
+    function (article) {
+
+      createNewsCard(
+        article
+      );
+
+    }
+  );
+
+}
+
+
+/* =========================
+   CREATE NEWS CARD
+========================= */
+
+function createNewsCard(
+  article
+) {
+
+  const newsGrid =
+    document.getElementById(
+      "newsGrid"
+    );
+
+
+  if (!newsGrid) {
+    return;
+  }
+
+
+  const card =
+    document.createElement(
+      "article"
+    );
+
+
+  card.className =
+    "news-card";
+
+
+  card.style.cursor =
+    "pointer";
+
+
+  /* =========================
+     OPEN FULL ARTICLE
+  ========================= */
+
+  card.addEventListener(
+    "click",
+    function () {
+
+      window.location.href =
+        "article.html?id=" +
+        encodeURIComponent(
+          article.id
+        );
+
+    }
+  );
+
+
+  /* =========================
+     IMAGE
+  ========================= */
+
+  const image =
+    article.image_url
+
+      ? `
+        <img
+          src="${escapeHTML(
+            article.image_url
+          )}"
+          alt="${escapeHTML(
+            article.title
+          )}"
+          class="news-image"
+        >
+      `
+
+      : `
+        <div
+          class="placeholder-image"
+        ></div>
+      `;
+
+
+  /* =========================
+     DATE
+  ========================= */
+
+  const date =
+    new Date(
+      article.created_at
+    ).toLocaleDateString(
+      "en-US",
+      {
+        year: "numeric",
+        month: "long",
+        day: "numeric"
+      }
+    );
+
+
+  /* =========================
+     ARTICLE CARD
+  ========================= */
+
+  card.innerHTML = `
+
+    ${image}
+
+    <div class="news-content">
+
+      <span class="news-category">
+
+        ${escapeHTML(
+          article.category ||
+          "OINANCE NEWS"
+        )}
+
+      </span>
+
+
+      <h3>
+
+        ${escapeHTML(
+          article.title
+        )}
+
+      </h3>
+
+
+      <p>
+
+        ${escapeHTML(
+          article.story
+        )}
+
+      </p>
+
+
+      <div class="news-meta">
+
+        <span>
+
+          ${escapeHTML(
+            article.author ||
+            "OINANCE Editorial"
+          )}
+
+        </span>
+
+
+        <span>
+
+          ${date}
+
+        </span>
+
+      </div>
+
+
+      <div class="news-read-more">
+
+        Read Full Article →
+
+      </div>
+
+    </div>
+
+  `;
+
+
+  newsGrid.appendChild(
+    card
+  );
 
 }
 
@@ -503,6 +719,7 @@ function setupNewsletter() {
         newsletterMessage.textContent =
           "You're subscribed to OINANCE News.";
 
+
         newsletterForm.reset();
 
 
@@ -515,7 +732,7 @@ function setupNewsletter() {
 
 
         /* =========================
-           FRIENDLY ERRORS
+           DUPLICATE EMAIL
         ========================= */
 
         if (
@@ -545,7 +762,9 @@ function setupNewsletter() {
    SECURITY
 ========================= */
 
-function escapeHTML(value) {
+function escapeHTML(
+  value
+) {
 
   const div =
     document.createElement(
@@ -559,216 +778,4 @@ function escapeHTML(value) {
 
   return div.innerHTML;
 
-       }
-
-/* =========================
-   OINANCE NEWS CATEGORY FILTER
-========================= */
-
-let allNewsArticles = [];
-
-function setupNewsCategories() {
-
-  const categoryButtons =
-    document.querySelectorAll(".category-button");
-
-  if (!categoryButtons.length) {
-    return;
-  }
-
-  categoryButtons.forEach(function (button) {
-
-    button.addEventListener("click", function () {
-
-      const selectedCategory =
-        button.getAttribute("data-category");
-
-      categoryButtons.forEach(function (btn) {
-        btn.classList.remove("active");
-      });
-
-      button.classList.add("active");
-
-      displayNewsByCategory(selectedCategory);
-
-    });
-
-  });
-
 }
-
-
-function displayNewsByCategory(category) {
-
-  const newsGrid =
-    document.getElementById("newsGrid");
-
-  if (!newsGrid) {
-    return;
-  }
-
-  let filteredArticles;
-
-  if (category === "All") {
-
-    filteredArticles = allNewsArticles;
-
-  } else {
-
-    filteredArticles =
-      allNewsArticles.filter(function (article) {
-
-        return (
-          (article.category || "").toLowerCase() ===
-          category.toLowerCase()
-        );
-
-      });
-
-  }
-
-  newsGrid.innerHTML = "";
-
-  if (!filteredArticles.length) {
-
-    newsGrid.innerHTML = `
-      <article class="news-placeholder">
-
-        <div class="placeholder-image"></div>
-
-        <div class="placeholder-content">
-
-          <span>OINANCE NEWS</span>
-
-          <h3>
-            No articles in this category yet.
-          </h3>
-
-          <p>
-            Check back soon for new OINANCE News.
-          </p>
-
-        </div>
-
-      </article>
-    `;
-
-    return;
-  }
-
-  filteredArticles.forEach(function (article) {
-
-    createNewsCard(article);
-
-  });
-
-}
-
-
-/* =========================
-   NEWS CARD
-========================= */
-
-function createNewsCard(article) {
-
-  const newsGrid =
-    document.getElementById("newsGrid");
-
-  const card =
-    document.createElement("article");
-
-  card.className = "news-card";
-
-  card.style.cursor = "pointer";
-
-  card.addEventListener("click", function () {
-
-    window.location.href =
-      "article.html?id=" +
-      encodeURIComponent(article.id);
-
-  });
-
-  const image =
-    article.image_url
-
-      ? `
-        <img
-          src="${escapeHTML(article.image_url)}"
-          alt="${escapeHTML(article.title)}"
-          class="news-image"
-        >
-      `
-
-      : `
-        <div class="placeholder-image"></div>
-      `;
-
-  const date =
-    new Date(article.created_at)
-      .toLocaleDateString("en-US", {
-        year: "numeric",
-        month: "long",
-        day: "numeric"
-      });
-
-  card.innerHTML = `
-
-    ${image}
-
-    <div class="news-content">
-
-      <span class="news-category">
-        ${escapeHTML(
-          article.category || "OINANCE NEWS"
-        )}
-      </span>
-
-      <h3>
-        ${escapeHTML(article.title)}
-      </h3>
-
-      <p>
-        ${escapeHTML(article.story)}
-      </p>
-
-      <div class="news-meta">
-
-        <span>
-          ${escapeHTML(
-            article.author ||
-            "OINANCE Editorial"
-          )}
-        </span>
-
-        <span>
-          ${date}
-        </span>
-
-      </div>
-
-      <div class="news-read-more">
-        Read Full Article →
-      </div>
-
-    </div>
-
-  `;
-
-  newsGrid.appendChild(card);
-
-}
-
-
-/* =========================
-   START CATEGORY FILTER
-========================= */
-
-document.addEventListener(
-  "DOMContentLoaded",
-  function () {
-
-    setupNewsCategories();
-
-  }
-);

@@ -1237,3 +1237,64 @@ button {
 .product-card:hover {
   transform: translateY(-4px);
 }
+
+/* =========================
+   OINANCE NEWS CATEGORIES
+========================= */
+
+.news-categories {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: 50px;
+  margin-bottom: 35px;
+  padding: 0;
+}
+
+.category-button {
+  width: auto;
+  margin: 0;
+  padding: 9px 16px;
+  border: 1px solid #333333;
+  border-radius: 999px;
+  background: #111111;
+  color: #ffffff;
+  font-size: 13px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.25s ease;
+}
+
+.category-button:hover {
+  background: #ffffff;
+  color: #000000;
+  border-color: #ffffff;
+  transform: none;
+  box-shadow: none;
+}
+
+.category-button.active {
+  background: #ffffff;
+  color: #000000;
+  border-color: #ffffff;
+}
+
+
+/* =========================
+   MOBILE
+========================= */
+
+@media (max-width: 600px) {
+
+  .news-categories {
+    gap: 8px;
+    margin-top: 45px;
+    margin-bottom: 35px;
+  }
+
+  .category-button {
+    padding: 8px 13px;
+    font-size: 12px;
+  }
+
+}

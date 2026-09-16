@@ -145,12 +145,7 @@ async function loadArticle() {
 
 
     /*
-       New system:
-       image_urls = [
-         "picture 1",
-         "picture 2",
-         "picture 3"
-       ]
+       New multi-image system
     */
 
     if (
@@ -175,10 +170,8 @@ async function loadArticle() {
 
 
     /*
-       Backward compatibility.
-
-       If an older article only has
-       image_url, use it.
+       Support older articles
+       that only have image_url
     */
 
     if (
@@ -230,27 +223,20 @@ async function loadArticle() {
     let storyHTML = "";
 
 
-    /*
-       Put the first part of the article
-       before the additional pictures.
-
-       This makes the article feel more
-       like a real news story.
-    */
-
     paragraphs.forEach(
       function (paragraph, index) {
 
         storyHTML += `
+
           <p>
             ${paragraph}
           </p>
+
         `;
 
 
         /*
-           Picture 2 appears after
-           the first paragraph.
+           Picture 2
         */
 
         if (
@@ -272,8 +258,7 @@ async function loadArticle() {
 
 
         /*
-           Picture 3 appears after
-           the second paragraph.
+           Picture 3
         */
 
         if (

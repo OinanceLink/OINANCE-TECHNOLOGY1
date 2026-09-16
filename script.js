@@ -171,6 +171,8 @@ async function loadNews() {
           }
         );
 
+     allNewsArticles = data || [];
+
 
     if (error) {
 

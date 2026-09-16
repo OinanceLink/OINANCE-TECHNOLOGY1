@@ -1238,63 +1238,92 @@ button {
   transform: translateY(-4px);
 }
 
-/* =========================
-   OINANCE NEWS CATEGORIES
-========================= */
+
+/* =================================
+   OINANCE NEWS CATEGORY NAVIGATION
+================================= */
 
 .news-categories {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 10px;
-  margin-top: 50px;
-  margin-bottom: 35px;
-  padding: 0;
-}
+  display: flex !important;
+  flex-wrap: wrap !important;
+  align-items: center !important;
+  gap: 10px !important;
 
-.category-button {
-  width: auto;
-  margin: 0;
-  padding: 9px 16px;
-  border: 1px solid #333333;
-  border-radius: 999px;
-  background: #111111;
-  color: #ffffff;
-  font-size: 13px;
-  font-weight: 500;
-  cursor: pointer;
-  transition: all 0.25s ease;
-}
+  margin-top: 55px !important;
+  margin-bottom: 45px !important;
 
-.category-button:hover {
-  background: #ffffff;
-  color: #000000;
-  border-color: #ffffff;
-  transform: none;
-  box-shadow: none;
-}
-
-.category-button.active {
-  background: #ffffff;
-  color: #000000;
-  border-color: #ffffff;
+  width: 100% !important;
 }
 
 
-/* =========================
+/* CATEGORY BUTTON */
+
+.news-categories .category-button {
+  width: auto !important;
+  min-width: auto !important;
+
+  margin: 0 !important;
+  padding: 10px 17px !important;
+
+  border: 1px solid #333 !important;
+  border-radius: 999px !important;
+
+  background: #0a0a0a !important;
+  color: #ffffff !important;
+
+  font-family: inherit !important;
+  font-size: 13px !important;
+  font-weight: 500 !important;
+  line-height: 1 !important;
+
+  cursor: pointer !important;
+
+  box-shadow: none !important;
+  transform: none !important;
+
+  transition:
+    background 0.2s ease,
+    color 0.2s ease,
+    border-color 0.2s ease !important;
+}
+
+
+/* ACTIVE CATEGORY */
+
+.news-categories .category-button.active {
+  background: #ffffff !important;
+  color: #000000 !important;
+  border-color: #ffffff !important;
+}
+
+
+/* HOVER */
+
+.news-categories .category-button:hover {
+  background: #ffffff !important;
+  color: #000000 !important;
+  border-color: #ffffff !important;
+
+  transform: none !important;
+  box-shadow: none !important;
+}
+
+
+/* =================================
    MOBILE
-========================= */
+================================= */
 
 @media (max-width: 600px) {
 
   .news-categories {
-    gap: 8px;
-    margin-top: 45px;
-    margin-bottom: 35px;
+    gap: 8px !important;
+    margin-top: 50px !important;
+    margin-bottom: 45px !important;
   }
 
-  .category-button {
-    padding: 8px 13px;
-    font-size: 12px;
+  .news-categories .category-button {
+    padding: 9px 14px !important;
+    font-size: 12px !important;
   }
 
 }

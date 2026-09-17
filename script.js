@@ -1,12 +1,13 @@
-/* =========================
-   OINANCE TECHNOLOGY
+/* ==================================================
+   OINANCE LINK
    MAIN WEBSITE JAVASCRIPT
-========================= */
+   MULTI-IMAGE NEWS SYSTEM
+================================================== */
 
 
-/* =========================
+/* ==================================================
    SUPABASE
-========================= */
+================================================== */
 
 const SUPABASE_URL =
   "https://ohvqwdtvtcqchuwethuw.supabase.co";
@@ -21,16 +22,16 @@ const supabaseClient =
   );
 
 
-/* =========================
+/* ==================================================
    NEWS STORAGE
-========================= */
+================================================== */
 
 let allNewsArticles = [];
 
 
-/* =========================
+/* ==================================================
    PAGE START
-========================= */
+================================================== */
 
 document.addEventListener(
   "DOMContentLoaded",
@@ -46,13 +47,15 @@ document.addEventListener(
 
     loadNews();
 
+    loadFeaturedNews();
+
   }
 );
 
 
-/* =========================
+/* ==================================================
    MOBILE MENU
-========================= */
+================================================== */
 
 function setupMobileMenu() {
 
@@ -117,33 +120,39 @@ function setupMobileMenu() {
 }
 
 
-/* =========================
+/* ==================================================
    CURRENT YEAR
-========================= */
+================================================== */
 
 function updateYear() {
 
-  const year =
-    document.querySelector(
-      ".site-footer p"
+  const footerTexts =
+    document.querySelectorAll(
+      ".footer-bottom p"
     );
 
 
-  if (year) {
+  footerTexts.forEach(
+    function (element, index) {
 
-    year.textContent =
-      "© " +
-      new Date().getFullYear() +
-      " OINANCE. All rights reserved.";
+      if (index === 0) {
 
-  }
+        element.textContent =
+          "© " +
+          new Date().getFullYear() +
+          " OINANCE LINK. All rights reserved.";
+
+      }
+
+    }
+  );
 
 }
 
 
-/* =========================
+/* ==================================================
    LOAD OINANCE NEWS
-========================= */
+================================================== */
 
 async function loadNews() {
 
@@ -167,7 +176,7 @@ async function loadNews() {
       await supabaseClient
         .from("news")
         .select(
-          "id, title, category, author, story, image_url, created_at"
+          "id, title, category, author, story, image_url, image_urls, created_at"
         )
         .eq(
           "published",
@@ -197,10 +206,6 @@ async function loadNews() {
       data || [];
 
 
-    /* =========================
-       NO ARTICLES
-    ========================= */
-
     if (
       !allNewsArticles.length
     ) {
@@ -211,10 +216,6 @@ async function loadNews() {
 
     }
 
-
-    /* =========================
-       SHOW ALL ARTICLES
-    ========================= */
 
     displayNewsByCategory("All");
 
@@ -231,9 +232,91 @@ async function loadNews() {
 }
 
 
-/* =========================
-   NO ARTICLES MESSAGE
-========================= */
+/* ==================================================
+   GET ARTICLE IMAGES
+================================================== */
+
+function getArticleImages(article) {
+
+  let images = [];
+
+
+  /*
+     NEW SYSTEM:
+     image_urls contains
+     1–3 picture URLs
+  */
+
+  if (
+    Array.isArray(
+      article.image_urls
+    )
+  ) {
+
+    images =
+      article.image_urls.filter(
+        function (url) {
+
+          return (
+            typeof url === "string" &&
+            url.trim() !== ""
+          );
+
+        }
+      );
+
+  }
+
+
+  /*
+     BACKWARD COMPATIBILITY:
+     Old articles only have image_url
+  */
+
+  if (
+    !images.length &&
+    article.image_url
+  ) {
+
+    images = [
+      article.image_url
+    ];
+
+  }
+
+
+  /*
+     Make sure old main image
+     is not lost if image_urls
+     exists but does not contain it.
+  */
+
+  if (
+    article.image_url &&
+    !images.includes(
+      article.image_url
+    )
+  ) {
+
+    images.unshift(
+      article.image_url
+    );
+
+  }
+
+
+  /*
+     Maximum 3 pictures
+  */
+
+  return images.slice(0, 3);
+
+}
+
+
+/* ==================================================
+   NO ARTICLES
+================================================== */
 
 function showNoArticles() {
 
@@ -278,9 +361,9 @@ function showNoArticles() {
 }
 
 
-/* =========================
+/* ==================================================
    NEWS CATEGORY FILTER
-========================= */
+================================================== */
 
 function setupNewsCategories() {
 
@@ -337,9 +420,9 @@ function setupNewsCategories() {
 }
 
 
-/* =========================
+/* ==================================================
    DISPLAY NEWS BY CATEGORY
-========================= */
+================================================== */
 
 function displayNewsByCategory(
   category
@@ -390,10 +473,6 @@ function displayNewsByCategory(
   newsGrid.innerHTML = "";
 
 
-  /* =========================
-     NO CATEGORY ARTICLES
-  ========================= */
-
   if (
     !filteredArticles.length
   ) {
@@ -430,10 +509,6 @@ function displayNewsByCategory(
   }
 
 
-  /* =========================
-     CREATE NEWS CARDS
-  ========================= */
-
   filteredArticles.forEach(
     function (article) {
 
@@ -447,9 +522,9 @@ function displayNewsByCategory(
 }
 
 
-/* =========================
+/* ==================================================
    CREATE NEWS CARD
-========================= */
+================================================== */
 
 function createNewsCard(
   article
@@ -480,9 +555,9 @@ function createNewsCard(
     "pointer";
 
 
-  /* =========================
-     OPEN FULL ARTICLE
-  ========================= */
+  /*
+     Open full article
+  */
 
   card.addEventListener(
     "click",
@@ -498,35 +573,72 @@ function createNewsCard(
   );
 
 
-  /* =========================
-     IMAGE
-  ========================= */
+  /* ==================================================
+     ARTICLE IMAGES
+  ================================================== */
 
-  const image =
-    article.image_url
-
-      ? `
-        <img
-          src="${escapeHTML(
-            article.image_url
-          )}"
-          alt="${escapeHTML(
-            article.title
-          )}"
-          class="news-image"
-        >
-      `
-
-      : `
-        <div
-          class="placeholder-image"
-        ></div>
-      `;
+  const images =
+    getArticleImages(
+      article
+    );
 
 
-  /* =========================
+  let imageHTML = "";
+
+
+  if (images.length === 0) {
+
+    imageHTML = `
+
+      <div class="placeholder-image"></div>
+
+    `;
+
+  } else {
+
+    imageHTML = `
+
+      <div class="news-images">
+
+        ${images
+          .map(
+            function (imageUrl, index) {
+
+              return `
+
+                <img
+                  src="${escapeHTML(
+                    imageUrl
+                  )}"
+                  alt="${escapeHTML(
+                    article.title
+                  )} - Picture ${
+                    index + 1
+                  }"
+                  class="news-image ${
+                    index === 0
+                      ? "main-news-image"
+                      : "secondary-news-image"
+                  }"
+                  loading="lazy"
+                >
+
+              `;
+
+            }
+          )
+          .join("")}
+
+      </div>
+
+    `;
+
+  }
+
+
+  /* ==================================================
      DATE
-  ========================= */
+  ================================================== */
 
   const date =
     new Date(
@@ -541,13 +653,14 @@ function createNewsCard(
     );
 
 
-  /* =========================
+  /* ==================================================
      ARTICLE CARD
-  ========================= */
+  ================================================== */
 
   card.innerHTML = `
 
-    ${image}
+    ${imageHTML}
+
 
     <div class="news-content">
 
@@ -618,9 +731,9 @@ function createNewsCard(
 }
 
 
-/* =========================
+/* ==================================================
    NEWSLETTER
-========================= */
+================================================== */
 
 function setupNewsletter() {
 
@@ -682,10 +795,6 @@ function setupNewsletter() {
 
       try {
 
-        /* =========================
-           SAVE SUBSCRIBER
-        ========================= */
-
         const {
           error
         } =
@@ -712,10 +821,6 @@ function setupNewsletter() {
         }
 
 
-        /* =========================
-           SUCCESS
-        ========================= */
-
         newsletterMessage.textContent =
           "You're subscribed to OINANCE News.";
 
@@ -730,10 +835,6 @@ function setupNewsletter() {
           error
         );
 
-
-        /* =========================
-           DUPLICATE EMAIL
-        ========================= */
 
         if (
           error.code ===
@@ -758,53 +859,44 @@ function setupNewsletter() {
 }
 
 
-/* =========================
-   SECURITY
-========================= */
-
-function escapeHTML(
-  value
-) {
-
-  const div =
-    document.createElement(
-      "div"
-    );
-
-
-  div.textContent =
-    value ?? "";
-
-
-  return div.innerHTML;
-
-}
-
-/* =========================
+/* ==================================================
    FEATURED OINANCE NEWS
-========================= */
+================================================== */
 
 async function loadFeaturedNews() {
 
   const featuredNews =
-    document.getElementById("featuredNews");
+    document.getElementById(
+      "featuredNews"
+    );
+
 
   if (!featuredNews) {
     return;
   }
 
+
   try {
 
-    const { data, error } =
+    const {
+      data,
+      error
+    } =
       await supabaseClient
         .from("news")
         .select(
-          "id, title, category, author, story, image_url, created_at"
+          "id, title, category, author, story, image_url, image_urls, created_at"
         )
-        .eq("published", true)
-        .order("created_at", {
-          ascending: false
-        })
+        .eq(
+          "published",
+          true
+        )
+        .order(
+          "created_at",
+          {
+            ascending: false
+          }
+        )
         .limit(1);
 
 
@@ -816,10 +908,14 @@ async function loadFeaturedNews() {
       );
 
       return;
+
     }
 
 
-    if (!data || data.length === 0) {
+    if (
+      !data ||
+      data.length === 0
+    ) {
 
       featuredNews.innerHTML = `
 
@@ -844,25 +940,75 @@ async function loadFeaturedNews() {
       `;
 
       return;
+
     }
 
 
-    const article = data[0];
+    const article =
+      data[0];
 
 
-    const image =
-      article.image_url
+    /* ==================================================
+       FEATURED IMAGES
+    ================================================== */
 
-        ? `
-          <img
-            src="${escapeHTML(article.image_url)}"
-            alt="${escapeHTML(article.title)}"
-            class="featured-image"
-          >
-        `
+    const images =
+      getArticleImages(
+        article
+      );
 
-        : "";
 
+    let imageHTML = "";
+
+
+    if (images.length) {
+
+      imageHTML = `
+
+        <div class="featured-images">
+
+          ${images
+            .map(
+              function (
+                imageUrl,
+                index
+              ) {
+
+                return `
+
+                  <img
+                    src="${escapeHTML(
+                      imageUrl
+                    )}"
+                    alt="${escapeHTML(
+                      article.title
+                    )} - Picture ${
+                      index + 1
+                    }"
+                    class="featured-image ${
+                      index === 0
+                        ? "featured-main-image"
+                        : "featured-secondary-image"
+                    }"
+                    loading="lazy"
+                  >
+
+                `;
+
+              }
+            )
+            .join("")}
+
+        </div>
+
+      `;
+
+    }
+
+
+    /* ==================================================
+       DATE
+    ================================================== */
 
     const date =
       new Date(
@@ -877,14 +1023,20 @@ async function loadFeaturedNews() {
       );
 
 
+    /* ==================================================
+       FEATURED ARTICLE
+    ================================================== */
+
     featuredNews.innerHTML = `
 
       <article
         class="featured-article"
-        onclick="openFeaturedArticle('${encodeURIComponent(article.id)}')"
+        data-article-id="${escapeHTML(
+          article.id
+        )}"
       >
 
-        ${image}
+        ${imageHTML}
 
 
         <div class="featured-content">
@@ -928,6 +1080,7 @@ async function loadFeaturedNews() {
 
             </span>
 
+
             <span>
               ${date}
             </span>
@@ -948,6 +1101,30 @@ async function loadFeaturedNews() {
     `;
 
 
+    const featuredArticle =
+      featuredNews.querySelector(
+        ".featured-article"
+      );
+
+
+    if (featuredArticle) {
+
+      featuredArticle.addEventListener(
+        "click",
+        function () {
+
+          window.location.href =
+            "article.html?id=" +
+            encodeURIComponent(
+              article.id
+            );
+
+        }
+      );
+
+    }
+
+
   } catch (error) {
 
     console.error(
@@ -960,27 +1137,24 @@ async function loadFeaturedNews() {
 }
 
 
-/* =========================
-   OPEN FEATURED ARTICLE
-========================= */
+/* ==================================================
+   SECURITY
+================================================== */
 
-function openFeaturedArticle(id) {
+function escapeHTML(
+  value
+) {
 
-  window.location.href =
-    "article.html?id=" + id;
+  const div =
+    document.createElement(
+      "div"
+    );
+
+
+  div.textContent =
+    value ?? "";
+
+
+  return div.innerHTML;
 
 }
-
-
-/* =========================
-   START FEATURED NEWS
-========================= */
-
-document.addEventListener(
-  "DOMContentLoaded",
-  function () {
-
-    loadFeaturedNews();
-
-  }
-);

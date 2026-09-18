@@ -1,3 +1,1140 @@
+/* ==================================================
+   OINANCE LINK
+   MAIN WEBSITE JAVASCRIPT
+================================================== */
+
+
+/* ==================================================
+   SUPABASE
+================================================== */
+
+const SUPABASE_URL =
+  "https://ohvqwdtvtcqchuwethuw.supabase.co";
+
+const SUPABASE_KEY =
+  "sb_publishable_PRGk5RJCVmUB--1ovLeC0g_qo25F6L3";
+
+const supabaseClient =
+  window.supabase.createClient(
+    SUPABASE_URL,
+    SUPABASE_KEY
+  );
+
+
+/* ==================================================
+   NEWS STORAGE
+================================================== */
+
+let allNewsArticles = [];
+
+
+/* ==================================================
+   MARKET CONFIGURATION
+================================================== */
+
+const MARKET_ASSETS = {
+
+  btc: {
+    id: "bitcoin",
+    chartId: "btcChart",
+    marketPriceId: "marketBtc",
+    marketChangeId: "marketBtcChange",
+    tickerPriceId: "btcPrice",
+    tickerChangeId: "btcChange",
+    statsId: "btcMarketStats"
+  },
+
+  eth: {
+    id: "ethereum",
+    chartId: "ethChart",
+    marketPriceId: "marketEth",
+    marketChangeId: "marketEthChange",
+    tickerPriceId: "ethPrice",
+    tickerChangeId: "ethChange",
+    statsId: "ethMarketStats"
+  },
+
+  sol: {
+    id: "solana",
+    chartId: "solChart",
+    marketPriceId: "marketSol",
+    marketChangeId: "marketSolChange",
+    tickerPriceId: "solPrice",
+    tickerChangeId: "solChange",
+    statsId: "solMarketStats"
+  },
+
+  bnb: {
+    id: "binancecoin",
+    chartId: "bnbChart",
+    marketPriceId: "marketBnb",
+    marketChangeId: "marketBnbChange",
+    tickerPriceId: "bnbPrice",
+    tickerChangeId: "bnbChange",
+    statsId: "bnbMarketStats"
+  }
+
+};
+
+
+/* ==================================================
+   MARKET STATS STYLE
+   Added here so we do not need to change
+   style.css in this step.
+================================================== */
+
+function setupMarketStatsStyle() {
+
+  if (
+    document.getElementById(
+      "oinanceMarketStatsStyle"
+    )
+  ) {
+
+    return;
+
+  }
+
+
+  const style =
+    document.createElement(
+      "style"
+    );
+
+
+  style.id =
+    "oinanceMarketStatsStyle";
+
+
+  style.textContent = `
+
+    .market-stats {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 10px;
+      margin-top: 18px;
+      padding-top: 15px;
+      border-top: 1px solid #292929;
+    }
+
+    .market-stat {
+      min-width: 0;
+    }
+
+    .market-stat-label {
+      display: block;
+      color: #666;
+      font-size: 8px;
+      font-weight: 700;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      margin-bottom: 5px;
+    }
+
+    .market-stat-value {
+      display: block;
+      color: #ddd;
+      font-size: 11px;
+      font-weight: 600;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    @media (max-width: 600px) {
+
+      .market-stats {
+        gap: 7px;
+      }
+
+      .market-stat-label {
+        font-size: 7px;
+        letter-spacing: .7px;
+      }
+
+      .market-stat-value {
+        font-size: 10px;
+      }
+
+    }
+
+  `;
+
+
+  document.head.appendChild(
+    style
+  );
+
+}
+
+
+/* ==================================================
+   PAGE START
+================================================== */
+
+document.addEventListener(
+  "DOMContentLoaded",
+  function () {
+
+    setupMobileMenu();
+
+    updateYear();
+
+    setupNewsCategories();
+
+    setupNewsletter();
+
+    setupMarketStatsStyle();
+
+    loadNews();
+
+    loadFeaturedNews();
+
+    loadMarketData();
+
+  }
+);
+
+
+/* ==================================================
+   MOBILE MENU
+================================================== */
+
+function setupMobileMenu() {
+
+  const menuButton =
+    document.getElementById(
+      "menuButton"
+    );
+
+
+  const mobileMenu =
+    document.getElementById(
+      "mobileMenu"
+    );
+
+
+  if (
+    !menuButton ||
+    !mobileMenu
+  ) {
+
+    return;
+
+  }
+
+
+  menuButton.addEventListener(
+    "click",
+    function () {
+
+      mobileMenu.classList.toggle(
+        "open"
+      );
+
+
+      if (
+        mobileMenu.classList.contains(
+          "open"
+        )
+      ) {
+
+        menuButton.textContent =
+          "✕";
+
+      } else {
+
+        menuButton.textContent =
+          "☰";
+
+      }
+
+    }
+  );
+
+
+  const mobileLinks =
+    mobileMenu.querySelectorAll(
+      "a"
+    );
+
+
+  mobileLinks.forEach(
+    function (link) {
+
+      link.addEventListener(
+        "click",
+        function () {
+
+          mobileMenu.classList.remove(
+            "open"
+          );
+
+          menuButton.textContent =
+            "☰";
+
+        }
+      );
+
+    }
+  );
+
+}
+
+
+/* ==================================================
+   CURRENT YEAR
+================================================== */
+
+function updateYear() {
+
+  const year =
+    document.querySelector(
+      ".site-footer p"
+    );
+
+
+  if (year) {
+
+    year.textContent =
+      "© " +
+      new Date().getFullYear() +
+      " OINANCE. All rights reserved.";
+
+  }
+
+}
+
+
+/* ==================================================
+   LOAD OINANCE NEWS
+================================================== */
+
+async function loadNews() {
+
+  const newsGrid =
+    document.getElementById(
+      "newsGrid"
+    );
+
+
+  if (!newsGrid) {
+
+    return;
+
+  }
+
+
+  try {
+
+    const {
+      data,
+      error
+    } =
+      await supabaseClient
+        .from("news")
+        .select(
+          "id, title, category, author, story, image_url, created_at"
+        )
+        .eq(
+          "published",
+          true
+        )
+        .order(
+          "created_at",
+          {
+            ascending: false
+          }
+        );
+
+
+    if (error) {
+
+      console.error(
+        "OINANCE News error:",
+        error
+      );
+
+      return;
+
+    }
+
+
+    allNewsArticles =
+      data || [];
+
+
+    if (
+      !allNewsArticles.length
+    ) {
+
+      showNoArticles();
+
+      return;
+
+    }
+
+
+    displayNewsByCategory(
+      "All"
+    );
+
+
+  } catch (error) {
+
+    console.error(
+      "Unexpected OINANCE News error:",
+      error
+    );
+
+  }
+
+}
+
+
+/* ==================================================
+   NO ARTICLES
+================================================== */
+
+function showNoArticles() {
+
+  const newsGrid =
+    document.getElementById(
+      "newsGrid"
+    );
+
+
+  if (!newsGrid) {
+
+    return;
+
+  }
+
+
+  newsGrid.innerHTML = `
+
+    <article class="news-placeholder">
+
+      <div class="placeholder-image"></div>
+
+      <div class="placeholder-content">
+
+        <span>
+          OINANCE NEWS
+        </span>
+
+        <h3>
+          OINANCE News is coming soon.
+        </h3>
+
+        <p>
+          Articles published through the
+          OINANCE Dashboard will appear here.
+        </p>
+
+      </div>
+
+    </article>
+
+  `;
+
+}
+
+
+/* ==================================================
+   NEWS CATEGORY FILTER
+================================================== */
+
+function setupNewsCategories() {
+
+  const categoryButtons =
+    document.querySelectorAll(
+      ".category-button"
+    );
+
+
+  if (
+    !categoryButtons.length
+  ) {
+
+    return;
+
+  }
+
+
+  categoryButtons.forEach(
+    function (button) {
+
+      button.addEventListener(
+        "click",
+        function () {
+
+          const selectedCategory =
+            button.getAttribute(
+              "data-category"
+            );
+
+
+          categoryButtons.forEach(
+            function (btn) {
+
+              btn.classList.remove(
+                "active"
+              );
+
+            }
+          );
+
+
+          button.classList.add(
+            "active"
+          );
+
+
+          displayNewsByCategory(
+            selectedCategory
+          );
+
+        }
+      );
+
+    }
+  );
+
+}
+
+
+/* ==================================================
+   DISPLAY NEWS BY CATEGORY
+================================================== */
+
+function displayNewsByCategory(
+  category
+) {
+
+  const newsGrid =
+    document.getElementById(
+      "newsGrid"
+    );
+
+
+  if (!newsGrid) {
+
+    return;
+
+  }
+
+
+  let filteredArticles;
+
+
+  if (
+    category === "All"
+  ) {
+
+    filteredArticles =
+      allNewsArticles;
+
+  } else {
+
+    filteredArticles =
+      allNewsArticles.filter(
+        function (article) {
+
+          return (
+            (article.category || "")
+              .trim()
+              .toLowerCase() ===
+            category
+              .trim()
+              .toLowerCase()
+          );
+
+        }
+      );
+
+  }
+
+
+  newsGrid.innerHTML =
+    "";
+
+
+  if (
+    !filteredArticles.length
+  ) {
+
+    newsGrid.innerHTML = `
+
+      <article class="news-placeholder">
+
+        <div class="placeholder-image"></div>
+
+        <div class="placeholder-content">
+
+          <span>
+            OINANCE NEWS
+          </span>
+
+          <h3>
+            No articles in this category yet.
+          </h3>
+
+          <p>
+            Check back soon for new
+            OINANCE News.
+          </p>
+
+        </div>
+
+      </article>
+
+    `;
+
+    return;
+
+  }
+
+
+  filteredArticles.forEach(
+    function (article) {
+
+      createNewsCard(
+        article
+      );
+
+    }
+  );
+
+}
+
+
+/* ==================================================
+   CREATE NEWS CARD
+================================================== */
+
+function createNewsCard(
+  article
+) {
+
+  const newsGrid =
+    document.getElementById(
+      "newsGrid"
+    );
+
+
+  if (!newsGrid) {
+
+    return;
+
+  }
+
+
+  const card =
+    document.createElement(
+      "article"
+    );
+
+
+  card.className =
+    "news-card";
+
+
+  card.style.cursor =
+    "pointer";
+
+
+  card.addEventListener(
+    "click",
+    function () {
+
+      window.location.href =
+        "article.html?id=" +
+        encodeURIComponent(
+          article.id
+        );
+
+    }
+  );
+
+
+  const image =
+    article.image_url
+
+      ? `
+        <img
+          src="${escapeHTML(
+            article.image_url
+          )}"
+          alt="${escapeHTML(
+            article.title
+          )}"
+          class="news-image"
+        >
+      `
+
+      : `
+        <div
+          class="placeholder-image"
+        ></div>
+      `;
+
+
+  const date =
+    new Date(
+      article.created_at
+    ).toLocaleDateString(
+      "en-US",
+      {
+        year: "numeric",
+        month: "long",
+        day: "numeric"
+      }
+    );
+
+
+  card.innerHTML = `
+
+    ${image}
+
+    <div class="news-content">
+
+      <span class="news-category">
+
+        ${escapeHTML(
+          article.category ||
+          "OINANCE NEWS"
+        )}
+
+      </span>
+
+
+      <h3>
+
+        ${escapeHTML(
+          article.title
+        )}
+
+      </h3>
+
+
+      <p>
+
+        ${escapeHTML(
+          article.story
+        )}
+
+      </p>
+
+
+      <div class="news-meta">
+
+        <span>
+
+          ${escapeHTML(
+            article.author ||
+            "OINANCE Editorial"
+          )}
+
+        </span>
+
+
+        <span>
+
+          ${date}
+
+        </span>
+
+      </div>
+
+
+      <div class="news-read-more">
+
+        Read Full Article →
+
+      </div>
+
+    </div>
+
+  `;
+
+
+  newsGrid.appendChild(
+    card
+  );
+
+}
+
+
+/* ==================================================
+   NEWSLETTER
+================================================== */
+
+function setupNewsletter() {
+
+  const newsletterForm =
+    document.getElementById(
+      "newsletterForm"
+    );
+
+
+  const newsletterEmail =
+    document.getElementById(
+      "newsletterEmail"
+    );
+
+
+  const newsletterMessage =
+    document.getElementById(
+      "newsletterMessage"
+    );
+
+
+  if (
+    !newsletterForm ||
+    !newsletterEmail ||
+    !newsletterMessage
+  ) {
+
+    return;
+
+  }
+
+
+  newsletterForm.addEventListener(
+    "submit",
+    async function (event) {
+
+      event.preventDefault();
+
+
+      const email =
+        newsletterEmail.value
+          .trim()
+          .toLowerCase();
+
+
+      if (!email) {
+
+        newsletterMessage.textContent =
+          "Please enter your email.";
+
+        return;
+
+      }
+
+
+      newsletterMessage.textContent =
+        "Subscribing...";
+
+
+      try {
+
+        const {
+          error
+        } =
+          await supabaseClient
+            .from(
+              "newsletter_subscribers"
+            )
+            .insert([
+              {
+                email: email
+              }
+            ]);
+
+
+        if (error) {
+
+          console.error(
+            "Supabase newsletter error:",
+            error
+          );
+
+          throw error;
+
+        }
+
+
+        newsletterMessage.textContent =
+          "You're subscribed to OINANCE News.";
+
+
+        newsletterForm.reset();
+
+
+      } catch (error) {
+
+        console.error(
+          "Newsletter subscription error:",
+          error
+        );
+
+
+        if (
+          error.code ===
+          "23505"
+        ) {
+
+          newsletterMessage.textContent =
+            "This email is already subscribed.";
+
+        } else {
+
+          newsletterMessage.textContent =
+            "Something went wrong. Please try again.";
+
+        }
+
+      }
+
+    }
+  );
+
+}
+
+
+/* ==================================================
+   SECURITY
+================================================== */
+
+function escapeHTML(
+  value
+) {
+
+  const div =
+    document.createElement(
+      "div"
+    );
+
+
+  div.textContent =
+    value ?? "";
+
+
+  return div.innerHTML;
+
+}
+
+
+/* ==================================================
+   FEATURED OINANCE NEWS
+================================================== */
+
+async function loadFeaturedNews() {
+
+  const featuredNews =
+    document.getElementById(
+      "featuredNews"
+    );
+
+
+  if (!featuredNews) {
+
+    return;
+
+  }
+
+
+  try {
+
+    const {
+      data,
+      error
+    } =
+      await supabaseClient
+        .from("news")
+        .select(
+          "id, title, category, author, story, image_url, created_at"
+        )
+        .eq(
+          "published",
+          true
+        )
+        .order(
+          "created_at",
+          {
+            ascending: false
+          }
+        )
+        .limit(1);
+
+
+    if (error) {
+
+      console.error(
+        "Featured News error:",
+        error
+      );
+
+      return;
+
+    }
+
+
+    if (
+      !data ||
+      data.length === 0
+    ) {
+
+      featuredNews.innerHTML = `
+
+        <div class="featured-placeholder">
+
+          <span>
+            OINANCE NEWS
+          </span>
+
+          <h2>
+            Latest OINANCE News
+            and market developments.
+          </h2>
+
+          <p>
+            Articles published through the
+            OINANCE LINK newsroom will appear here.
+          </p>
+
+        </div>
+
+      `;
+
+      return;
+
+    }
+
+
+    const article =
+      data[0];
+
+
+    const image =
+      article.image_url
+
+        ? `
+          <img
+            src="${escapeHTML(
+              article.image_url
+            )}"
+            alt="${escapeHTML(
+              article.title
+            )}"
+            class="featured-image"
+          >
+        `
+
+        : "";
+
+
+    const date =
+      new Date(
+        article.created_at
+      ).toLocaleDateString(
+        "en-US",
+        {
+          year: "numeric",
+          month: "long",
+          day: "numeric"
+        }
+      );
+
+
+    featuredNews.innerHTML = `
+
+      <article
+        class="featured-article"
+        onclick="openFeaturedArticle('${encodeURIComponent(
+          article.id
+        )}')"
+      >
+
+        ${image}
+
+
+        <div class="featured-content">
+
+          <span class="featured-category">
+
+            ${escapeHTML(
+              article.category ||
+              "OINANCE NEWS"
+            )}
+
+          </span>
+
+
+          <h2>
+
+            ${escapeHTML(
+              article.title
+            )}
+
+          </h2>
+
+
+          <p>
+
+            ${escapeHTML(
+              article.story
+            )}
+
+          </p>
+
+
+          <div class="featured-meta">
+
+            <span>
+
+              ${escapeHTML(
+                article.author ||
+                "OINANCE Editorial"
+              )}
+
+            </span>
+
+            <span>
+              ${date}
+            </span>
+
+          </div>
+
+
+          <div class="featured-read-more">
+
+            Read Full Article →
+
+          </div>
+
+        </div>
+
+      </article>
+
+    `;
+
+
+  } catch (error) {
+
+    console.error(
+      "Unexpected Featured News error:",
+      error
+    );
+
+  }
+
+}
+
+
+/* ==================================================
+   OPEN FEATURED ARTICLE
+================================================== */
+
+function openFeaturedArticle(
+  id
+) {
+
+  window.location.href =
+    "article.html?id=" +
+    id;
 
 }
 
@@ -5,6 +1142,7 @@
 /* ==================================================
    MARKET DATA
    LIVE PRICE + REAL MARKET HISTORY
+   + 24H HIGH + 24H LOW + 24H VOLUME
 ================================================== */
 
 async function loadMarketData() {
@@ -61,7 +1199,9 @@ async function loadMarketData() {
 
 
         if (!asset) {
+
           return;
+
         }
 
 
@@ -80,6 +1220,20 @@ async function loadMarketData() {
         );
 
 
+        /*
+           NEW:
+           Display 24H high, 24H low
+           and 24H trading volume.
+        */
+
+        updateMarketStats(
+          asset,
+          coin.high_24h,
+          coin.low_24h,
+          coin.total_volume
+        );
+
+
         const prices =
           coin.sparkline_in_7d &&
           Array.isArray(
@@ -89,7 +1243,9 @@ async function loadMarketData() {
             : [];
 
 
-        if (prices.length) {
+        if (
+          prices.length
+        ) {
 
           drawRealMarketChart(
             asset.chartId,
@@ -231,6 +1387,130 @@ function updateMarketAsset(
 
 
 /* ==================================================
+   UPDATE MARKET STATS
+================================================== */
+
+function updateMarketStats(
+  asset,
+  high24h,
+  low24h,
+  volume24h
+) {
+
+  const chart =
+    document.getElementById(
+      asset.chartId
+    );
+
+
+  if (!chart) {
+
+    return;
+
+  }
+
+
+  const card =
+    chart.closest(
+      ".market-card"
+    );
+
+
+  if (!card) {
+
+    return;
+
+  }
+
+
+  let stats =
+    document.getElementById(
+      asset.statsId
+    );
+
+
+  /*
+     Create the statistics section
+     automatically if it does not
+     already exist in index.html.
+  */
+
+  if (!stats) {
+
+    stats =
+      document.createElement(
+        "div"
+      );
+
+
+    stats.id =
+      asset.statsId;
+
+
+    stats.className =
+      "market-stats";
+
+
+    card.insertBefore(
+      stats,
+      chart
+    );
+
+  }
+
+
+  stats.innerHTML = `
+
+    <div class="market-stat">
+
+      <span class="market-stat-label">
+        24H HIGH
+      </span>
+
+      <span class="market-stat-value">
+        ${formatMarketPrice(
+          high24h
+        )}
+      </span>
+
+    </div>
+
+
+    <div class="market-stat">
+
+      <span class="market-stat-label">
+        24H LOW
+      </span>
+
+      <span class="market-stat-value">
+        ${formatMarketPrice(
+          low24h
+        )}
+      </span>
+
+    </div>
+
+
+    <div class="market-stat">
+
+      <span class="market-stat-label">
+        VOLUME
+      </span>
+
+      <span class="market-stat-value">
+        ${formatMarketVolume(
+          volume24h
+        )}
+      </span>
+
+    </div>
+
+  `;
+
+}
+
+
+/* ==================================================
    FORMAT PRICE
 ================================================== */
 
@@ -274,6 +1554,92 @@ function formatMarketPrice(
       {
         minimumFractionDigits: 2,
         maximumFractionDigits: 2
+      }
+    );
+
+}
+
+
+/* ==================================================
+   FORMAT MARKET VOLUME
+================================================== */
+
+function formatMarketVolume(
+  volume
+) {
+
+  if (
+    volume === null ||
+    volume === undefined ||
+    isNaN(volume)
+  ) {
+
+    return "$—";
+
+  }
+
+
+  const number =
+    Number(volume);
+
+
+  if (
+    number >= 1e12
+  ) {
+
+    return "$" +
+      (
+        number / 1e12
+      ).toFixed(2) +
+      "T";
+
+  }
+
+
+  if (
+    number >= 1e9
+  ) {
+
+    return "$" +
+      (
+        number / 1e9
+      ).toFixed(2) +
+      "B";
+
+  }
+
+
+  if (
+    number >= 1e6
+  ) {
+
+    return "$" +
+      (
+        number / 1e6
+      ).toFixed(2) +
+      "M";
+
+  }
+
+
+  if (
+    number >= 1e3
+  ) {
+
+    return "$" +
+      (
+        number / 1e3
+      ).toFixed(2) +
+      "K";
+
+  }
+
+
+  return "$" +
+    number.toLocaleString(
+      "en-US",
+      {
+        maximumFractionDigits: 0
       }
     );
 
@@ -331,15 +1697,11 @@ function drawRealMarketChart(
 
 
   if (!chart) {
+
     return;
+
   }
 
-
-  /*
-     Keep the most recent portion of the
-     market history so the mini chart
-     stays clean on mobile and desktop.
-  */
 
   const values =
     prices
@@ -387,12 +1749,9 @@ function drawRealMarketChart(
     );
 
 
-  /*
-     Prevent a flat line when prices
-     are extremely close together.
-  */
-
-  if (min === max) {
+  if (
+    min === max
+  ) {
 
     min -= 1;
     max += 1;
@@ -406,7 +1765,10 @@ function drawRealMarketChart(
 
   const points =
     values.map(
-      function (value, index) {
+      function (
+        value,
+        index
+      ) {
 
         const x =
           padding +
@@ -447,7 +1809,10 @@ function drawRealMarketChart(
   const linePath =
     points
       .map(
-        function (point, index) {
+        function (
+          point,
+          index
+        ) {
 
           return (
             index === 0
@@ -552,8 +1917,6 @@ function drawRealMarketChart(
       </defs>
 
 
-      <!-- subtle chart grid -->
-
       <line
         x1="0"
         y1="22"
@@ -582,16 +1945,12 @@ function drawRealMarketChart(
       />
 
 
-      <!-- filled market area -->
-
       <path
         d="${areaPath}"
         fill="url(#${gradientId})"
         stroke="none"
       />
 
-
-      <!-- real market price line -->
 
       <path
         d="${linePath}"
@@ -603,8 +1962,6 @@ function drawRealMarketChart(
         vector-effect="non-scaling-stroke"
       />
 
-
-      <!-- latest price point -->
 
       <circle
         cx="${lastPoint.x}"
@@ -642,7 +1999,9 @@ function showChartMessage(
 
 
   if (!chart) {
+
     return;
+
   }
 
 
@@ -661,7 +2020,9 @@ function showChartMessage(
       "
     >
 
-      ${escapeHTML(message)}
+      ${escapeHTML(
+        message
+      )}
 
     </div>
 
@@ -687,4 +2048,41 @@ function showMarketChartErrors() {
   chartIds.forEach(
     function (chartId) {
 
-      const cha
+      const chart =
+        document.getElementById(
+          chartId
+        );
+
+
+      if (
+        chart &&
+        !chart.querySelector(
+          "svg"
+        )
+      ) {
+
+        showChartMessage(
+          chartId,
+          "Market chart unavailable"
+        );
+
+      }
+
+    }
+  );
+
+}
+
+
+/* ==================================================
+   REFRESH MARKET DATA
+================================================== */
+
+setInterval(
+  function () {
+
+    loadMarketData();
+
+  },
+  60000
+);

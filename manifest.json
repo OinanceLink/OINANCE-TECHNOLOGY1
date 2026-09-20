@@ -1,1 +1,19 @@
-
+{
+  "name": "OINANCE LINK — Technology & News",
+  "short_name": "OINANCE LINK",
+  "description": "OINANCE LINK — Technology, business, economics, crypto and technology news.",
+  "start_url": "./index.html",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#050505",
+  "theme_color": "#050505",
+  "orientation": "portrait-primary",
+  "icons": [
+    {
+      "src": "file_000000001bdc81f496a425cbbdef65a7.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ]
+}

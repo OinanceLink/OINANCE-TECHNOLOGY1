@@ -79,8 +79,6 @@ const MARKET_ASSETS = {
 
 /* ==================================================
    MARKET STATS STYLE
-   Added here so we do not need to change
-   style.css in this step.
 ================================================== */
 
 function setupMarketStatsStyle() {
@@ -177,6 +175,8 @@ document.addEventListener(
   function () {
 
     setupMobileMenu();
+
+    setupSearch();
 
     updateYear();
 
@@ -278,6 +278,366 @@ function setupMobileMenu() {
 
     }
   );
+
+}
+
+
+/* ==================================================
+   SEARCH
+   OINANCE WEBSITE SEARCH
+================================================== */
+
+function setupSearch() {
+
+  const searchButton =
+    document.getElementById(
+      "searchButton"
+    );
+
+
+  const searchPanel =
+    document.getElementById(
+      "searchPanel"
+    );
+
+
+  const searchInput =
+    document.getElementById(
+      "siteSearch"
+    );
+
+
+  const closeSearch =
+    document.getElementById(
+      "closeSearch"
+    );
+
+
+  if (!searchButton || !searchPanel) {
+
+    return;
+
+  }
+
+
+  /* ----------------------------------------------
+     OPEN SEARCH
+  ---------------------------------------------- */
+
+  searchButton.addEventListener(
+    "click",
+    function () {
+
+      searchPanel.classList.add(
+        "open"
+      );
+
+
+      if (searchInput) {
+
+        setTimeout(
+          function () {
+
+            searchInput.focus();
+
+          },
+          100
+        );
+
+      }
+
+    }
+  );
+
+
+  /* ----------------------------------------------
+     CLOSE SEARCH
+  ---------------------------------------------- */
+
+  if (closeSearch) {
+
+    closeSearch.addEventListener(
+      "click",
+      function () {
+
+        closeSearchPanel();
+
+      }
+    );
+
+  }
+
+
+  /* ----------------------------------------------
+     ENTER KEY SEARCH
+  ---------------------------------------------- */
+
+  if (searchInput) {
+
+    searchInput.addEventListener(
+      "keydown",
+      function (event) {
+
+        if (
+          event.key ===
+          "Enter"
+        ) {
+
+          event.preventDefault();
+
+          performSiteSearch(
+            searchInput.value
+          );
+
+        }
+
+
+        if (
+          event.key ===
+          "Escape"
+        ) {
+
+          closeSearchPanel();
+
+        }
+
+      }
+    );
+
+  }
+
+
+  /* ----------------------------------------------
+     SEARCH BUTTON INSIDE PANEL
+  ---------------------------------------------- */
+
+  const searchSubmit =
+    searchPanel.querySelector(
+      "button[type='submit']"
+    );
+
+
+  if (searchSubmit) {
+
+    searchSubmit.addEventListener(
+      "click",
+      function (event) {
+
+        event.preventDefault();
+
+        performSiteSearch(
+          searchInput
+            ? searchInput.value
+            : ""
+        );
+
+      }
+    );
+
+  }
+
+}
+
+
+/* ==================================================
+   CLOSE SEARCH PANEL
+================================================== */
+
+function closeSearchPanel() {
+
+  const searchPanel =
+    document.getElementById(
+      "searchPanel"
+    );
+
+
+  const searchInput =
+    document.getElementById(
+      "siteSearch"
+    );
+
+
+  if (searchPanel) {
+
+    searchPanel.classList.remove(
+      "open"
+    );
+
+  }
+
+
+  if (searchInput) {
+
+    searchInput.value =
+      "";
+
+  }
+
+}
+
+
+/* ==================================================
+   PERFORM SITE SEARCH
+================================================== */
+
+function performSiteSearch(
+  searchTerm
+) {
+
+  const term =
+    String(
+      searchTerm || ""
+    )
+      .trim()
+      .toLowerCase();
+
+
+  const newsGrid =
+    document.getElementById(
+      "newsGrid"
+    );
+
+
+  if (!newsGrid) {
+
+    return;
+
+  }
+
+
+  /* ----------------------------------------------
+     EMPTY SEARCH
+  ---------------------------------------------- */
+
+  if (!term) {
+
+    displayNewsByCategory(
+      "All"
+    );
+
+    closeSearchPanel();
+
+    return;
+
+  }
+
+
+  /* ----------------------------------------------
+     SEARCH ALL NEWS FIELDS
+  ---------------------------------------------- */
+
+  const results =
+    allNewsArticles.filter(
+      function (article) {
+
+        const title =
+          String(
+            article.title || ""
+          ).toLowerCase();
+
+
+        const story =
+          String(
+            article.story || ""
+          ).toLowerCase();
+
+
+        const category =
+          String(
+            article.category || ""
+          ).toLowerCase();
+
+
+        const author =
+          String(
+            article.author || ""
+          ).toLowerCase();
+
+
+        return (
+          title.includes(term) ||
+          story.includes(term) ||
+          category.includes(term) ||
+          author.includes(term)
+        );
+
+      }
+    );
+
+
+  /* ----------------------------------------------
+     DISPLAY SEARCH RESULTS
+  ---------------------------------------------- */
+
+  newsGrid.innerHTML =
+    "";
+
+
+  if (!results.length) {
+
+    newsGrid.innerHTML = `
+
+      <article class="news-placeholder">
+
+        <div class="placeholder-image"></div>
+
+        <div class="placeholder-content">
+
+          <span>
+            OINANCE SEARCH
+          </span>
+
+          <h3>
+            No results found.
+          </h3>
+
+          <p>
+            We could not find any OINANCE
+            News matching
+            "<strong>${escapeHTML(
+              searchTerm
+            )}</strong>".
+          </p>
+
+        </div>
+
+      </article>
+
+    `;
+
+
+    closeSearchPanel();
+
+
+    newsGrid.scrollIntoView({
+      behavior: "smooth",
+      block: "start"
+    });
+
+
+    return;
+
+  }
+
+
+  results.forEach(
+    function (article) {
+
+      createNewsCard(
+        article
+      );
+
+    }
+  );
+
+
+  closeSearchPanel();
+
+
+  newsGrid.scrollIntoView({
+    behavior: "smooth",
+    block: "start"
+  });
 
 }
 
@@ -1141,8 +1501,6 @@ function openFeaturedArticle(
 
 /* ==================================================
    MARKET DATA
-   LIVE PRICE + REAL MARKET HISTORY
-   + 24H HIGH + 24H LOW + 24H VOLUME
 ================================================== */
 
 async function loadMarketData() {
@@ -1219,12 +1577,6 @@ async function loadMarketData() {
           change
         );
 
-
-        /*
-           NEW:
-           Display 24H high, 24H low
-           and 24H trading volume.
-        */
 
         updateMarketStats(
           asset,
@@ -1428,12 +1780,6 @@ function updateMarketStats(
       asset.statsId
     );
 
-
-  /*
-     Create the statistics section
-     automatically if it does not
-     already exist in index.html.
-  */
 
   if (!stats) {
 

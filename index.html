@@ -1,4 +1,461 @@
-NANCE News is coming soon.
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+  <meta charset="UTF-8">
+
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+  >
+
+  <meta
+    name="description"
+    content="OINANCE LINK — Technology, markets, finance, economics, business and global news."
+  >
+
+  <!-- PWA / APP SETTINGS -->
+  <meta name="theme-color" content="#050505">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta
+    name="apple-mobile-web-app-status-bar-style"
+    content="black-translucent"
+  >
+  <meta
+    name="apple-mobile-web-app-title"
+    content="OINANCE LINK"
+  >
+
+  <!-- OINANCE LINK APP MANIFEST -->
+  <link rel="manifest" href="manifest.json">
+
+  <!-- APP ICON -->
+  <link
+    rel="icon"
+    type="image/png"
+    href="file_000000001bdc81f496a425cbbdef65a7.png"
+  >
+
+  <link
+    rel="apple-touch-icon"
+    href="file_000000001bdc81f496a425cbbdef65a7.png"
+  >
+
+  <link rel="stylesheet" href="style.css">
+
+  <title>OINANCE LINK</title>
+
+</head>
+
+
+<body>
+
+
+<!-- ==================================================
+     OINANCE LINK HEADER
+================================================== -->
+
+<header class="site-header">
+
+  <div class="header-inner">
+
+    <a href="#home" class="brand">
+
+      <img
+        src="IMG_20260916_192545.jpg"
+        alt="OINANCE LINK Logo"
+        class="brand-logo"
+      >
+
+      <div class="brand-text">
+
+        <strong>OINANCE LINK</strong>
+
+        <span>TECHNOLOGY & NEWS</span>
+
+      </div>
+
+    </a>
+
+
+    <nav class="desktop-nav">
+
+      <a href="#home">Home</a>
+
+      <a href="#markets">Markets</a>
+
+      <a href="#news">News</a>
+
+      <a href="#technology">Technology</a>
+
+      <a href="#business">Business</a>
+
+      <a href="#about">About</a>
+
+    </nav>
+
+
+    <button
+      class="search-button"
+      id="searchButton"
+      aria-label="Search"
+    >
+      🔎
+    </button>
+
+
+    <a
+      href="dashboard.html"
+      class="dashboard-button"
+    >
+      Dashboard
+    </a>
+
+
+    <button
+      class="menu-button"
+      id="menuButton"
+      aria-label="Open menu"
+    >
+      ☰
+    </button>
+
+  </div>
+
+
+  <div
+    class="mobile-menu"
+    id="mobileMenu"
+  >
+
+    <a href="#home">Home</a>
+
+    <a href="#markets">Markets</a>
+
+    <a href="#news">News</a>
+
+    <a href="#technology">Technology</a>
+
+    <a href="#business">Business</a>
+
+    <a href="#about">About</a>
+
+    <a
+      href="dashboard.html"
+      class="mobile-dashboard"
+    >
+      Dashboard →
+    </a>
+
+  </div>
+
+</header>
+
+
+
+<!-- ==================================================
+     SEARCH PANEL
+================================================== -->
+
+<div
+  id="searchPanel"
+  class="search-panel"
+>
+
+  <div class="search-inner">
+
+    <input
+      type="search"
+      id="siteSearch"
+      placeholder="Search OINANCE News..."
+      autocomplete="off"
+    >
+
+    <button
+      id="closeSearch"
+      type="button"
+    >
+      ✕
+    </button>
+
+  </div>
+
+</div>
+
+
+
+<!-- ==================================================
+     MARKET TICKER
+================================================== -->
+
+<section
+  class="market-ticker"
+  id="markets"
+>
+
+  <div class="ticker-label">
+    MARKETS
+  </div>
+
+
+  <div class="ticker-track">
+
+    <div class="market-item">
+      <span>BTC</span>
+      <strong id="btcPrice">$—</strong>
+      <em id="btcChange" class="market-up">—</em>
+    </div>
+
+
+    <div class="market-item">
+      <span>ETH</span>
+      <strong id="ethPrice">$—</strong>
+      <em id="ethChange" class="market-down">—</em>
+    </div>
+
+
+    <div class="market-item">
+      <span>SOL</span>
+      <strong id="solPrice">$—</strong>
+      <em id="solChange" class="market-up">—</em>
+    </div>
+
+
+    <div class="market-item">
+      <span>BNB</span>
+      <strong id="bnbPrice">$—</strong>
+      <em id="bnbChange" class="market-up">—</em>
+    </div>
+
+
+    <div class="market-item">
+      <span>CRYPTO</span>
+      <strong>GLOBAL</strong>
+      <em>LIVE</em>
+    </div>
+
+  </div>
+
+</section>
+
+
+
+<!-- ==================================================
+     MAIN
+================================================== -->
+
+<main>
+
+
+<section
+  class="news-hero"
+  id="home"
+>
+
+  <div class="hero-label">
+
+    <span>OINANCE LINK</span>
+
+    <strong>NEWS</strong>
+
+  </div>
+
+
+  <h1>
+    The latest news,
+    <br>
+    markets and ideas.
+  </h1>
+
+
+  <p>
+    Technology, finance, economics, business,
+    markets and developments shaping the world.
+  </p>
+
+</section>
+
+
+
+<section class="category-section">
+
+  <div class="category-scroll">
+
+    <button class="category-button active" data-category="All">
+      All
+    </button>
+
+    <button class="category-button" data-category="Market">
+      Market
+    </button>
+
+    <button class="category-button" data-category="Exclusive">
+      Exclusive
+    </button>
+
+    <button class="category-button" data-category="Breaking News">
+      Breaking News
+    </button>
+
+    <button class="category-button" data-category="Finance">
+      Finance
+    </button>
+
+    <button class="category-button" data-category="Technology">
+      Technology
+    </button>
+
+    <button class="category-button" data-category="Politics">
+      Politics
+    </button>
+
+    <button class="category-button" data-category="Industries">
+      Industries
+    </button>
+
+    <button class="category-button" data-category="AI">
+      AI
+    </button>
+
+    <button class="category-button" data-category="Blockchain">
+      Blockchain
+    </button>
+
+    <button class="category-button" data-category="Bitcoin">
+      Bitcoin
+    </button>
+
+    <button class="category-button" data-category="Business">
+      Business
+    </button>
+
+    <button class="category-button" data-category="Economics">
+      Economics
+    </button>
+
+  </div>
+
+</section>
+
+
+
+<section
+  class="main-news-section"
+  id="news"
+>
+
+  <div class="featured-news">
+
+    <div class="section-top">
+
+      <span>FEATURED</span>
+
+      <a href="#news">
+        View All →
+      </a>
+
+    </div>
+
+
+    <div
+      id="featuredNews"
+      class="featured-news-card"
+    >
+
+      <div class="featured-placeholder">
+
+        <span>OINANCE NEWS</span>
+
+        <h2>
+          Loading latest news...
+        </h2>
+
+        <p>
+          OINANCE LINK News is loading the
+          latest featured story.
+        </p>
+
+      </div>
+
+    </div>
+
+  </div>
+
+
+
+  <aside class="latest-news">
+
+    <div class="section-top">
+
+      <span>LATEST</span>
+
+      <a href="#news">
+        See All →
+      </a>
+
+    </div>
+
+
+    <div
+      id="latestNews"
+      class="latest-news-list"
+    >
+
+      <article class="latest-placeholder">
+
+        <small>OINANCE NEWS</small>
+
+        <h3>
+          Latest stories will appear here.
+        </h3>
+
+      </article>
+
+    </div>
+
+  </aside>
+
+</section>
+
+
+
+<section class="section news-section">
+
+  <div class="section-heading">
+
+    <span class="eyebrow">
+      OINANCE NEWS
+    </span>
+
+    <h2>
+      Latest Stories
+    </h2>
+
+    <p>
+      News, developments and ideas from
+      markets, technology, finance and business.
+    </p>
+
+  </div>
+
+
+  <div
+    id="newsGrid"
+    class="news-grid"
+  >
+
+    <article class="news-placeholder">
+
+      <div class="placeholder-image"></div>
+
+      <div class="placeholder-content">
+
+        <span>OINANCE NEWS</span>
+
+        <h3>
+          OINANCE News is coming soon.
         </h3>
 
         <p>
@@ -16,13 +473,7 @@ NANCE News is coming soon.
 
 
 
-<!-- ==================================================
-     MARKET WATCH
-================================================== -->
-
-<section
-  class="market-watch"
->
+<section class="market-watch">
 
   <div class="section-heading">
 
@@ -40,22 +491,13 @@ NANCE News is coming soon.
   <div class="market-grid">
 
 
-    <!-- BITCOIN -->
-
     <article class="market-card">
 
-      <span>
-        BITCOIN
-      </span>
+      <span>BITCOIN</span>
 
-      <strong id="marketBtc">
-        $—
-      </strong>
+      <strong id="marketBtc">$—</strong>
 
-      <em id="marketBtcChange">
-        —
-      </em>
-
+      <em id="marketBtcChange">—</em>
 
       <div
         class="mini-chart"
@@ -65,18 +507,10 @@ NANCE News is coming soon.
 
         <div class="chart-bars">
 
-          <span></span>
-          <span></span>
-          <span></span>
-          <span></span>
-          <span></span>
-          <span></span>
-          <span></span>
-          <span></span>
-          <span></span>
-          <span></span>
-          <span></span>
-          <span></span>
+          <span></span><span></span><span></span>
+          <span></span><span></span><span></span>
+          <span></span><span></span><span></span>
+          <span></span><span></span><span></span>
 
         </div>
 
@@ -86,22 +520,13 @@ NANCE News is coming soon.
 
 
 
-    <!-- ETHEREUM -->
-
     <article class="market-card">
 
-      <span>
-        ETHEREUM
-      </span>
+      <span>ETHEREUM</span>
 
-      <strong id="marketEth">
-        $—
-      </strong>
+      <strong id="marketEth">$—</strong>
 
-      <em id="marketEthChange">
-        —
-      </em>
-
+      <em id="marketEthChange">—</em>
 
       <div
         class="mini-chart"
@@ -111,18 +536,10 @@ NANCE News is coming soon.
 
         <div class="chart-bars">
 
-          <span></span>
-          <span></span>
-          <span></span>
-          <span></span>
-          <span></span>
-          <span></span>
-          <span></span>
-          <span></span>
-          <span></span>
-          <span></span>
-          <span></span>
-          <span></span>
+          <span></span><span></span><span></span>
+          <span></span><span></span><span></span>
+          <span></span><span></span><span></span>
+          <span></span><span></span><span></span>
 
         </div>
 
@@ -132,22 +549,13 @@ NANCE News is coming soon.
 
 
 
-    <!-- SOLANA -->
-
     <article class="market-card">
 
-      <span>
-        SOLANA
-      </span>
+      <span>SOLANA</span>
 
-      <strong id="marketSol">
-        $—
-      </strong>
+      <strong id="marketSol">$—</strong>
 
-      <em id="marketSolChange">
-        —
-      </em>
-
+      <em id="marketSolChange">—</em>
 
       <div
         class="mini-chart"
@@ -157,18 +565,10 @@ NANCE News is coming soon.
 
         <div class="chart-bars">
 
-          <span></span>
-          <span></span>
-          <span></span>
-          <span></span>
-          <span></span>
-          <span></span>
-          <span></span>
-          <span></span>
-          <span></span>
-          <span></span>
-          <span></span>
-          <span></span>
+          <span></span><span></span><span></span>
+          <span></span><span></span><span></span>
+          <span></span><span></span><span></span>
+          <span></span><span></span><span></span>
 
         </div>
 
@@ -178,22 +578,13 @@ NANCE News is coming soon.
 
 
 
-    <!-- BNB -->
-
     <article class="market-card">
 
-      <span>
-        BNB
-      </span>
+      <span>BNB</span>
 
-      <strong id="marketBnb">
-        $—
-      </strong>
+      <strong id="marketBnb">$—</strong>
 
-      <em id="marketBnbChange">
-        —
-      </em>
-
+      <em id="marketBnbChange">—</em>
 
       <div
         class="mini-chart"
@@ -203,18 +594,10 @@ NANCE News is coming soon.
 
         <div class="chart-bars">
 
-          <span></span>
-          <span></span>
-          <span></span>
-          <span></span>
-          <span></span>
-          <span></span>
-          <span></span>
-          <span></span>
-          <span></span>
-          <span></span>
-          <span></span>
-          <span></span>
+          <span></span><span></span><span></span>
+          <span></span><span></span><span></span>
+          <span></span><span></span><span></span>
+          <span></span><span></span><span></span>
 
         </div>
 
@@ -227,10 +610,6 @@ NANCE News is coming soon.
 </section>
 
 
-
-<!-- ==================================================
-     TRENDING / IN FOCUS
-================================================== -->
 
 <section class="focus-section">
 
@@ -249,55 +628,22 @@ NANCE News is coming soon.
 
   <div class="focus-tags">
 
-    <a href="#news">
-      Bitcoin
-    </a>
-
-    <a href="#news">
-      Artificial Intelligence
-    </a>
-
-    <a href="#news">
-      Global Markets
-    </a>
-
-    <a href="#news">
-      Finance
-    </a>
-
-    <a href="#news">
-      Technology
-    </a>
-
-    <a href="#news">
-      Economics
-    </a>
-
-    <a href="#news">
-      Business
-    </a>
-
-    <a href="#news">
-      Blockchain
-    </a>
-
-    <a href="#news">
-      Politics
-    </a>
-
-    <a href="#news">
-      Industries
-    </a>
+    <a href="#news">Bitcoin</a>
+    <a href="#news">Artificial Intelligence</a>
+    <a href="#news">Global Markets</a>
+    <a href="#news">Finance</a>
+    <a href="#news">Technology</a>
+    <a href="#news">Economics</a>
+    <a href="#news">Business</a>
+    <a href="#news">Blockchain</a>
+    <a href="#news">Politics</a>
+    <a href="#news">Industries</a>
 
   </div>
 
 </section>
 
 
-
-<!-- ==================================================
-     TECHNOLOGY
-================================================== -->
 
 <section
   class="section"
@@ -324,12 +670,9 @@ NANCE News is coming soon.
 
   <div class="technology-grid">
 
-
     <article class="technology-card">
 
-      <span class="card-number">
-        01
-      </span>
+      <span class="card-number">01</span>
 
       <h3>
         Artificial Intelligence
@@ -345,9 +688,7 @@ NANCE News is coming soon.
 
     <article class="technology-card">
 
-      <span class="card-number">
-        02
-      </span>
+      <span class="card-number">02</span>
 
       <h3>
         Digital Finance
@@ -363,9 +704,7 @@ NANCE News is coming soon.
 
     <article class="technology-card">
 
-      <span class="card-number">
-        03
-      </span>
+      <span class="card-number">03</span>
 
       <h3>
         Blockchain
@@ -381,9 +720,7 @@ NANCE News is coming soon.
 
     <article class="technology-card">
 
-      <span class="card-number">
-        04
-      </span>
+      <span class="card-number">04</span>
 
       <h3>
         Future Technology
@@ -396,16 +733,11 @@ NANCE News is coming soon.
 
     </article>
 
-
   </div>
 
 </section>
 
 
-
-<!-- ==================================================
-     PRODUCTS
-================================================== -->
 
 <section
   class="section dark-section"
@@ -424,8 +756,6 @@ NANCE News is coming soon.
 
   </div>
 
-
-  <!-- BITCOIN MINING CALCULATOR -->
 
   <a
     href="https://oinancelink.github.io/oinance-bitcoin-calculator/"
@@ -460,8 +790,6 @@ NANCE News is coming soon.
   </a>
 
 
-
-  <!-- OINANCE CRYPTO & STOCK MARKET -->
 
   <a
     href="https://oinancelink.github.io/OINANCE-Markets/"
@@ -499,10 +827,6 @@ NANCE News is coming soon.
 
 
 
-<!-- ==================================================
-     BUSINESS
-================================================== -->
-
 <section
   class="section"
   id="business"
@@ -528,10 +852,6 @@ NANCE News is coming soon.
 </section>
 
 
-
-<!-- ==================================================
-     ABOUT
-================================================== -->
 
 <section
   class="section about-section"
@@ -561,10 +881,6 @@ NANCE News is coming soon.
 </section>
 
 
-
-<!-- ==================================================
-     NEWSLETTER
-================================================== -->
 
 <section class="newsletter-section">
 
@@ -619,10 +935,6 @@ NANCE News is coming soon.
 
 
 
-<!-- ==================================================
-     FOOTER
-================================================== -->
-
 <footer class="site-footer">
 
   <div class="footer-inner">
@@ -652,25 +964,15 @@ NANCE News is coming soon.
 
     <div class="footer-links">
 
-      <a href="#markets">
-        Markets
-      </a>
+      <a href="#markets">Markets</a>
 
-      <a href="#technology">
-        Technology
-      </a>
+      <a href="#technology">Technology</a>
 
-      <a href="#news">
-        News
-      </a>
+      <a href="#news">News</a>
 
-      <a href="#business">
-        Business
-      </a>
+      <a href="#business">Business</a>
 
-      <a href="#about">
-        About
-      </a>
+      <a href="#about">About</a>
 
     </div>
 
@@ -692,10 +994,6 @@ NANCE News is coming soon.
 </footer>
 
 
-
-<!-- ==================================================
-     SUPABASE
-================================================== -->
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 

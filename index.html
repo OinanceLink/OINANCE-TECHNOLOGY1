@@ -1,4 +1,358 @@
--category="Blockchain">
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+  <meta charset="UTF-8">
+
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+  >
+
+  <meta
+    name="description"
+    content="OINANCE LINK — Technology, markets, finance, economics, business and global news."
+  >
+
+  <!-- PWA / APP SETTINGS -->
+  <meta name="theme-color" content="#050505">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+
+  <meta
+    name="apple-mobile-web-app-status-bar-style"
+    content="black-translucent"
+  >
+
+  <meta
+    name="apple-mobile-web-app-title"
+    content="OINANCE LINK"
+  >
+
+  <!-- OINANCE LINK APP MANIFEST -->
+  <link rel="manifest" href="manifest.json">
+
+  <!-- APP ICON -->
+  <link
+    rel="icon"
+    type="image/png"
+    href="file_000000001bdc81f496a425cbbdef65a7.png"
+  >
+
+  <link
+    rel="apple-touch-icon"
+    href="file_000000001bdc81f496a425cbbdef65a7.png"
+  >
+
+  <link rel="stylesheet" href="style.css">
+
+  <title>OINANCE LINK</title>
+
+</head>
+
+
+<body>
+
+
+<!-- ==================================================
+     OINANCE LINK APP LAUNCH SCREEN
+================================================== -->
+
+<div
+  id="oinanceSplash"
+  aria-label="OINANCE LINK loading"
+>
+
+  <img
+    src="icon-192.png"
+    alt="OINANCE LINK"
+  >
+
+  <strong>
+    OINANCE LINK
+  </strong>
+
+  <span>
+    TECHNOLOGY & NEWS
+  </span>
+
+  <div
+    class="oinance-splash-loader"
+    aria-hidden="true"
+  ></div>
+
+</div>
+
+
+
+<!-- ==================================================
+     OINANCE LINK HEADER
+================================================== -->
+
+<header class="site-header">
+
+  <div class="header-inner">
+
+    <a href="#home" class="brand">
+
+      <img
+        src="IMG_20260916_192545.jpg"
+        alt="OINANCE LINK Logo"
+        class="brand-logo"
+      >
+
+      <div class="brand-text">
+
+        <strong>OINANCE LINK</strong>
+
+        <span>TECHNOLOGY & NEWS</span>
+
+      </div>
+
+    </a>
+
+
+    <nav class="desktop-nav">
+
+      <a href="#home">Home</a>
+
+      <a href="#markets">Markets</a>
+
+      <a href="#news">News</a>
+
+      <a href="#technology">Technology</a>
+
+      <a href="#business">Business</a>
+
+      <a href="#about">About</a>
+
+    </nav>
+
+
+    <button
+      class="search-button"
+      id="searchButton"
+      aria-label="Search"
+    >
+      🔎
+    </button>
+
+
+    <a
+      href="dashboard.html"
+      class="dashboard-button"
+    >
+      Dashboard
+    </a>
+
+
+    <button
+      class="menu-button"
+      id="menuButton"
+      aria-label="Open menu"
+    >
+      ☰
+    </button>
+
+  </div>
+
+
+  <div
+    class="mobile-menu"
+    id="mobileMenu"
+  >
+
+    <a href="#home">Home</a>
+
+    <a href="#markets">Markets</a>
+
+    <a href="#news">News</a>
+
+    <a href="#technology">Technology</a>
+
+    <a href="#business">Business</a>
+
+    <a href="#about">About</a>
+
+    <a
+      href="dashboard.html"
+      class="mobile-dashboard"
+    >
+      Dashboard →
+    </a>
+
+  </div>
+
+</header>
+
+
+
+<!-- ==================================================
+     SEARCH PANEL
+================================================== -->
+
+<div
+  id="searchPanel"
+  class="search-panel"
+>
+
+  <div class="search-inner">
+
+    <input
+      type="search"
+      id="siteSearch"
+      placeholder="Search OINANCE News..."
+      autocomplete="off"
+    >
+
+    <button
+      id="closeSearch"
+      type="button"
+    >
+      ✕
+    </button>
+
+  </div>
+
+</div>
+
+
+
+<!-- ==================================================
+     MARKET TICKER
+================================================== -->
+
+<section
+  class="market-ticker"
+  id="markets"
+>
+
+  <div class="ticker-label">
+    MARKETS
+  </div>
+
+
+  <div class="ticker-track">
+
+    <div class="market-item">
+      <span>BTC</span>
+      <strong id="btcPrice">$—</strong>
+      <em id="btcChange" class="market-up">—</em>
+    </div>
+
+
+    <div class="market-item">
+      <span>ETH</span>
+      <strong id="ethPrice">$—</strong>
+      <em id="ethChange" class="market-down">—</em>
+    </div>
+
+
+    <div class="market-item">
+      <span>SOL</span>
+      <strong id="solPrice">$—</strong>
+      <em id="solChange" class="market-up">—</em>
+    </div>
+
+
+    <div class="market-item">
+      <span>BNB</span>
+      <strong id="bnbPrice">$—</strong>
+      <em id="bnbChange" class="market-up">—</em>
+    </div>
+
+
+    <div class="market-item">
+      <span>CRYPTO</span>
+      <strong>GLOBAL</strong>
+      <em>LIVE</em>
+    </div>
+
+  </div>
+
+</section>
+
+
+
+<!-- ==================================================
+     MAIN
+================================================== -->
+
+<main>
+
+
+<section
+  class="news-hero"
+  id="home"
+>
+
+  <div class="hero-label">
+
+    <span>OINANCE LINK</span>
+
+    <strong>NEWS</strong>
+
+  </div>
+
+
+  <h1>
+    The latest news,
+    <br>
+    markets and ideas.
+  </h1>
+
+
+  <p>
+    Technology, finance, economics, business,
+    markets and developments shaping the world.
+  </p>
+
+</section>
+
+
+
+<section class="category-section">
+
+  <div class="category-scroll">
+
+    <button class="category-button active" data-category="All">
+      All
+    </button>
+
+    <button class="category-button" data-category="Market">
+      Market
+    </button>
+
+    <button class="category-button" data-category="Exclusive">
+      Exclusive
+    </button>
+
+    <button class="category-button" data-category="Breaking News">
+      Breaking News
+    </button>
+
+    <button class="category-button" data-category="Finance">
+      Finance
+    </button>
+
+    <button class="category-button" data-category="Technology">
+      Technology
+    </button>
+
+    <button class="category-button" data-category="Politics">
+      Politics
+    </button>
+
+    <button class="category-button" data-category="Industries">
+      Industries
+    </button>
+
+    <button class="category-button" data-category="AI">
+      AI
+    </button>
+
+    <button class="category-button" data-category="Blockchain">
       Blockchain
     </button>
 

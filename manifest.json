@@ -1,7 +1,7 @@
 {
   "name": "OINANCE LINK — Technology & News",
   "short_name": "OINANCE LINK",
-  "description": "OINANCE LINK — Technology, business, economics, crypto and technology news.",
+  "description": "OINANCE LINK — Technology, markets, finance, economics, business and global news.",
   "start_url": "./index.html",
   "scope": "./",
   "display": "standalone",
@@ -10,7 +10,13 @@
   "orientation": "portrait-primary",
   "icons": [
     {
-      "src": "file_000000001bdc81f496a425cbbdef65a7.png",
+      "src": "./icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "./icon-512.png",
       "sizes": "512x512",
       "type": "image/png",
       "purpose": "any maskable"

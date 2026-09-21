@@ -2432,3 +2432,24 @@ setInterval(
   },
   60000
 );
+
+
+/* ==================================================
+   OINANCE LINK APP SERVICE WORKER
+================================================== */
+
+if ("serviceWorker" in navigator) {
+  window.addEventListener("load", () => {
+    navigator.serviceWorker
+      .register("./service-worker.js")
+      .then(() => {
+        console.log("OINANCE LINK app service worker registered.");
+      })
+      .catch((error) => {
+        console.error(
+          "OINANCE LINK service worker registration failed:",
+          error
+        );
+      });
+  });
+}

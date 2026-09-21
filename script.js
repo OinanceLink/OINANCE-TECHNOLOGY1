@@ -2468,13 +2468,13 @@ window.addEventListener("load", () => {
 
   setTimeout(() => {
 
-    splash.style.opacity = "0";
-    splash.style.transition = "opacity 0.35s ease";
+  splash.style.transition = "opacity 0.6s ease";
+  splash.style.opacity = "0";
 
-    setTimeout(() => {
-      splash.remove();
-    }, 350);
+  setTimeout(() => {
+    splash.remove();
+  }, 600);
 
-  }, 500);
+}, 2500);
 
 });

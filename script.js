@@ -2453,3 +2453,28 @@ if ("serviceWorker" in navigator) {
       });
   });
 }
+
+/* ==================================================
+   OINANCE LINK APP LAUNCH SCREEN
+================================================== */
+
+window.addEventListener("load", () => {
+
+  const splash = document.getElementById("oinanceSplash");
+
+  if (!splash) {
+    return;
+  }
+
+  setTimeout(() => {
+
+    splash.style.opacity = "0";
+    splash.style.transition = "opacity 0.35s ease";
+
+    setTimeout(() => {
+      splash.remove();
+    }, 350);
+
+  }, 500);
+
+});

@@ -1384,3 +1384,15 @@ input {
   }
 
      }
+
+/* ==================================================
+   PRODUCT LOGIN MODAL — HIDDEN BY DEFAULT
+================================================== */
+
+#productLoginModal {
+  display: none !important;
+}
+
+#productLoginModal[aria-hidden="false"] {
+  display: flex !important;
+}

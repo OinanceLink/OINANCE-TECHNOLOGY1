@@ -1,4 +1,4 @@
-const CACHE_NAME = "oinance-link-v1";
+const CACHE_NAME = "oinance-link-v2";
 
 const APP_FILES = [
   "./",
@@ -6,6 +6,8 @@ const APP_FILES = [
   "./style.css",
   "./script.js",
   "./manifest.json",
+  "./icon-192.png",
+  "./icon-512.png",
   "./file_000000001bdc81f496a425cbbdef65a7.png"
 ];
 
@@ -18,7 +20,6 @@ self.addEventListener("install", (event) => {
 
   self.skipWaiting();
 });
-
 
 self.addEventListener("activate", (event) => {
   event.waitUntil(
@@ -33,7 +34,6 @@ self.addEventListener("activate", (event) => {
 
   self.clients.claim();
 });
-
 
 self.addEventListener("fetch", (event) => {
   if (event.request.method !== "GET") {

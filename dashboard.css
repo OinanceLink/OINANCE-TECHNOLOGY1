@@ -30,7 +30,12 @@ body {
   justify-content: center;
   padding: 25px;
   background:
-    radial-gradient(circle at top, #202020 0%, #0a0a0a 45%, #050505 100%);
+    radial-gradient(
+      circle at top,
+      #202020 0%,
+      #0a0a0a 45%,
+      #050505 100%
+    );
 }
 
 .login-card {
@@ -104,7 +109,10 @@ body {
   padding: 14px 15px;
   font-family: Arial, Helvetica, sans-serif;
   font-size: 15px;
-  transition: border-color 0.2s, background 0.2s;
+  transition:
+    border-color 0.2s,
+    background 0.2s,
+    box-shadow 0.2s;
 }
 
 .form-group input,
@@ -143,14 +151,15 @@ body {
 }
 
 /* =========================================
-   LOGIN BUTTON
+   LOGIN / GENERAL BUTTONS
 ========================================= */
 
 .login-button,
 .primary-button,
 .publish-button,
 .cancel-button,
-.delete-article-button {
+.delete-article-button,
+.editor-tool {
   font-family: Arial, Helvetica, sans-serif;
   cursor: pointer;
   transition: 0.2s ease;
@@ -332,7 +341,7 @@ body {
 }
 
 /* =========================================
-   EDITOR
+   ARTICLE EDITOR CARD
 ========================================= */
 
 .editor-card {
@@ -412,6 +421,280 @@ body {
 }
 
 /* =========================================
+   ARTICLE EDITOR TOOLBAR
+========================================= */
+
+.article-toolbar {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 7px;
+
+  padding: 10px;
+
+  background: #151515;
+  border: 1px solid #303030;
+  border-bottom: 0;
+
+  border-radius: 12px 12px 0 0;
+}
+
+.article-toolbar select {
+  min-height: 38px;
+  border: 1px solid #353535;
+  border-radius: 7px;
+  outline: none;
+
+  padding: 7px 9px;
+
+  background: #202020;
+  color: #eeeeee;
+
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: 12px;
+
+  cursor: pointer;
+}
+
+.article-toolbar select:focus {
+  border-color: #777777;
+}
+
+/* =========================================
+   EDITOR BUTTONS
+========================================= */
+
+.editor-tool {
+  min-width: 36px;
+  min-height: 36px;
+
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  border: 1px solid #353535;
+  border-radius: 7px;
+
+  padding: 6px 9px;
+
+  background: #202020;
+  color: #eeeeee;
+
+  font-size: 13px;
+}
+
+.editor-tool:hover {
+  background: #303030;
+  color: #ffffff;
+}
+
+.editor-tool:active {
+  transform: scale(0.96);
+}
+
+.editor-tool strong {
+  font-size: 15px;
+}
+
+.editor-tool em {
+  font-size: 15px;
+}
+
+.editor-tool u {
+  font-size: 15px;
+}
+
+/* =========================================
+   TEXT COLOUR PICKER
+========================================= */
+
+.editor-color {
+  width: 38px;
+  height: 36px;
+
+  position: relative;
+
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  border: 1px solid #353535;
+  border-radius: 7px;
+
+  background: #202020;
+
+  color: #ff3333;
+
+  font-size: 17px;
+  font-weight: 800;
+
+  cursor: pointer;
+  overflow: hidden;
+}
+
+.editor-color span {
+  position: relative;
+  z-index: 1;
+  pointer-events: none;
+}
+
+.editor-color input[type="color"] {
+  position: absolute;
+  inset: 0;
+
+  width: 100%;
+  height: 100%;
+
+  padding: 0;
+  margin: 0;
+
+  border: 0;
+  opacity: 0;
+
+  cursor: pointer;
+}
+
+/* =========================================
+   ARTICLE WRITING AREA
+========================================= */
+
+.article-editor-area {
+  width: 100%;
+  min-height: 430px;
+
+  padding: 22px;
+
+  background: #181818;
+
+  border: 1px solid #303030;
+  border-radius: 0 0 12px 12px;
+
+  outline: none;
+
+  color: #ffffff;
+
+  font-family:
+    Arial,
+    Helvetica,
+    sans-serif;
+
+  font-size: 17px;
+  line-height: 1.8;
+
+  overflow-wrap: break-word;
+  word-break: normal;
+
+  transition:
+    border-color 0.2s,
+    background 0.2s;
+}
+
+.article-editor-area:focus {
+  border-color: #666666;
+  background: #1b1b1b;
+}
+
+/* =========================================
+   EDITOR PLACEHOLDER
+========================================= */
+
+.article-editor-area:empty::before {
+  content: attr(data-placeholder);
+
+  color: #666666;
+
+  pointer-events: none;
+}
+
+/* =========================================
+   ARTICLE FORMATTING
+========================================= */
+
+.article-editor-area p {
+  margin: 0 0 18px;
+}
+
+.article-editor-area h2 {
+  margin: 30px 0 15px;
+
+  color: #ffffff;
+
+  font-size: 30px;
+  line-height: 1.2;
+  letter-spacing: -0.5px;
+}
+
+.article-editor-area h3 {
+  margin: 25px 0 12px;
+
+  color: #ffffff;
+
+  font-size: 22px;
+  line-height: 1.3;
+}
+
+.article-editor-area blockquote {
+  margin: 25px 0;
+  padding: 18px 20px;
+
+  border-left: 4px solid #ffffff;
+
+  background: #222222;
+
+  color: #cccccc;
+
+  font-size: 18px;
+  line-height: 1.7;
+}
+
+.article-editor-area a {
+  color: #4da3ff;
+  text-decoration: underline;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 3px;
+}
+
+.article-editor-area a:hover {
+  color: #7bbcff;
+}
+
+.article-editor-area ul,
+.article-editor-area ol {
+  margin: 15px 0;
+  padding-left: 28px;
+}
+
+.article-editor-area li {
+  margin-bottom: 8px;
+}
+
+.article-editor-area strong {
+  color: #ffffff;
+}
+
+.article-editor-area img {
+  max-width: 100%;
+  height: auto;
+  border-radius: 10px;
+}
+
+/* =========================================
+   EDITOR HELP
+========================================= */
+
+.editor-help {
+  display: block;
+
+  margin-top: 10px;
+
+  color: #777777;
+
+  font-size: 12px;
+  line-height: 1.5;
+}
+
+/* =========================================
    PUBLISH
 ========================================= */
 
@@ -420,8 +703,10 @@ body {
   border: 0;
   border-radius: 11px;
   padding: 16px;
+
   background: #ffffff;
   color: #000000;
+
   font-size: 15px;
   font-weight: 700;
 }
@@ -462,6 +747,7 @@ body {
   display: flex;
   align-items: center;
   gap: 18px;
+
   padding: 16px;
 
   background: #111111;
@@ -471,4 +757,384 @@ body {
 
 .dashboard-article-image {
   width: 125px !important;
-  height: 82
+  height: 82px !important;
+
+  flex-shrink: 0;
+
+  object-fit: cover;
+
+  border-radius: 10px;
+  border: 1px solid #303030;
+}
+
+.dashboard-article-content {
+  flex: 1;
+  min-width: 0;
+}
+
+.dashboard-article-content h3 {
+  margin: 0 0 7px;
+
+  color: #ffffff;
+
+  font-size: 17px;
+  line-height: 1.35;
+}
+
+.dashboard-article-content p {
+  margin: 0;
+
+  color: #777777;
+
+  font-size: 12px;
+  line-height: 1.5;
+}
+
+.dashboard-article-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+
+  margin-top: 9px;
+
+  color: #666666;
+
+  font-size: 10px;
+  font-weight: 700;
+
+  letter-spacing: 1px;
+  text-transform: uppercase;
+}
+
+.dashboard-article-actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.delete-article-button {
+  border: 1px solid #393939;
+  border-radius: 8px;
+
+  padding: 9px 12px;
+
+  background: #191919;
+  color: #999999;
+
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.delete-article-button:hover {
+  border-color: #666666;
+  background: #252525;
+  color: #ffffff;
+}
+
+/* =========================================
+   EMPTY STATE
+========================================= */
+
+.empty-state {
+  padding: 55px 25px;
+
+  text-align: center;
+
+  background: #101010;
+
+  border: 1px dashed #303030;
+  border-radius: 17px;
+}
+
+.empty-state strong {
+  display: block;
+
+  margin-bottom: 8px;
+
+  color: #ffffff;
+
+  font-size: 18px;
+}
+
+.empty-state p {
+  margin: 0;
+
+  color: #777777;
+
+  font-size: 13px;
+  line-height: 1.6;
+}
+
+/* =========================================
+   DASHBOARD MESSAGE
+========================================= */
+
+.dashboard-message {
+  position: fixed;
+
+  left: 50%;
+  bottom: 25px;
+
+  z-index: 9999;
+
+  width: min(
+    calc(100% - 40px),
+    500px
+  );
+
+  transform: translateX(-50%);
+
+  padding: 13px 18px;
+
+  background: #ffffff;
+  color: #000000;
+
+  border-radius: 10px;
+
+  box-shadow:
+    0 15px 45px
+    rgba(0, 0, 0, 0.4);
+
+  font-size: 13px;
+  font-weight: 700;
+
+  text-align: center;
+
+  opacity: 0;
+  pointer-events: none;
+
+  transition:
+    opacity 0.25s ease,
+    transform 0.25s ease;
+}
+
+.dashboard-message.show {
+  opacity: 1;
+  transform:
+    translateX(-50%)
+    translateY(-4px);
+}
+
+/* =========================================
+   HIDDEN DASHBOARD
+========================================= */
+
+#dashboardApp {
+  display: block;
+}
+
+/* =========================================
+   MOBILE
+========================================= */
+
+@media (max-width: 900px) {
+
+  .stats-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+}
+
+@media (max-width: 700px) {
+
+  .dashboard-header {
+    margin: 10px;
+    width: calc(100% - 20px);
+
+    padding: 14px 16px;
+
+    border-radius: 14px;
+  }
+
+  .dashboard-container {
+    padding:
+      45px
+      15px
+      70px;
+  }
+
+  .dashboard-intro {
+    align-items: flex-start;
+
+    flex-direction: column;
+
+    gap: 22px;
+  }
+
+  .dashboard-intro h1 {
+    font-size: 48px;
+  }
+
+  .dashboard-intro p {
+    font-size: 14px;
+  }
+
+  .primary-button {
+    width: 100%;
+  }
+
+  .stats-grid {
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+  }
+
+  .stat-card {
+    min-height: 125px;
+    padding: 17px;
+  }
+
+  .stat-card strong {
+    font-size: 27px;
+  }
+
+  .editor-card {
+    padding: 18px;
+    border-radius: 16px;
+  }
+
+  .editor-heading {
+    align-items: flex-start;
+  }
+
+  .editor-heading h2 {
+    font-size: 27px;
+  }
+
+  .article-toolbar {
+    gap: 6px;
+    padding: 8px;
+  }
+
+  .article-toolbar select {
+    flex: 1;
+    min-width: 110px;
+  }
+
+  .editor-tool {
+    min-width: 36px;
+    min-height: 36px;
+  }
+
+  .article-editor-area {
+    min-height: 380px;
+
+    padding: 17px;
+
+    font-size: 16px;
+    line-height: 1.75;
+  }
+
+  .dashboard-article {
+    align-items: flex-start;
+    flex-wrap: wrap;
+  }
+
+  .dashboard-article-image {
+    width: 105px !important;
+    height: 72px !important;
+  }
+
+  .dashboard-article-content {
+    width: calc(100% - 125px);
+  }
+
+  .dashboard-article-actions {
+    width: 100%;
+  }
+
+  .delete-article-button {
+    width: 100%;
+  }
+
+}
+
+@media (max-width: 480px) {
+
+  .login-screen {
+    padding: 15px;
+  }
+
+  .login-card {
+    padding: 25px;
+    border-radius: 18px;
+  }
+
+  .login-card h1 {
+    font-size: 30px;
+  }
+
+  .dashboard-brand strong {
+    font-size: 15px;
+  }
+
+  .website-link {
+    font-size: 11px;
+  }
+
+  .dashboard-intro h1 {
+    font-size: 42px;
+    letter-spacing: -2px;
+  }
+
+  .stats-grid {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .stat-card {
+    min-height: 115px;
+    padding: 14px;
+  }
+
+  .stat-card span {
+    font-size: 9px;
+    letter-spacing: 1.3px;
+  }
+
+  .stat-card strong {
+    font-size: 24px;
+  }
+
+  .editor-card {
+    padding: 14px;
+  }
+
+  .editor-heading {
+    flex-direction: column;
+  }
+
+  .cancel-button {
+    width: 100%;
+  }
+
+  .article-toolbar {
+    align-items: stretch;
+  }
+
+  .article-toolbar select {
+    width: 100%;
+    flex: 1 1 100%;
+  }
+
+  .editor-tool {
+    flex: 0 0 auto;
+  }
+
+  .article-editor-area {
+    min-height: 340px;
+    font-size: 16px;
+  }
+
+  .dashboard-article {
+    padding: 13px;
+  }
+
+  .dashboard-article-image {
+    width: 90px !important;
+    height: 65px !important;
+  }
+
+  .dashboard-article-content {
+    width: calc(100% - 108px);
+  }
+
+}

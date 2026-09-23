@@ -1138,3 +1138,11 @@ body {
   }
 
 }
+
+/* =========================================
+   HIDE OLD ARTICLE TEXTAREA
+========================================= */
+
+#articleStory {
+  display: none !important;
+}

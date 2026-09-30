@@ -1,10 +1,1365 @@
-s="market-card">
+<!DOCTYPE html>
+<html lang="en">
 
-      <span>ETHEREUM</span>
+<head>
 
-      <strong id="marketEth">$—</strong>
+  <meta charset="UTF-8">
 
-      <em id="marketEthChange">—</em>
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+  >
+
+  <meta
+    name="description"
+    content="OINANCE LINK — Technology, markets, finance, economics, business and global news."
+  >
+
+  <!-- PWA -->
+  <meta name="theme-color" content="#050505">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+
+  <meta
+    name="apple-mobile-web-app-status-bar-style"
+    content="black-translucent"
+  >
+
+  <meta
+    name="apple-mobile-web-app-title"
+    content="OINANCE LINK"
+  >
+
+  <link rel="manifest" href="manifest.json">
+
+  <link
+    rel="icon"
+    type="image/png"
+    href="file_000000001bdc81f496a425cbbdef65a7.png"
+  >
+
+  <link
+    rel="apple-touch-icon"
+    href="file_000000001bdc81f496a425cbbdef65a7.png"
+  >
+
+  <link rel="stylesheet" href="style.css">
+
+  <title>OINANCE LINK</title>
+
+</head>
+
+
+<body>
+
+
+<!-- ==================================================
+     APP LAUNCH SCREEN
+================================================== -->
+
+<div
+  id="oinanceSplash"
+  aria-label="OINANCE LINK loading"
+>
+
+  <img
+    src="icon-192.png"
+    alt="OINANCE LINK"
+  >
+
+  <strong>
+    OINANCE LINK
+  </strong>
+
+  <span>
+    TECHNOLOGY & NEWS
+  </span>
+
+  <div
+    class="oinance-splash-loader"
+    aria-hidden="true"
+  ></div>
+
+</div>
+
+
+<!-- ==================================================
+     HEADER
+================================================== -->
+
+<header class="site-header">
+
+  <div class="header-inner">
+
+    <a href="#home" class="brand">
+
+      <img
+        src="IMG_20260916_192545.jpg"
+        alt="OINANCE LINK Logo"
+        class="brand-logo"
+      >
+
+      <div class="brand-text">
+
+        <strong>OINANCE LINK</strong>
+
+        <span>TECHNOLOGY & NEWS</span>
+
+      </div>
+
+    </a>
+
+
+    <nav class="desktop-nav">
+
+      <a href="#home">Home</a>
+
+      <a href="#markets">Markets</a>
+
+      <a href="#news">News</a>
+
+      <a href="#technology">Technology</a>
+
+      <a href="#business">Business</a>
+
+      <a href="#about">About</a>
+
+    </nav>
+
+
+    <button
+      class="search-button"
+      id="searchButton"
+      aria-label="Search"
+    >
+      🔎
+    </button>
+
+
+    <a
+      href="dashboard.html"
+      class="dashboard-button"
+    >
+      Dashboard
+    </a>
+
+
+    <button
+      class="menu-button"
+      id="menuButton"
+      aria-label="Open menu"
+    >
+      ☰
+    </button>
+
+  </div>
+
+
+  <div
+    class="mobile-menu"
+    id="mobileMenu"
+  >
+
+    <a href="#home">Home</a>
+
+    <a href="#markets">Markets</a>
+
+    <a href="#news">News</a>
+
+    <a href="#technology">Technology</a>
+
+    <a href="#business">Business</a>
+
+    <a href="#about">About</a>
+
+    <a
+      href="dashboard.html"
+      class="mobile-dashboard"
+    >
+      Dashboard →
+    </a>
+
+  </div>
+
+</header>
+
+
+<!-- ==================================================
+     SEARCH
+================================================== -->
+
+<div
+  id="searchPanel"
+  class="search-panel"
+>
+
+  <div class="search-inner">
+
+    <input
+      type="search"
+      id="siteSearch"
+      placeholder="Search OINANCE News..."
+      autocomplete="off"
+    >
+
+    <button
+      id="closeSearch"
+      type="button"
+    >
+      ✕
+    </button>
+
+  </div>
+
+</div>
+
+
+<!-- ==================================================
+     PRODUCT LOGIN
+================================================== -->
+
+<div
+  id="productLoginModal"
+  class="product-login-modal"
+  aria-hidden="true"
+>
+
+  <div
+    class="product-login-overlay"
+    id="productLoginOverlay"
+  ></div>
+
+
+  <div
+    class="product-login-box"
+    role="dialog"
+    aria-modal="true"
+    aria-labelledby="productLoginTitle"
+  >
+
+    <button
+      type="button"
+      class="product-login-close"
+      id="productLoginClose"
+      aria-label="Close login"
+    >
+      ✕
+    </button>
+
+
+    <div class="product-login-icon"></div>
+
+
+    <span class="eyebrow">
+      OINANCE PRODUCT
+    </span>
+
+
+    <h2 id="productLoginTitle">
+      Login to access this product
+    </h2>
+
+
+    <p id="productLoginMessage">
+      Please log in with your email or sign up for an OINANCE account to access this product.
+    </p>
+
+
+    <div class="product-login-actions">
+
+      <button
+        type="button"
+        id="productLoginButton"
+      >
+        Login
+      </button>
+
+
+      <button
+        type="button"
+        id="productSignupButton"
+      >
+        Sign Up
+      </button>
+
+    </div>
+
+  </div>
+
+</div>
+
+
+<!-- ==================================================
+     LIVE MARKET TICKER
+================================================== -->
+
+<section
+  class="market-ticker"
+  id="markets"
+>
+
+  <div class="ticker-label">
+    LIVE MARKETS
+  </div>
+
+
+  <div class="ticker-window">
+
+    <div
+      class="ticker-track"
+      id="marketTickerTrack"
+    >
+
+      <div class="market-item">
+
+        <span>BTC</span>
+
+        <strong id="btcPrice">$—</strong>
+
+        <em
+          id="btcChange"
+          class="market-up"
+        >
+          —
+        </em>
+
+      </div>
+
+
+      <div class="market-item">
+
+        <span>ETH</span>
+
+        <strong id="ethPrice">$—</strong>
+
+        <em
+          id="ethChange"
+          class="market-down"
+        >
+          —
+        </em>
+
+      </div>
+
+
+      <div class="market-item">
+
+        <span>SOL</span>
+
+        <strong id="solPrice">$—</strong>
+
+        <em
+          id="solChange"
+          class="market-up"
+        >
+          —
+        </em>
+
+      </div>
+
+
+      <div class="market-item">
+
+        <span>BNB</span>
+
+        <strong id="bnbPrice">$—</strong>
+
+        <em
+          id="bnbChange"
+          class="market-up"
+        >
+          —
+        </em>
+
+      </div>
+
+
+      <div class="market-item">
+
+        <span>XRP</span>
+
+        <strong id="xrpPrice">$—</strong>
+
+        <em
+          id="xrpChange"
+          class="market-up"
+        >
+          —
+        </em>
+
+      </div>
+
+
+      <div class="market-item">
+
+        <span>DOGE</span>
+
+        <strong id="dogePrice">$—</strong>
+
+        <em
+          id="dogeChange"
+          class="market-up"
+        >
+          —
+        </em>
+
+      </div>
+
+
+      <div class="market-item">
+
+        <span>ADA</span>
+
+        <strong id="adaPrice">$—</strong>
+
+        <em
+          id="adaChange"
+          class="market-up"
+        >
+          —
+        </em>
+
+      </div>
+
+
+      <div class="market-item">
+
+        <span>AVAX</span>
+
+        <strong id="avaxPrice">$—</strong>
+
+        <em
+          id="avaxChange"
+          class="market-up"
+        >
+          —
+        </em>
+
+      </div>
+
+    </div>
+
+  </div>
+
+</section>
+
+
+<!-- ==================================================
+     MAIN
+================================================== -->
+
+<main>
+
+
+<!-- ==================================================
+     HERO
+================================================== -->
+
+<section
+  class="news-hero"
+  id="home"
+>
+
+  <div class="hero-label">
+
+    <span>OINANCE LINK</span>
+
+    <strong>NEWS</strong>
+
+  </div>
+
+
+  <h1>
+    The latest news,
+    <br>
+    markets and ideas.
+  </h1>
+
+
+  <p>
+    Technology, finance, economics, business,
+    markets and developments shaping the world.
+  </p>
+
+</section>
+
+
+<!-- ==================================================
+     NEWS CATEGORY NAVIGATION
+================================================== -->
+
+<section class="category-section">
+
+  <div class="category-scroll">
+
+    <button
+      class="category-button active"
+      data-category="All"
+    >
+      All
+    </button>
+
+    <button
+      class="category-button"
+      data-category="Market"
+    >
+      Markets
+    </button>
+
+    <button
+      class="category-button"
+      data-category="Bitcoin"
+    >
+      Bitcoin
+    </button>
+
+    <button
+      class="category-button"
+      data-category="Ethereum"
+    >
+      Ethereum
+    </button>
+
+    <button
+      class="category-button"
+      data-category="Altcoins"
+    >
+      Altcoins
+    </button>
+
+    <button
+      class="category-button"
+      data-category="Blockchain"
+    >
+      Blockchain
+    </button>
+
+    <button
+      class="category-button"
+      data-category="Regulation"
+    >
+      Regulation
+    </button>
+
+    <button
+      class="category-button"
+      data-category="Magazine"
+    >
+      Magazine
+    </button>
+
+    <button
+      class="category-button"
+      data-category="Finance"
+    >
+      Finance
+    </button>
+
+    <button
+      class="category-button"
+      data-category="Technology"
+    >
+      Technology
+    </button>
+
+    <button
+      class="category-button"
+      data-category="AI"
+    >
+      AI
+    </button>
+
+    <button
+      class="category-button"
+      data-category="Business"
+    >
+      Business
+    </button>
+
+    <button
+      class="category-button"
+      data-category="Economics"
+    >
+      Economics
+    </button>
+
+    <button
+      class="category-button"
+      data-category="Cryptocurrency"
+    >
+      Cryptocurrency
+    </button>
+
+    <button
+      class="category-button"
+      data-category="Breaking News"
+    >
+      Breaking News
+    </button>
+
+  </div>
+
+</section>
+
+
+<!-- ==================================================
+     LIVE NEWS & MARKETS
+================================================== -->
+
+<section
+  class="section live-news-section"
+  id="liveNewsMarkets"
+>
+
+  <div class="section-heading">
+
+    <span class="eyebrow">
+      LIVE
+    </span>
+
+    <h2>
+      Live News & Markets
+    </h2>
+
+    <p>
+      The latest OINANCE stories alongside
+      live market movements.
+    </p>
+
+  </div>
+
+
+  <div class="live-news-grid">
+
+
+    <div class="live-news-column">
+
+      <div class="section-top">
+
+        <span>
+          LIVE NEWS
+        </span>
+
+        <a href="#news">
+          View All →
+        </a>
+
+      </div>
+
+
+      <div
+        id="liveNewsList"
+        class="live-news-list"
+      >
+
+        <article class="latest-placeholder">
+
+          <small>
+            OINANCE NEWS
+          </small>
+
+          <h3>
+            Live stories will appear here.
+          </h3>
+
+        </article>
+
+      </div>
+
+    </div>
+
+
+    <aside class="live-market-column">
+
+      <div class="section-top">
+
+        <span>
+          MARKET MOVES
+        </span>
+
+        <a href="#markets">
+          Markets →
+        </a>
+
+      </div>
+
+
+      <div
+        id="liveMarketList"
+        class="live-market-list"
+      >
+
+        <div class="live-market-row">
+
+          <span>Bitcoin</span>
+
+          <strong id="liveBtcPrice">
+            $—
+          </strong>
+
+          <em id="liveBtcChange">
+            —
+          </em>
+
+        </div>
+
+
+        <div class="live-market-row">
+
+          <span>Ethereum</span>
+
+          <strong id="liveEthPrice">
+            $—
+          </strong>
+
+          <em id="liveEthChange">
+            —
+          </em>
+
+        </div>
+
+
+        <div class="live-market-row">
+
+          <span>Solana</span>
+
+          <strong id="liveSolPrice">
+            $—
+          </strong>
+
+          <em id="liveSolChange">
+            —
+          </em>
+
+        </div>
+
+
+        <div class="live-market-row">
+
+          <span>BNB</span>
+
+          <strong id="liveBnbPrice">
+            $—
+          </strong>
+
+          <em id="liveBnbChange">
+            —
+          </em>
+
+        </div>
+
+      </div>
+
+    </aside>
+
+  </div>
+
+</section>
+
+
+<!-- ==================================================
+     TOP NEWS
+================================================== -->
+
+<section
+  class="section top-news-section"
+  id="topNews"
+>
+
+  <div class="section-heading">
+
+    <span class="eyebrow">
+      TOP NEWS
+    </span>
+
+    <h2>
+      Stories making headlines.
+    </h2>
+
+    <p>
+      The latest important developments from
+      markets, technology, business and finance.
+    </p>
+
+  </div>
+
+
+  <div
+    id="topNewsGrid"
+    class="top-news-grid"
+  >
+
+    <article class="news-placeholder">
+
+      <div class="placeholder-image"></div>
+
+      <div class="placeholder-content">
+
+        <span>
+          TOP NEWS
+        </span>
+
+        <h3>
+          Top stories will appear here.
+        </h3>
+
+        <p>
+          Your latest published stories will be
+          displayed in this section.
+        </p>
+
+      </div>
+
+    </article>
+
+  </div>
+
+</section>
+
+
+<!-- ==================================================
+     FEATURED + LATEST
+================================================== -->
+
+<section
+  class="main-news-section"
+  id="news"
+>
+
+  <div class="featured-news">
+
+    <div class="section-top">
+
+      <span>
+        FEATURED
+      </span>
+
+      <a href="#news">
+        View All →
+      </a>
+
+    </div>
+
+
+    <div
+      id="featuredNews"
+      class="featured-news-card"
+    >
+
+      <div class="featured-placeholder">
+
+        <span>
+          OINANCE NEWS
+        </span>
+
+        <h2>
+          Loading latest news...
+        </h2>
+
+        <p>
+          OINANCE LINK News is loading the
+          latest featured story.
+        </p>
+
+      </div>
+
+    </div>
+
+  </div>
+
+
+  <aside class="latest-news">
+
+    <div class="section-top">
+
+      <span>
+        LATEST
+      </span>
+
+      <a href="#news">
+        See All →
+      </a>
+
+    </div>
+
+
+    <div
+      id="latestNews"
+      class="latest-news-list"
+    >
+
+      <article class="latest-placeholder">
+
+        <small>
+          OINANCE NEWS
+        </small>
+
+        <h3>
+          Latest stories will appear here.
+        </h3>
+
+      </article>
+
+    </div>
+
+  </aside>
+
+</section>
+
+
+<!-- ==================================================
+     MOST READ
+================================================== -->
+
+<section
+  class="section most-read-section"
+  id="mostRead"
+>
+
+  <div class="section-heading">
+
+    <span class="eyebrow">
+      MOST READ
+    </span>
+
+    <h2>
+      What readers are following.
+    </h2>
+
+  </div>
+
+
+  <div
+    id="mostReadList"
+    class="most-read-list"
+  >
+
+    <article class="most-read-placeholder">
+
+      <span class="most-read-number">
+        01
+      </span>
+
+      <div>
+
+        <small>
+          OINANCE NEWS
+        </small>
+
+        <h3>
+          Most-read stories will appear here.
+        </h3>
+
+      </div>
+
+    </article>
+
+  </div>
+
+</section>
+
+
+<!-- ==================================================
+     LATEST STORIES
+================================================== -->
+
+<section class="section news-section">
+
+  <div class="section-heading">
+
+    <span class="eyebrow">
+      OINANCE NEWS
+    </span>
+
+    <h2>
+      Latest Stories
+    </h2>
+
+    <p>
+      News, developments and ideas from
+      markets, technology, finance and business.
+    </p>
+
+  </div>
+
+
+  <div
+    id="newsGrid"
+    class="news-grid"
+  >
+
+    <article class="news-placeholder">
+
+      <div class="placeholder-image"></div>
+
+      <div class="placeholder-content">
+
+        <span>
+          OINANCE NEWS
+        </span>
+
+        <h3>
+          OINANCE News is coming soon.
+        </h3>
+
+        <p>
+          Articles published through the
+          OINANCE Dashboard will appear here.
+        </p>
+
+      </div>
+
+    </article>
+
+  </div>
+
+</section>
+
+
+<!-- ==================================================
+     EDITORIAL NEWS SECTIONS
+================================================== -->
+
+<section
+  class="section editorial-section"
+  id="editorialSections"
+>
+
+  <div class="section-heading">
+
+    <span class="eyebrow">
+      OINANCE EDITORIAL
+    </span>
+
+    <h2>
+      Explore the newsroom.
+    </h2>
+
+    <p>
+      Follow individual areas of the OINANCE
+      newsroom and discover stories by topic.
+    </p>
+
+  </div>
+
+
+  <!-- MARKETS -->
+
+  <div
+    class="editorial-block"
+    id="marketsNews"
+  >
+
+    <div class="editorial-heading">
+
+      <span>
+        MARKETS
+      </span>
+
+      <a href="#marketsNews">
+        More →
+      </a>
+
+    </div>
+
+
+    <div
+      id="marketsNewsGrid"
+      class="editorial-news-grid"
+    >
+
+      <div class="editorial-placeholder">
+        Markets stories will appear here.
+      </div>
+
+    </div>
+
+  </div>
+
+
+  <!-- BITCOIN -->
+
+  <div
+    class="editorial-block"
+    id="bitcoinNews"
+  >
+
+    <div class="editorial-heading">
+
+      <span>
+        BITCOIN
+      </span>
+
+      <a href="#bitcoinNews">
+        More →
+      </a>
+
+    </div>
+
+
+    <div
+      id="bitcoinNewsGrid"
+      class="editorial-news-grid"
+    >
+
+      <div class="editorial-placeholder">
+        Bitcoin stories will appear here.
+      </div>
+
+    </div>
+
+  </div>
+
+
+  <!-- ETHEREUM -->
+
+  <div
+    class="editorial-block"
+    id="ethereumNews"
+  >
+
+    <div class="editorial-heading">
+
+      <span>
+        ETHEREUM
+      </span>
+
+      <a href="#ethereumNews">
+        More →
+      </a>
+
+    </div>
+
+
+    <div
+      id="ethereumNewsGrid"
+      class="editorial-news-grid"
+    >
+
+      <div class="editorial-placeholder">
+        Ethereum stories will appear here.
+      </div>
+
+    </div>
+
+  </div>
+
+
+  <!-- ALTCOINS -->
+
+  <div
+    class="editorial-block"
+    id="altcoinsNews"
+  >
+
+    <div class="editorial-heading">
+
+      <span>
+        ALTCOINS
+      </span>
+
+      <a href="#altcoinsNews">
+        More →
+      </a>
+
+    </div>
+
+
+    <div
+      id="altcoinsNewsGrid"
+      class="editorial-news-grid"
+    >
+
+      <div class="editorial-placeholder">
+        Altcoin stories will appear here.
+      </div>
+
+    </div>
+
+  </div>
+
+
+  <!-- BLOCKCHAIN -->
+
+  <div
+    class="editorial-block"
+    id="blockchainNews"
+  >
+
+    <div class="editorial-heading">
+
+      <span>
+        BLOCKCHAIN
+      </span>
+
+      <a href="#blockchainNews">
+        More →
+      </a>
+
+    </div>
+
+
+    <div
+      id="blockchainNewsGrid"
+      class="editorial-news-grid"
+    >
+
+      <div class="editorial-placeholder">
+        Blockchain stories will appear here.
+      </div>
+
+    </div>
+
+  </div>
+
+
+  <!-- REGULATION -->
+
+  <div
+    class="editorial-block"
+    id="regulationNews"
+  >
+
+    <div class="editorial-heading">
+
+      <span>
+        REGULATION
+      </span>
+
+      <a href="#regulationNews">
+        More →
+      </a>
+
+    </div>
+
+
+    <div
+      id="regulationNewsGrid"
+      class="editorial-news-grid"
+    >
+
+      <div class="editorial-placeholder">
+        Regulation stories will appear here.
+      </div>
+
+    </div>
+
+  </div>
+
+
+  <!-- MAGAZINE -->
+
+  <div
+    class="editorial-block"
+    id="magazineNews"
+  >
+
+    <div class="editorial-heading">
+
+      <span>
+        MAGAZINE
+      </span>
+
+      <a href="#magazineNews">
+        More →
+      </a>
+
+    </div>
+
+
+    <div
+      id="magazineNewsGrid"
+      class="editorial-news-grid"
+    >
+
+      <div class="editorial-placeholder">
+        Magazine stories will appear here.
+      </div>
+
+    </div>
+
+  </div>
+
+</section>
+
+
+<!-- ==================================================
+     MARKET WATCH
+================================================== -->
+
+<section class="market-watch">
+
+  <div class="section-heading">
+
+    <span class="eyebrow">
+      MARKET WATCH
+    </span>
+
+    <h2>
+      Markets in focus.
+    </h2>
+
+  </div>
+
+
+  <div class="market-grid">
+
+
+    <article class="market-card">
+
+      <span>
+        BITCOIN
+      </span>
+
+      <strong id="marketBtc">
+        $—
+      </strong>
+
+      <em id="marketBtcChange">
+        —
+      </em>
+
+      <div
+        class="mini-chart"
+        id="btcChart"
+        aria-label="Bitcoin price chart"
+      >
+
+        <div class="chart-bars">
+
+          <span></span>
+          <span></span>
+          <span></span>
+          <span></span>
+          <span></span>
+          <span></span>
+          <span></span>
+          <span></span>
+          <span></span>
+          <span></span>
+          <span></span>
+          <span></span>
+
+        </div>
+
+      </div>
+
+    </article>
+
+
+    <article class="market-card">
+
+      <span>
+        ETHEREUM
+      </span>
+
+      <strong id="marketEth">
+        $—
+      </strong>
+
+      <em id="marketEthChange">
+        —
+      </em>
 
       <div
         class="mini-chart"
@@ -14,10 +1369,18 @@ s="market-card">
 
         <div class="chart-bars">
 
-          <span></span><span></span><span></span>
-          <span></span><span></span><span></span>
-          <span></span><span></span><span></span>
-          <span></span><span></span><span></span>
+          <span></span>
+          <span></span>
+          <span></span>
+          <span></span>
+          <span></span>
+          <span></span>
+          <span></span>
+          <span></span>
+          <span></span>
+          <span></span>
+          <span></span>
+          <span></span>
 
         </div>
 
@@ -26,14 +1389,19 @@ s="market-card">
     </article>
 
 
-
     <article class="market-card">
 
-      <span>SOLANA</span>
+      <span>
+        SOLANA
+      </span>
 
-      <strong id="marketSol">$—</strong>
+      <strong id="marketSol">
+        $—
+      </strong>
 
-      <em id="marketSolChange">—</em>
+      <em id="marketSolChange">
+        —
+      </em>
 
       <div
         class="mini-chart"
@@ -43,10 +1411,18 @@ s="market-card">
 
         <div class="chart-bars">
 
-          <span></span><span></span><span></span>
-          <span></span><span></span><span></span>
-          <span></span><span></span><span></span>
-          <span></span><span></span><span></span>
+          <span></span>
+          <span></span>
+          <span></span>
+          <span></span>
+          <span></span>
+          <span></span>
+          <span></span>
+          <span></span>
+          <span></span>
+          <span></span>
+          <span></span>
+          <span></span>
 
         </div>
 
@@ -55,14 +1431,19 @@ s="market-card">
     </article>
 
 
-
     <article class="market-card">
 
-      <span>BNB</span>
+      <span>
+        BNB
+      </span>
 
-      <strong id="marketBnb">$—</strong>
+      <strong id="marketBnb">
+        $—
+      </strong>
 
-      <em id="marketBnbChange">—</em>
+      <em id="marketBnbChange">
+        —
+      </em>
 
       <div
         class="mini-chart"
@@ -72,10 +1453,18 @@ s="market-card">
 
         <div class="chart-bars">
 
-          <span></span><span></span><span></span>
-          <span></span><span></span><span></span>
-          <span></span><span></span><span></span>
-          <span></span><span></span><span></span>
+          <span></span>
+          <span></span>
+          <span></span>
+          <span></span>
+          <span></span>
+          <span></span>
+          <span></span>
+          <span></span>
+          <span></span>
+          <span></span>
+          <span></span>
+          <span></span>
 
         </div>
 
@@ -88,6 +1477,9 @@ s="market-card">
 </section>
 
 
+<!-- ==================================================
+     IN FOCUS
+================================================== -->
 
 <section class="focus-section">
 
@@ -106,23 +1498,62 @@ s="market-card">
 
   <div class="focus-tags">
 
-    <a href="#news">Bitcoin</a>
-    <a href="#news">Artificial Intelligence</a>
-    <a href="#news">Global Markets</a>
-    <a href="#news">Finance</a>
-    <a href="#news">Technology</a>
-    <a href="#news">Economics</a>
-    <a href="#news">Business</a>
-    <a href="#news">Blockchain</a>
-    <a href="#news">Politics</a>
-    <a href="#news">Industries</a>
-    <a href="#news">Cryptocurrency</a>
+    <a href="#bitcoinNews">
+      Bitcoin
+    </a>
+
+    <a href="#ethereumNews">
+      Ethereum
+    </a>
+
+    <a href="#altcoinsNews">
+      Altcoins
+    </a>
+
+    <a href="#blockchainNews">
+      Blockchain
+    </a>
+
+    <a href="#regulationNews">
+      Regulation
+    </a>
+
+    <a href="#magazineNews">
+      Magazine
+    </a>
+
+    <a href="#news">
+      Artificial Intelligence
+    </a>
+
+    <a href="#news">
+      Global Markets
+    </a>
+
+    <a href="#news">
+      Finance
+    </a>
+
+    <a href="#technology">
+      Technology
+    </a>
+
+    <a href="#news">
+      Economics
+    </a>
+
+    <a href="#business">
+      Business
+    </a>
 
   </div>
 
 </section>
 
 
+<!-- ==================================================
+     TECHNOLOGY
+================================================== -->
 
 <section
   class="section"
@@ -151,7 +1582,9 @@ s="market-card">
 
     <article class="technology-card">
 
-      <span class="card-number">01</span>
+      <span class="card-number">
+        01
+      </span>
 
       <h3>
         Artificial Intelligence
@@ -167,7 +1600,9 @@ s="market-card">
 
     <article class="technology-card">
 
-      <span class="card-number">02</span>
+      <span class="card-number">
+        02
+      </span>
 
       <h3>
         Digital Finance
@@ -183,7 +1618,9 @@ s="market-card">
 
     <article class="technology-card">
 
-      <span class="card-number">03</span>
+      <span class="card-number">
+        03
+      </span>
 
       <h3>
         Blockchain
@@ -199,7 +1636,9 @@ s="market-card">
 
     <article class="technology-card">
 
-      <span class="card-number">04</span>
+      <span class="card-number">
+        04
+      </span>
 
       <h3>
         Future Technology
@@ -217,9 +1656,8 @@ s="market-card">
 </section>
 
 
-
 <!-- ==================================================
-     OINANCE PRODUCTS
+     PRODUCTS
 ================================================== -->
 
 <section
@@ -243,11 +1681,11 @@ s="market-card">
   <!-- BITCOIN MINING CALCULATOR -->
 
   <a
-  href="#"
-  class="product-card product-protected"
-  data-product-name="Bitcoin Mining Calculator"
-  data-product-url="https://oinancelink.github.io/oinance-bitcoin-calculator/"
->
+    href="#"
+    class="product-card product-protected"
+    data-product-name="Bitcoin Mining Calculator"
+    data-product-url="https://oinancelink.github.io/oinance-bitcoin-calculator/"
+  >
 
     <div>
 
@@ -275,15 +1713,14 @@ s="market-card">
   </a>
 
 
-
   <!-- OINANCE CRYPTO & STOCK MARKET -->
 
   <a
-  href="#"
-  class="product-card product-protected"
-  data-product-name="OINANCE Crypto & Stock Market"
-  data-product-url="https://oinancelink.github.io/OINANCE-Markets/"
->
+    href="#"
+    class="product-card product-protected"
+    data-product-name="OINANCE Crypto & Stock Market"
+    data-product-url="https://oinancelink.github.io/OINANCE-Markets/"
+  >
 
     <div>
 
@@ -313,6 +1750,9 @@ s="market-card">
 </section>
 
 
+<!-- ==================================================
+     BUSINESS
+================================================== -->
 
 <section
   class="section"
@@ -339,6 +1779,9 @@ s="market-card">
 </section>
 
 
+<!-- ==================================================
+     ABOUT
+================================================== -->
 
 <section
   class="section about-section"
@@ -368,6 +1811,9 @@ s="market-card">
 </section>
 
 
+<!-- ==================================================
+     NEWSLETTER
+================================================== -->
 
 <section class="newsletter-section">
 
@@ -400,6 +1846,7 @@ s="market-card">
         required
       >
 
+
       <button type="submit">
         Subscribe →
       </button>
@@ -417,9 +1864,7 @@ s="market-card">
 </section>
 
 
-
 </main>
-
 
 
 <!-- ==================================================
@@ -455,15 +1900,37 @@ s="market-card">
 
     <div class="footer-links">
 
-      <a href="#markets">Markets</a>
+      <a href="#markets">
+        Markets
+      </a>
 
-      <a href="#technology">Technology</a>
+      <a href="#bitcoinNews">
+        Bitcoin
+      </a>
 
-      <a href="#news">News</a>
+      <a href="#ethereumNews">
+        Ethereum
+      </a>
 
-      <a href="#business">Business</a>
+      <a href="#blockchainNews">
+        Blockchain
+      </a>
 
-      <a href="#about">About</a>
+      <a href="#technology">
+        Technology
+      </a>
+
+      <a href="#news">
+        News
+      </a>
+
+      <a href="#business">
+        Business
+      </a>
+
+      <a href="#about">
+        About
+      </a>
 
     </div>
 
@@ -483,7 +1950,6 @@ s="market-card">
   </div>
 
 </footer>
-
 
 
 <!-- ==================================================

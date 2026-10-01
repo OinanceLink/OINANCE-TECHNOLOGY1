@@ -1,463 +1,1180 @@
-===================== */
+/* =========================================================
+   OINANCE LINK — MAIN WEBSITE SCRIPT
+   ========================================================= */
 
-function createEditorialCard(
-  article
-) {
+/* =========================================================
+   SUPABASE
+   ========================================================= */
 
-  const card =
-    document.createElement(
-      "article"
+const SUPABASE_URL = "https://ohvqwdtvtcqchuwethuw.supabase.co";
+
+const SUPABASE_KEY =
+  "sb_publishable_PRGk5RJCVmUB--1ovLeC0g_qo25F6L3";
+
+const supabaseClient =
+  window.supabase.createClient(
+    SUPABASE_URL,
+    SUPABASE_KEY
+  );
+
+
+/* =========================================================
+   GLOBAL DATA
+   ========================================================= */
+
+let allNewsArticles = [];
+
+
+/* =========================================================
+   MARKET ASSETS
+   ========================================================= */
+
+const MARKET_ASSETS = {
+  btc: {
+    id: "bitcoin",
+    symbol: "BTC",
+    name: "Bitcoin",
+    priceId: "btcPrice",
+    changeId: "btcChange",
+    tickerPriceId: "tickerBtcPrice",
+    tickerChangeId: "tickerBtcChange",
+    livePriceId: "liveBtcPrice",
+    liveChangeId: "liveBtcChange",
+    marketPriceId: "marketBtc",
+    chartId: "btcChart"
+  },
+
+  eth: {
+    id: "ethereum",
+    symbol: "ETH",
+    name: "Ethereum",
+    priceId: "ethPrice",
+    changeId: "ethChange",
+    tickerPriceId: "tickerEthPrice",
+    tickerChangeId: "tickerEthChange",
+    livePriceId: "liveEthPrice",
+    liveChangeId: "liveEthChange",
+    marketPriceId: "marketEth",
+    chartId: "ethChart"
+  },
+
+  sol: {
+    id: "solana",
+    symbol: "SOL",
+    name: "Solana",
+    priceId: "solPrice",
+    changeId: "solChange",
+    tickerPriceId: "tickerSolPrice",
+    tickerChangeId: "tickerSolChange",
+    livePriceId: "liveSolPrice",
+    liveChangeId: "liveSolChange",
+    marketPriceId: "marketSol",
+    chartId: "solChart"
+  },
+
+  bnb: {
+    id: "binancecoin",
+    symbol: "BNB",
+    name: "BNB",
+    priceId: "bnbPrice",
+    changeId: "bnbChange",
+    tickerPriceId: "tickerBnbPrice",
+    tickerChangeId: "tickerBnbChange",
+    livePriceId: "liveBnbPrice",
+    liveChangeId: "liveBnbChange",
+    marketPriceId: "marketBnb",
+    chartId: "bnbChart"
+  },
+
+  xrp: {
+    id: "ripple",
+    symbol: "XRP",
+    name: "XRP",
+    tickerPriceId: "tickerXrpPrice",
+    tickerChangeId: "tickerXrpChange",
+    livePriceId: "liveXrpPrice",
+    liveChangeId: "liveXrpChange"
+  },
+
+  doge: {
+    id: "dogecoin",
+    symbol: "DOGE",
+    name: "Dogecoin",
+    tickerPriceId: "tickerDogePrice",
+    tickerChangeId: "tickerDogeChange",
+    livePriceId: "liveDogePrice",
+    liveChangeId: "liveDogeChange"
+  },
+
+  ada: {
+    id: "cardano",
+    symbol: "ADA",
+    name: "Cardano",
+    tickerPriceId: "tickerAdaPrice",
+    tickerChangeId: "tickerAdaChange",
+    livePriceId: "liveAdaPrice",
+    liveChangeId: "liveAdaChange"
+  },
+
+  avax: {
+    id: "avalanche-2",
+    symbol: "AVAX",
+    name: "Avalanche",
+    tickerPriceId: "tickerAvaxPrice",
+    tickerChangeId: "tickerAvaxChange",
+    livePriceId: "liveAvaxPrice",
+    liveChangeId: "liveAvaxChange"
+  }
+};
+
+
+/* =========================================================
+   STARTUP
+   ========================================================= */
+
+document.addEventListener("DOMContentLoaded", () => {
+
+  setupMobileMenu();
+
+  setupSearch();
+
+  updateYear();
+
+  setupNewsCategories();
+
+  setupNewsletter();
+
+  setupMarketStatsStyle();
+
+  setupProductProtection();
+
+  loadNews();
+
+  loadFeaturedNews();
+
+  loadMarketData();
+
+  setupLiveTicker();
+
+});
+
+
+/* =========================================================
+   MOBILE MENU
+   ========================================================= */
+
+function setupMobileMenu() {
+
+  const menuToggle =
+    document.getElementById("menuToggle");
+
+  const navLinks =
+    document.getElementById("navLinks");
+
+  if (!menuToggle || !navLinks) return;
+
+  menuToggle.addEventListener("click", () => {
+
+    navLinks.classList.toggle("active");
+
+    menuToggle.classList.toggle("active");
+
+  });
+
+
+  navLinks.querySelectorAll("a").forEach(link => {
+
+    link.addEventListener("click", () => {
+
+      navLinks.classList.remove("active");
+
+      menuToggle.classList.remove("active");
+
+    });
+
+  });
+
+}
+
+
+/* =========================================================
+   SEARCH
+   ========================================================= */
+
+function setupSearch() {
+
+  const searchButton =
+    document.getElementById("searchButton");
+
+  const searchBox =
+    document.getElementById("searchBox");
+
+  const searchInput =
+    document.getElementById("searchInput");
+
+  if (!searchButton || !searchBox || !searchInput) {
+    return;
+  }
+
+
+  searchButton.addEventListener("click", () => {
+
+    searchBox.classList.toggle("active");
+
+    if (searchBox.classList.contains("active")) {
+
+      searchInput.focus();
+
+    }
+
+  });
+
+
+  searchInput.addEventListener("input", () => {
+
+    const query =
+      searchInput.value
+        .trim()
+        .toLowerCase();
+
+    if (!query) {
+
+      renderNews(allNewsArticles);
+
+      return;
+
+    }
+
+
+    const filtered =
+      allNewsArticles.filter(article => {
+
+        return (
+
+          String(article.title || "")
+            .toLowerCase()
+            .includes(query)
+
+          ||
+
+          String(article.category || "")
+            .toLowerCase()
+            .includes(query)
+
+          ||
+
+          String(article.story || "")
+            .toLowerCase()
+            .includes(query)
+
+        );
+
+      });
+
+
+    renderNews(filtered);
+
+  });
+
+}
+
+
+/* =========================================================
+   YEAR
+   ========================================================= */
+
+function updateYear() {
+
+  const year =
+    document.getElementById("year");
+
+  if (year) {
+
+    year.textContent =
+      new Date().getFullYear();
+
+  }
+
+}
+
+
+/* =========================================================
+   NEWS CATEGORIES
+   ========================================================= */
+
+function setupNewsCategories() {
+
+  const buttons =
+    document.querySelectorAll(
+      ".category-button"
+    );
+
+  buttons.forEach(button => {
+
+    button.addEventListener("click", () => {
+
+      buttons.forEach(btn =>
+        btn.classList.remove("active")
+      );
+
+      button.classList.add("active");
+
+      const category =
+        button.dataset.category;
+
+      if (!category || category === "all") {
+
+        renderNews(allNewsArticles);
+
+        return;
+
+      }
+
+
+      const filtered =
+        allNewsArticles.filter(article => {
+
+          return String(article.category || "")
+            .toLowerCase()
+            === category.toLowerCase();
+
+        });
+
+
+      renderNews(filtered);
+
+    });
+
+  });
+
+}
+
+
+/* =========================================================
+   LOAD NEWS
+   ========================================================= */
+
+async function loadNews() {
+
+  try {
+
+    const { data, error } =
+      await supabaseClient
+        .from("news")
+        .select(
+          "id,title,category,author,story,image_url,created_at"
+        )
+        .eq("published", true)
+        .order("created_at", {
+          ascending: false
+        });
+
+
+    if (error) {
+
+      console.error(
+        "News loading error:",
+        error
+      );
+
+      return;
+
+    }
+
+
+    allNewsArticles =
+      data || [];
+
+
+    renderNews(allNewsArticles);
+
+    buildHomepageNewsSections(
+      allNewsArticles
+    );
+
+  } catch (error) {
+
+    console.error(
+      "Unexpected news error:",
+      error
+    );
+
+  }
+
+}
+
+
+/* =========================================================
+   RENDER MAIN NEWS
+   ========================================================= */
+
+function renderNews(articles) {
+
+  const newsGrid =
+    document.getElementById("newsGrid");
+
+  if (!newsGrid) return;
+
+
+  if (!articles.length) {
+
+    newsGrid.innerHTML = `
+      <div class="empty-news">
+        No news articles found.
+      </div>
+    `;
+
+    return;
+
+  }
+
+
+  newsGrid.innerHTML =
+    articles
+      .map(article =>
+        createNewsCard(article)
+      )
+      .join("");
+
+}
+
+
+/* =========================================================
+   MAIN NEWS CARD
+   ========================================================= */
+
+function createNewsCard(article) {
+
+  const title =
+    escapeHTML(
+      article.title || "Untitled article"
     );
 
 
-  card.className =
-    "editorial-news-card";
+  const category =
+    escapeHTML(
+      article.category || "News"
+    );
 
 
-  card.style.cursor =
-    "pointer";
+  const author =
+    escapeHTML(
+      article.author || "OINANCE"
+    );
 
 
-  card.addEventListener(
-    "click",
-    function () {
-
-      window.location.href =
-        "article.html?id=" +
-        encodeURIComponent(
-          article.id
-        );
-
-    }
-  );
+  const preview =
+    createPreview(
+      article.story || "",
+      170
+    );
 
 
   const image =
     article.image_url
+      ? article.image_url
+      : "icon-512.png";
 
-      ? `
+
+  const date =
+    formatDate(article.created_at);
+
+
+  return `
+    <article
+      class="news-card"
+      onclick="openArticle('${article.id}')"
+      style="
+        display:flex;
+        flex-direction:column;
+        width:100%;
+        overflow:hidden;
+      "
+    >
+
+      <div
+        class="news-card-image-wrap"
+        style="
+          width:100%;
+          height:clamp(150px,22vw,190px);
+          overflow:hidden;
+          border-radius:10px;
+          margin-bottom:18px;
+          background:#111;
+        "
+      >
+
         <img
-          src="${escapeHTML(
-            article.image_url
-          )}"
-          alt="${escapeHTML(
-            article.title
-          )}"
+          class="news-image"
+          src="${escapeAttribute(image)}"
+          alt="${escapeAttribute(article.title || "OINANCE News")}"
           loading="lazy"
+          style="
+            display:block;
+            width:100%;
+            height:100%;
+            max-height:190px;
+            object-fit:cover;
+            object-position:center;
+          "
         >
-      `
-
-      : `
-        <div class="editorial-card-placeholder"></div>
-      `;
-
-
-  card.innerHTML = `
-
-    <div class="editorial-card-image">
-
-      ${image}
-
-    </div>
-
-
-    <div class="editorial-card-body">
-
-      <span class="editorial-card-category">
-
-        ${escapeHTML(
-          article.category ||
-          "OINANCE NEWS"
-        )}
-
-      </span>
-
-
-      <h3>
-
-        ${escapeHTML(
-          article.title
-        )}
-
-      </h3>
-
-
-      <p>
-
-        ${escapeHTML(
-          getArticlePreview(
-            article.story,
-            140
-          )
-        )}
-
-      </p>
-
-
-      <div class="editorial-card-meta">
-
-        <span>
-          ${escapeHTML(
-            article.author ||
-            "OINANCE Editorial"
-          )}
-        </span>
-
-
-        <span>
-          ${formatArticleDate(
-            article.created_at
-          )}
-        </span>
 
       </div>
 
-    </div>
 
+      <div
+        class="news-card-content"
+        style="
+          flex:1;
+          display:flex;
+          flex-direction:column;
+        "
+      >
+
+        <div
+          class="news-category"
+          style="
+            font-size:11px;
+            font-weight:700;
+            letter-spacing:2px;
+            text-transform:uppercase;
+            margin-bottom:10px;
+          "
+        >
+          ${category}
+        </div>
+
+
+        <h3
+          class="news-title"
+          style="
+            margin:0 0 12px;
+            font-size:clamp(20px,2.5vw,28px);
+            line-height:1.2;
+            font-weight:800;
+          "
+        >
+          ${title}
+        </h3>
+
+
+        <p
+          class="news-preview"
+          style="
+            margin:0 0 16px;
+            font-size:clamp(15px,1.7vw,17px);
+            line-height:1.65;
+          "
+        >
+          ${preview}
+        </p>
+
+
+        <div
+          class="news-meta"
+          style="
+            margin-top:auto;
+          "
+        >
+          <span>${author}</span>
+          <span>${date}</span>
+        </div>
+
+
+        <div
+          class="read-more"
+          style="
+            margin-top:12px;
+          "
+        >
+          Read Article →
+        </div>
+
+      </div>
+
+    </article>
   `;
-
-
-  return card;
 
 }
 
 
-/* ==================================================
-   CREATE COMPACT NEWS ITEM
-================================================== */
+/* =========================================================
+   FEATURED NEWS
+   ========================================================= */
 
-function createCompactNewsItem(
-  article
-) {
+async function loadFeaturedNews() {
 
-  const item =
-    document.createElement(
-      "article"
+  const featured =
+    document.getElementById(
+      "featuredNews"
     );
 
-
-  item.className =
-    "live-news-item";
+  if (!featured) return;
 
 
-  item.style.cursor =
-    "pointer";
+  try {
+
+    const { data, error } =
+      await supabaseClient
+        .from("news")
+        .select(
+          "id,title,category,author,story,image_url,created_at"
+        )
+        .eq("published", true)
+        .order("created_at", {
+          ascending: false
+        })
+        .limit(1);
 
 
-  item.addEventListener(
-    "click",
-    function () {
+    if (error) {
 
-      window.location.href =
-        "article.html?id=" +
-        encodeURIComponent(
-          article.id
-        );
+      console.error(
+        "Featured news error:",
+        error
+      );
+
+      return;
 
     }
-  );
 
 
-  const image =
-    article.image_url
+    if (!data || !data.length) {
 
-      ? `
+      featured.innerHTML = "";
+
+      return;
+
+    }
+
+
+    const article = data[0];
+
+
+    const image =
+      article.image_url ||
+      "icon-512.png";
+
+
+    featured.innerHTML = `
+
+      <article
+        class="featured-card"
+        onclick="openArticle('${article.id}')"
+      >
+
         <img
-          src="${escapeHTML(
-            article.image_url
-          )}"
-          alt="${escapeHTML(
-            article.title
-          )}"
+          src="${escapeAttribute(image)}"
+          alt="${escapeAttribute(article.title || "OINANCE")}"
           loading="lazy"
         >
-      `
 
-      : `
-        <div class="live-news-placeholder"></div>
-      `;
+        <div class="featured-overlay">
 
+          <span class="featured-category">
+            ${escapeHTML(article.category || "News")}
+          </span>
 
-  item.innerHTML = `
+          <h2>
+            ${escapeHTML(article.title || "")}
+          </h2>
 
-    <div class="live-news-image">
+          <p>
+            ${createPreview(
+              article.story || "",
+              220
+            )}
+          </p>
 
-      ${image}
+          <span class="featured-meta">
+            ${escapeHTML(article.author || "OINANCE")}
+            ·
+            ${formatDate(article.created_at)}
+          </span>
 
-    </div>
+        </div>
 
+      </article>
 
-    <div class="live-news-content">
+    `;
 
-      <span>
-        ${escapeHTML(
-          article.category ||
-          "OINANCE NEWS"
-        )}
-      </span>
+  } catch (error) {
 
+    console.error(
+      "Featured news unexpected error:",
+      error
+    );
 
-      <h3>
-        ${escapeHTML(
-          article.title
-        )}
-      </h3>
-
-
-      <small>
-        ${formatArticleDate(
-          article.created_at
-        )}
-      </small>
-
-    </div>
-
-  `;
-
-
-  return item;
+  }
 
 }
 
 
-/* ==================================================
-   LIVE MARKET PANEL
-================================================== */
+/* =========================================================
+   HOMEPAGE NEWS SECTIONS
+   ========================================================= */
 
-function updateLiveMarketPanel(
-  asset,
-  price,
-  change
+function buildHomepageNewsSections(
+  articles
 ) {
 
-  const priceElement =
-    document.getElementById(
-      asset.livePriceId
-    );
-
-
-  const changeElement =
-    document.getElementById(
-      asset.liveChangeId
-    );
-
-
-  if (priceElement) {
-
-    priceElement.textContent =
-      formatMarketPrice(
-        price
-      );
-
-  }
-
-
-  if (changeElement) {
-
-    changeElement.textContent =
-      formatMarketChange(
-        change
-      );
-
-
-    changeElement.classList.remove(
-      "market-up",
-      "market-down"
-    );
-
-
-    changeElement.classList.add(
-      Number(change) >= 0
-        ? "market-up"
-        : "market-down"
-    );
-
-  }
-
-}
-
-
-/* ==================================================
-   SETUP LIVE TICKER
-================================================== */
-
-function setupLiveTicker() {
-
-  const tickerTrack =
-    document.querySelector(
-      ".market-ticker-track"
-    );
-
-
-  if (!tickerTrack) {
-
+  if (!articles || !articles.length) {
     return;
-
   }
 
 
-  /*
-    Duplicate the ticker items once so the CSS
-    scrolling animation can move continuously.
-  */
+  buildLiveNews(articles);
 
-  if (
-    !tickerTrack.dataset.duplicated
-  ) {
+  buildTopNews(articles);
 
-    const original =
-      tickerTrack.innerHTML;
+  buildMostRead(articles);
 
-
-    tickerTrack.innerHTML =
-      original +
-      original;
-
-
-    tickerTrack.dataset.duplicated =
-      "true";
-
-  }
-
-}
+  buildEditorialSection(
+    "marketsNewsGrid",
+    articles,
+    [
+      "markets",
+      "market",
+      "finance"
+    ]
+  );
 
 
-/* ==================================================
-   MARKET STATS STYLE
-================================================== */
-
-function setupMarketStatsStyle() {
-
-  if (
-    document.getElementById(
-      "oinanceMarketStatsStyle"
-    )
-  ) {
-
-    return;
-
-  }
+  buildEditorialSection(
+    "bitcoinNewsGrid",
+    articles,
+    [
+      "bitcoin",
+      "btc"
+    ]
+  );
 
 
-  const style =
-    document.createElement(
-      "style"
-    );
+  buildEditorialSection(
+    "ethereumNewsGrid",
+    articles,
+    [
+      "ethereum",
+      "eth"
+    ]
+  );
 
 
-  style.id =
-    "oinanceMarketStatsStyle";
+  buildEditorialSection(
+    "altcoinsNewsGrid",
+    articles,
+    [
+      "altcoins",
+      "altcoin",
+      "crypto"
+    ]
+  );
 
 
-  style.textContent = `
-
-    .market-stats {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 10px;
-      margin-top: 18px;
-      padding-top: 15px;
-      border-top: 1px solid #292929;
-    }
-
-    .market-stat {
-      min-width: 0;
-    }
-
-    .market-stat-label {
-      display: block;
-      color: #666;
-      font-size: 8px;
-      font-weight: 700;
-      letter-spacing: 1px;
-      text-transform: uppercase;
-      margin-bottom: 5px;
-    }
-
-    .market-stat-value {
-      display: block;
-      color: #ddd;
-      font-size: 11px;
-      font-weight: 600;
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
-    }
-
-    .section-empty {
-      width: 100%;
-      padding: 35px 20px;
-      border: 1px solid #252525;
-      background: #0b0b0b;
-    }
-
-    .section-empty span {
-      color: #777;
-      font-size: 10px;
-      font-weight: 800;
-      letter-spacing: 2px;
-      text-transform: uppercase;
-    }
-
-    .section-empty p {
-      margin: 8px 0 0;
-      color: #666;
-      font-size: 13px;
-    }
-
-    .editorial-card-placeholder {
-      width: 100%;
-      height: 100%;
-      min-height: 180px;
-      background: #111;
-    }
-
-    @media (max-width: 600px) {
-
-      .market-stats {
-        gap: 7px;
-      }
-
-      .market-stat-label {
-        font-size: 7px;
-        letter-spacing: .7px;
-      }
-
-      .market-stat-value {
-        font-size: 10px;
-      }
-
-    }
-
-  `;
+  buildEditorialSection(
+    "blockchainNewsGrid",
+    articles,
+    [
+      "blockchain",
+      "technology"
+    ]
+  );
 
 
-  document.head.appendChild(
-    style
+  buildEditorialSection(
+    "regulationNewsGrid",
+    articles,
+    [
+      "regulation",
+      "regulatory",
+      "policy"
+    ]
+  );
+
+
+  buildEditorialSection(
+    "magazineNewsGrid",
+    articles,
+    [
+      "magazine",
+      "feature"
+    ]
   );
 
 }
 
 
-/* ==================================================
+/* =========================================================
+   LIVE NEWS
+   ========================================================= */
+
+function buildLiveNews(articles) {
+
+  const container =
+    document.getElementById(
+      "liveNewsList"
+    );
+
+  if (!container) return;
+
+
+  const items =
+    articles.slice(0, 8);
+
+
+  container.innerHTML =
+    items
+      .map(article =>
+        createCompactNewsItem(article)
+      )
+      .join("");
+
+}
+
+
+/* =========================================================
+   TOP NEWS
+   ========================================================= */
+
+function buildTopNews(articles) {
+
+  const container =
+    document.getElementById(
+      "topNewsGrid"
+    );
+
+  if (!container) return;
+
+
+  const items =
+    articles.slice(0, 6);
+
+
+  container.innerHTML =
+    items
+      .map(article =>
+        createEditorialCard(article)
+      )
+      .join("");
+
+}
+
+
+/* =========================================================
+   MOST READ
+   ========================================================= */
+
+function buildMostRead(articles) {
+
+  const container =
+    document.getElementById(
+      "mostReadList"
+    );
+
+  if (!container) return;
+
+
+  const items =
+    articles.slice(0, 7);
+
+
+  container.innerHTML =
+    items
+      .map((article, index) => {
+
+        return `
+
+          <article
+            class="most-read-item"
+            onclick="openArticle('${article.id}')"
+          >
+
+            <span class="most-read-number">
+              ${String(index + 1).padStart(2, "0")}
+            </span>
+
+            <div>
+
+              <span class="most-read-category">
+                ${escapeHTML(
+                  article.category || "News"
+                )}
+              </span>
+
+              <h3>
+                ${escapeHTML(
+                  article.title || ""
+                )}
+              </h3>
+
+            </div>
+
+          </article>
+
+        `;
+
+      })
+      .join("");
+
+}
+
+
+/* =========================================================
+   EDITORIAL SECTION
+   ========================================================= */
+
+function buildEditorialSection(
+  elementId,
+  articles,
+  categories
+) {
+
+  const container =
+    document.getElementById(
+      elementId
+    );
+
+  if (!container) return;
+
+
+  const filtered =
+    articles.filter(article => {
+
+      const category =
+        String(
+          article.category || ""
+        ).toLowerCase();
+
+
+      return categories.some(
+        value =>
+          category.includes(
+            value.toLowerCase()
+          )
+      );
+
+    });
+
+
+  const items =
+    filtered.length
+      ? filtered.slice(0, 4)
+      : articles.slice(0, 4);
+
+
+  container.innerHTML =
+    items
+      .map(article =>
+        createEditorialCard(article)
+      )
+      .join("");
+
+}
+
+
+/* =========================================================
+   EDITORIAL CARD
+   ========================================================= */
+
+function createEditorialCard(article) {
+
+  const image =
+    article.image_url ||
+    "icon-512.png";
+
+
+  const title =
+    escapeHTML(
+      article.title || "Untitled article"
+    );
+
+
+  const category =
+    escapeHTML(
+      article.category || "News"
+    );
+
+
+  const preview =
+    createPreview(
+      article.story || "",
+      120
+    );
+
+
+  return `
+
+    <article
+      class="editorial-news-card"
+      onclick="openArticle('${article.id}')"
+      style="
+        width:100%;
+        overflow:hidden;
+      "
+    >
+
+      <div
+        class="editorial-card-image-wrap"
+        style="
+          width:100%;
+          height:180px;
+          overflow:hidden;
+          border-radius:10px;
+          background:#111;
+          margin-bottom:15px;
+        "
+      >
+
+        <img
+          class="editorial-card-image"
+          src="${escapeAttribute(image)}"
+          alt="${escapeAttribute(article.title || "OINANCE News")}"
+          loading="lazy"
+          style="
+            display:block;
+            width:100%;
+            height:180px;
+            max-height:180px;
+            object-fit:cover;
+            object-position:center;
+          "
+        >
+
+      </div>
+
+
+      <div
+        class="editorial-card-body"
+      >
+
+        <div
+          class="editorial-card-category"
+        >
+          ${category}
+        </div>
+
+
+        <h3
+          class="editorial-card-title"
+          style="
+            margin:0 0 10px;
+            font-size:clamp(19px,2.2vw,25px);
+            line-height:1.25;
+            font-weight:800;
+          "
+        >
+          ${title}
+        </h3>
+
+
+        <p
+          class="editorial-card-preview"
+          style="
+            margin:0;
+            font-size:15px;
+            line-height:1.6;
+          "
+        >
+          ${preview}
+        </p>
+
+
+        <div
+          class="editorial-card-meta"
+        >
+          ${formatDate(article.created_at)}
+        </div>
+
+      </div>
+
+    </article>
+
+  `;
+
+}
+
+
+/* =========================================================
+   COMPACT NEWS ITEM
+   ========================================================= */
+
+function createCompactNewsItem(article) {
+
+  return `
+
+    <article
+      class="compact-news-item"
+      onclick="openArticle('${article.id}')"
+    >
+
+      <div class="compact-news-time">
+        ${formatDate(article.created_at)}
+      </div>
+
+      <div class="compact-news-content">
+
+        <span>
+          ${escapeHTML(
+            article.category || "News"
+          )}
+        </span>
+
+        <h3>
+          ${escapeHTML(
+            article.title || ""
+          )}
+        </h3>
+
+      </div>
+
+    </article>
+
+  `;
+
+}
+
+
+/* =========================================================
+   OPEN ARTICLE
+   ========================================================= */
+
+function openArticle(id) {
+
+  if (!id) return;
+
+
+  window.location.href =
+    `article.html?id=${encodeURIComponent(id)}`;
+
+}
+
+
+/* =========================================================
    MARKET DATA
-================================================== */
+   ========================================================= */
 
 async function loadMarketData() {
 
   try {
 
+    const ids =
+      Object.values(MARKET_ASSETS)
+        .map(asset => asset.id)
+        .join(",");
+
+
+    const url =
+      `https://api.coingecko.com/api/v3/simple/price?ids=${ids}&vs_currencies=usd&include_24hr_change=true`;
+
+
     const response =
-      await fetch(
-        "https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&ids=bitcoin,ethereum,solana,binancecoin,ripple,dogecoin,cardano,avalanche-2&sparkline=true&price_change_percentage=24h"
-      );
+      await fetch(url);
 
 
     if (!response.ok) {
 
       throw new Error(
-        "CoinGecko market request failed: " +
-        response.status
+        "CoinGecko request failed"
       );
 
     }
@@ -467,285 +1184,48 @@ async function loadMarketData() {
       await response.json();
 
 
-    if (
-      !Array.isArray(data)
-    ) {
+    Object.values(MARKET_ASSETS)
+      .forEach(asset => {
 
-      throw new Error(
-        "Invalid market data"
-      );
-
-    }
+        const coin =
+          data[asset.id];
 
 
-    data.forEach(
-      function (coin) {
-
-        const asset =
-          Object.values(
-            MARKET_ASSETS
-          ).find(
-            function (item) {
-
-              return (
-                item.id ===
-                coin.id
-              );
-
-            }
-          );
+        if (!coin) return;
 
 
-        if (!asset) {
-
-          return;
-
-        }
+        const price =
+          coin.usd;
 
 
         const change =
-          Number(
-            coin.price_change_percentage_24h_in_currency ??
-            coin.price_change_percentage_24h ??
-            0
-          );
+          coin.usd_24h_change;
 
 
         updateMarketAsset(
           asset,
-          coin.current_price,
+          price,
           change
         );
 
-
-        updateLiveMarketPanel(
-          asset,
-          coin.current_price,
-          change
-        );
-
-
-        updateMarketStats(
-          asset,
-          coin.high_24h,
-          coin.low_24h,
-          coin.total_volume
-        );
-
-
-        const prices =
-          coin.sparkline_in_7d &&
-          Array.isArray(
-            coin.sparkline_in_7d.price
-          )
-            ? coin.sparkline_in_7d.price
-            : [];
-
-
-        if (
-          prices.length &&
-          asset.chartId
-        ) {
-
-          drawRealMarketChart(
-            asset.chartId,
-            prices,
-            change
-          );
-
-        } else if (
-          asset.chartId
-        ) {
-
-          showChartMessage(
-            asset.chartId,
-            "Market history unavailable"
-          );
-
-        }
-
-      }
-    );
-
-
-    /*
-      Update the Live News & Markets panel.
-    */
-
-    buildLiveMarketList(
-      data
-    );
+      });
 
 
   } catch (error) {
 
     console.error(
-      "OINANCE market data error:",
+      "Market data error:",
       error
     );
 
-    showMarketChartErrors();
-
   }
 
 }
 
 
-/* ==================================================
-   LIVE MARKET LIST
-================================================== */
-
-function buildLiveMarketList(
-  marketData
-) {
-
-  const container =
-    document.getElementById(
-      "liveMarketList"
-    );
-
-
-  if (!container) {
-
-    return;
-
-  }
-
-
-  container.innerHTML =
-    "";
-
-
-  const assets =
-    marketData.slice(
-      0,
-      8
-    );
-
-
-  assets.forEach(
-    function (coin) {
-
-      const change =
-        Number(
-          coin.price_change_percentage_24h_in_currency ??
-          coin.price_change_percentage_24h ??
-          0
-        );
-
-
-      const item =
-        document.createElement(
-          "div"
-        );
-
-
-      item.className =
-        "live-market-item";
-
-
-      item.innerHTML = `
-
-        <div class="live-market-name">
-
-          <strong>
-            ${escapeHTML(
-              getCoinSymbol(
-                coin.id
-              )
-            )}
-          </strong>
-
-          <span>
-            ${escapeHTML(
-              coin.name
-            )}
-          </span>
-
-        </div>
-
-
-        <div class="live-market-price">
-
-          <strong>
-            ${formatMarketPrice(
-              coin.current_price
-            )}
-          </strong>
-
-
-          <span class="${
-            change >= 0
-              ? "market-up"
-              : "market-down"
-          }">
-
-            ${formatMarketChange(
-              change
-            )}
-
-          </span>
-
-        </div>
-
-      `;
-
-
-      container.appendChild(
-        item
-      );
-
-    }
-  );
-
-}
-
-
-/* ==================================================
-   COIN SYMBOL
-================================================== */
-
-function getCoinSymbol(
-  coinId
-) {
-
-  const asset =
-    Object.values(
-      MARKET_ASSETS
-    ).find(
-      function (item) {
-
-        return (
-          item.id ===
-          coinId
-        );
-
-      }
-    );
-
-
-  if (asset) {
-
-    return asset.symbol;
-
-  }
-
-
-  return String(
-    coinId || ""
-  )
-    .substring(
-      0,
-      5
-    )
-    .toUpperCase();
-
-}
-
-
-/* ==================================================
+/* =========================================================
    UPDATE MARKET ASSET
-================================================== */
+   ========================================================= */
 
 function updateMarketAsset(
   asset,
@@ -753,379 +1233,109 @@ function updateMarketAsset(
   change
 ) {
 
-  const tickerPrice =
-    document.getElementById(
-      asset.tickerPriceId
-    );
-
-
-  const tickerChange =
-    document.getElementById(
-      asset.tickerChangeId
-    );
-
-
-  const marketPrice =
-    asset.marketPriceId
-      ? document.getElementById(
-          asset.marketPriceId
-        )
-      : null;
-
-
-  const marketChange =
-    asset.marketChangeId
-      ? document.getElementById(
-          asset.marketChangeId
-        )
-      : null;
-
-
   const formattedPrice =
-    formatMarketPrice(
-      price
-    );
+    formatCurrency(price);
 
 
   const formattedChange =
-    formatMarketChange(
-      change
-    );
+    formatPercentage(change);
 
 
-  if (tickerPrice) {
+  const priceElements = [
 
-    tickerPrice.textContent =
-      formattedPrice;
+    asset.priceId,
 
-  }
+    asset.tickerPriceId,
 
+    asset.livePriceId,
 
-  if (tickerChange) {
+    asset.marketPriceId
 
-    tickerChange.textContent =
-      formattedChange;
-
-
-    tickerChange.classList.remove(
-      "market-up",
-      "market-down"
-    );
+  ];
 
 
-    tickerChange.classList.add(
-      change >= 0
-        ? "market-up"
-        : "market-down"
-    );
+  priceElements.forEach(id => {
 
-  }
+    if (!id) return;
 
 
-  if (marketPrice) {
-
-    marketPrice.textContent =
-      formattedPrice;
-
-  }
+    const element =
+      document.getElementById(id);
 
 
-  if (marketChange) {
+    if (element) {
 
-    marketChange.textContent =
-      formattedChange;
+      element.textContent =
+        formattedPrice;
 
+    }
 
-    marketChange.classList.remove(
-      "market-up",
-      "market-down"
-    );
+  });
 
 
-    marketChange.classList.add(
-      change >= 0
-        ? "market-up"
-        : "market-down"
-    );
+  const changeElements = [
 
-  }
+    asset.changeId,
 
-}
+    asset.tickerChangeId,
 
+    asset.liveChangeId
 
-/* ==================================================
-   UPDATE MARKET STATS
-================================================== */
-
-function updateMarketStats(
-  asset,
-  high24h,
-  low24h,
-  volume24h
-) {
-
-  if (!asset.chartId) {
-
-    return;
-
-  }
+  ];
 
 
-  const chart =
-    document.getElementById(
-      asset.chartId
-    );
+  changeElements.forEach(id => {
+
+    if (!id) return;
 
 
-  if (!chart) {
-
-    return;
-
-  }
+    const element =
+      document.getElementById(id);
 
 
-  const card =
-    chart.closest(
-      ".market-card"
-    );
+    if (element) {
+
+      element.textContent =
+        formattedChange;
 
 
-  if (!card) {
-
-    return;
-
-  }
-
-
-  let stats =
-    document.getElementById(
-      asset.statsId
-    );
-
-
-  if (!stats) {
-
-    stats =
-      document.createElement(
-        "div"
+      element.classList.remove(
+        "positive",
+        "negative"
       );
 
 
-    stats.id =
-      asset.statsId;
+      if (change >= 0) {
 
+        element.classList.add(
+          "positive"
+        );
 
-    stats.className =
-      "market-stats";
+      } else {
 
+        element.classList.add(
+          "negative"
+        );
 
-    card.insertBefore(
-      stats,
-      chart
-    );
-
-  }
-
-
-  stats.innerHTML = `
-
-    <div class="market-stat">
-
-      <span class="market-stat-label">
-        24H HIGH
-      </span>
-
-      <span class="market-stat-value">
-        ${formatMarketPrice(
-          high24h
-        )}
-      </span>
-
-    </div>
-
-
-    <div class="market-stat">
-
-      <span class="market-stat-label">
-        24H LOW
-      </span>
-
-      <span class="market-stat-value">
-        ${formatMarketPrice(
-          low24h
-        )}
-      </span>
-
-    </div>
-
-
-    <div class="market-stat">
-
-      <span class="market-stat-label">
-        VOLUME
-      </span>
-
-      <span class="market-stat-value">
-        ${formatMarketVolume(
-          volume24h
-        )}
-      </span>
-
-    </div>
-
-  `;
-
-}
-
-
-/* ==================================================
-   FORMAT PRICE
-================================================== */
-
-function formatMarketPrice(
-  price
-) {
-
-  if (
-    price === null ||
-    price === undefined ||
-    isNaN(price)
-  ) {
-
-    return "$—";
-
-  }
-
-
-  const number =
-    Number(price);
-
-
-  if (
-    number >= 100
-  ) {
-
-    return "$" +
-      number.toLocaleString(
-        "en-US",
-        {
-          maximumFractionDigits: 0
-        }
-      );
-
-  }
-
-
-  return "$" +
-    number.toLocaleString(
-      "en-US",
-      {
-        minimumFractionDigits: 2,
-        maximumFractionDigits: 2
       }
-    );
+
+    }
+
+  });
 
 }
 
 
-/* ==================================================
-   FORMAT VOLUME
-================================================== */
+/* =========================================================
+   MARKET FORMATTING
+   ========================================================= */
 
-function formatMarketVolume(
-  volume
-) {
+function formatCurrency(value) {
 
   if (
-    volume === null ||
-    volume === undefined ||
-    isNaN(volume)
-  ) {
-
-    return "$—";
-
-  }
-
-
-  const number =
-    Number(volume);
-
-
-  if (
-    number >= 1e12
-  ) {
-
-    return "$" +
-      (
-        number / 1e12
-      ).toFixed(2) +
-      "T";
-
-  }
-
-
-  if (
-    number >= 1e9
-  ) {
-
-    return "$" +
-      (
-        number / 1e9
-      ).toFixed(2) +
-      "B";
-
-  }
-
-
-  if (
-    number >= 1e6
-  ) {
-
-    return "$" +
-      (
-        number / 1e6
-      ).toFixed(2) +
-      "M";
-
-  }
-
-
-  if (
-    number >= 1e3
-  ) {
-
-    return "$" +
-      (
-        number / 1e3
-      ).toFixed(2) +
-      "K";
-
-  }
-
-
-  return "$" +
-    number.toLocaleString(
-      "en-US",
-      {
-        maximumFractionDigits: 0
-      }
-    );
-
-}
-
-
-/* ==================================================
-   FORMAT CHANGE
-================================================== */
-
-function formatMarketChange(
-  change
-) {
-
-  if (
-    change === null ||
-    change === undefined ||
-    isNaN(change)
+    value === null ||
+    value === undefined ||
+    Number.isNaN(Number(value))
   ) {
 
     return "—";
@@ -1134,474 +1344,137 @@ function formatMarketChange(
 
 
   const number =
-    Number(change);
+    Number(value);
 
 
-  return (
+  if (number >= 1000) {
+
+    return number.toLocaleString(
+      "en-US",
+      {
+        style: "currency",
+        currency: "USD",
+        maximumFractionDigits: 0
+      }
+    );
+
+  }
+
+
+  if (number >= 1) {
+
+    return number.toLocaleString(
+      "en-US",
+      {
+        style: "currency",
+        currency: "USD",
+        minimumFractionDigits: 2,
+        maximumFractionDigits: 2
+      }
+    );
+
+  }
+
+
+  return number.toLocaleString(
+    "en-US",
+    {
+      style: "currency",
+      currency: "USD",
+      minimumFractionDigits: 4,
+      maximumFractionDigits: 6
+    }
+  );
+
+}
+
+
+function formatPercentage(value) {
+
+  if (
+    value === null ||
+    value === undefined ||
+    Number.isNaN(Number(value))
+  ) {
+
+    return "—";
+
+  }
+
+
+  const number =
+    Number(value);
+
+
+  const sign =
     number >= 0
       ? "+"
-      : ""
-  ) +
-    number.toFixed(2) +
-    "%";
+      : "";
+
+
+  return `${sign}${number.toFixed(2)}%`;
 
 }
 
 
-/* ==================================================
-   REAL SVG MARKET CHART
-================================================== */
-
-function drawRealMarketChart(
-  chartId,
-  prices,
-  change
-) {
-
-  const chart =
-    document.getElementById(
-      chartId
-    );
-
-
-  if (!chart) {
-
-    return;
-
-  }
-
-
-  const values =
-    prices
-      .filter(
-        function (value) {
-
-          return (
-            typeof value === "number" &&
-            isFinite(value)
-          );
-
-        }
-      )
-      .slice(-48);
-
-
-  if (
-    values.length < 2
-  ) {
-
-    showChartMessage(
-      chartId,
-      "Not enough market data"
-    );
-
-    return;
-
-  }
-
-
-  const width = 320;
-  const height = 90;
-  const padding = 6;
-
-
-  let min =
-    Math.min(
-      ...values
-    );
-
-
-  let max =
-    Math.max(
-      ...values
-    );
-
-
-  if (
-    min === max
-  ) {
-
-    min -= 1;
-    max += 1;
-
-  }
-
-
-  const range =
-    max - min;
-
-
-  const points =
-    values.map(
-      function (
-        value,
-        index
-      ) {
-
-        const x =
-          padding +
-          (
-            index /
-            (values.length - 1)
-          ) *
-          (
-            width -
-            padding * 2
-          );
-
-
-        const y =
-          height -
-          padding -
-          (
-            (
-              value - min
-            ) /
-            range
-          ) *
-          (
-            height -
-            padding * 2
-          );
-
-
-        return {
-          x: x,
-          y: y
-        };
-
-      }
-    );
-
-
-  const linePath =
-    points
-      .map(
-        function (
-          point,
-          index
-        ) {
-
-          return (
-            index === 0
-              ? "M "
-              : "L "
-          ) +
-          point.x.toFixed(2) +
-          " " +
-          point.y.toFixed(2);
-
-        }
-      )
-      .join(" ");
-
-
-  const lastPoint =
-    points[
-      points.length - 1
-    ];
-
-
-  const firstPoint =
-    points[0];
-
-
-  const areaPath =
-    linePath +
-    " L " +
-    lastPoint.x.toFixed(2) +
-    " " +
-    (
-      height -
-      padding
-    ) +
-    " L " +
-    firstPoint.x.toFixed(2) +
-    " " +
-    (
-      height -
-      padding
-    ) +
-    " Z";
-
-
-  const direction =
-    Number(change) >= 0
-      ? "up"
-      : "down";
-
-
-  const chartColor =
-    Number(change) >= 0
-      ? "#24c76b"
-      : "#ff4d4d";
-
-
-  const gradientId =
-    "gradient-" +
-    chartId;
-
-
-  chart.innerHTML = `
-
-    <svg
-      class="oinance-market-svg"
-      viewBox="0 0 ${width} ${height}"
-      preserveAspectRatio="none"
-      role="img"
-      aria-label="Live market price chart"
-      style="
-        width:100%;
-        height:90px;
-        display:block;
-        overflow:visible;
-      "
-    >
-
-      <defs>
-
-        <linearGradient
-          id="${gradientId}"
-          x1="0"
-          y1="0"
-          x2="0"
-          y2="1"
-        >
-
-          <stop
-            offset="0%"
-            stop-color="${chartColor}"
-            stop-opacity="0.25"
-          />
-
-          <stop
-            offset="100%"
-            stop-color="${chartColor}"
-            stop-opacity="0"
-          />
-
-        </linearGradient>
-
-      </defs>
-
-
-      <line
-        x1="0"
-        y1="22"
-        x2="${width}"
-        y2="22"
-        stroke="#292929"
-        stroke-width="1"
-      />
-
-      <line
-        x1="0"
-        y1="45"
-        x2="${width}"
-        y2="45"
-        stroke="#292929"
-        stroke-width="1"
-      />
-
-      <line
-        x1="0"
-        y1="68"
-        x2="${width}"
-        y2="68"
-        stroke="#292929"
-        stroke-width="1"
-      />
-
-
-      <path
-        d="${areaPath}"
-        fill="url(#${gradientId})"
-        stroke="none"
-      />
-
-
-      <path
-        d="${linePath}"
-        fill="none"
-        stroke="${chartColor}"
-        stroke-width="2.5"
-        stroke-linecap="round"
-        stroke-linejoin="round"
-        vector-effect="non-scaling-stroke"
-      />
-
-
-      <circle
-        cx="${lastPoint.x}"
-        cy="${lastPoint.y}"
-        r="3.5"
-        fill="${chartColor}"
-      />
-
-    </svg>
-
-  `;
-
-
-  chart.setAttribute(
-    "data-chart-direction",
-    direction
-  );
-
-}
-
-
-/* ==================================================
-   CHART FALLBACK
-================================================== */
-
-function showChartMessage(
-  chartId,
-  message
-) {
-
-  const chart =
-    document.getElementById(
-      chartId
-    );
-
-
-  if (!chart) {
-
-    return;
-
-  }
-
-
-  chart.innerHTML = `
-
-    <div
-      style="
-        width:100%;
-        height:90px;
-        display:flex;
-        align-items:center;
-        justify-content:center;
-        color:#777;
-        font-size:11px;
-        letter-spacing:1px;
-      "
-    >
-
-      ${escapeHTML(
-        message
-      )}
-
-    </div>
-
-  `;
-
-}
-
-
-/* ==================================================
-   MARKET CHART ERROR
-================================================== */
-
-function showMarketChartErrors() {
-
-  const chartIds = [
-    "btcChart",
-    "ethChart",
-    "solChart",
-    "bnbChart"
-  ];
-
-
-  chartIds.forEach(
-    function (chartId) {
-
-      const chart =
-        document.getElementById(
-          chartId
+/* =========================================================
+   MARKET STATS STYLE
+   ========================================================= */
+
+function setupMarketStatsStyle() {
+
+  document
+    .querySelectorAll(
+      ".market-change, .ticker-change, .live-change"
+    )
+    .forEach(element => {
+
+      const value =
+        parseFloat(
+          element.textContent
         );
 
 
-      if (
-        chart &&
-        !chart.querySelector(
-          "svg"
-        )
-      ) {
+      if (!Number.isNaN(value)) {
 
-        showChartMessage(
-          chartId,
-          "Market chart unavailable"
-        );
+        if (value >= 0) {
+
+          element.classList.add(
+            "positive"
+          );
+
+        } else {
+
+          element.classList.add(
+            "negative"
+          );
+
+        }
 
       }
 
-    }
-  );
+    });
 
 }
 
 
-/* ==================================================
-   REFRESH MARKET DATA
-================================================== */
+/* =========================================================
+   LIVE MARKET TICKER
+   ========================================================= */
 
-setInterval(
-  function () {
+function setupLiveTicker() {
 
-    loadMarketData();
-
-  },
-  60000
-);
-
-
-/* ==================================================
-   PRODUCT ACCESS
-   OINANCE PRODUCT LOGIN SYSTEM
-================================================== */
-
-function setupProductProtection() {
-
-  const productLinks =
-    document.querySelectorAll(
-      ".product-protected"
+  const track =
+    document.querySelector(
+      ".ticker-track"
     );
 
 
-  const modal =
-    document.getElementById(
-      "productLoginModal"
-    );
-
-
-  const overlay =
-    document.getElementById(
-      "productLoginOverlay"
-    );
-
-
-  const closeButton =
-    document.getElementById(
-      "productLoginClose"
-    );
-
-
-  const loginButton =
-    document.getElementById(
-      "productLoginButton"
-    );
-
-
-  const signupButton =
-    document.getElementById(
-      "productSignupButton"
-    );
+  if (!track) return;
 
 
   if (
-    !productLinks.length ||
-    !modal
+    track.dataset.duplicated === "true"
   ) {
 
     return;
@@ -1609,669 +1482,54 @@ function setupProductProtection() {
   }
 
 
-  productLinks.forEach(
-    function (link) {
+  const original =
+    track.innerHTML;
 
-      link.addEventListener(
-        "click",
-        async function (event) {
 
-          event.preventDefault();
+  track.innerHTML =
+    original + original;
 
 
-          const productUrl =
-            link.getAttribute(
-              "data-product-url"
-            );
-
-
-          const productName =
-            link.getAttribute(
-              "data-product-name"
-            ) ||
-            "this product";
-
-
-          const {
-            data,
-            error
-          } =
-            await supabaseClient.auth.getSession();
-
-
-          if (error) {
-
-            console.error(
-              "OINANCE authentication error:",
-              error
-            );
-
-            openProductLoginModal(
-              productName,
-              productUrl
-            );
-
-            return;
-
-          }
-
-
-          const session =
-            data &&
-            data.session;
-
-
-          if (session) {
-
-            window.location.href =
-              productUrl;
-
-            return;
-
-          }
-
-
-          openProductLoginModal(
-            productName,
-            productUrl
-          );
-
-        }
-      );
-
-    }
-  );
-
-
-  if (closeButton) {
-
-    closeButton.addEventListener(
-      "click",
-      function () {
-
-        closeProductLoginModal();
-
-      }
-    );
-
-  }
-
-
-  if (overlay) {
-
-    overlay.addEventListener(
-      "click",
-      function () {
-
-        closeProductLoginModal();
-
-      }
-    );
-
-  }
-
-
-  if (loginButton) {
-
-    loginButton.addEventListener(
-      "click",
-      function () {
-
-        showProductAuthForm(
-          "login"
-        );
-
-      }
-    );
-
-  }
-
-
-  if (signupButton) {
-
-    signupButton.addEventListener(
-      "click",
-      function () {
-
-        showProductAuthForm(
-          "signup"
-        );
-
-      }
-    );
-
-  }
-
-
-  document.addEventListener(
-    "keydown",
-    function (event) {
-
-      if (
-        event.key === "Escape"
-      ) {
-
-        closeProductLoginModal();
-
-      }
-
-    }
-  );
-
-
-  supabaseClient.auth.onAuthStateChange(
-    function (
-      event,
-      session
-    ) {
-
-      if (
-        event === "SIGNED_OUT"
-      ) {
-
-        return;
-
-      }
-
-
-      if (
-        event === "SIGNED_IN" &&
-        session
-      ) {
-
-        const productUrl =
-          modal.dataset.productUrl;
-
-
-        if (productUrl) {
-
-          closeProductLoginModal();
-
-          window.location.href =
-            productUrl;
-
-        }
-
-      }
-
-    }
-  );
+  track.dataset.duplicated =
+    "true";
 
 }
 
 
-/* ==================================================
-   OPEN PRODUCT LOGIN MODAL
-================================================== */
+/* =========================================================
+   NEWSLETTER
+   ========================================================= */
 
-function openProductLoginModal(
-  productName,
-  productUrl
-) {
+function setupNewsletter() {
 
-  const modal =
+  const form =
     document.getElementById(
-      "productLoginModal"
+      "newsletterForm"
     );
 
 
-  if (!modal) {
-
-    return;
-
-  }
-
-
-  modal.dataset.productUrl =
-    productUrl || "";
-
-
-  modal.dataset.productName =
-    productName || "this product";
-
-
-  const title =
+  const emailInput =
     document.getElementById(
-      "productLoginTitle"
+      "newsletterEmail"
     );
 
 
   const message =
     document.getElementById(
-      "productLoginMessage"
+      "newsletterMessage"
     );
 
 
-  if (title) {
-
-    title.textContent =
-      "Login to access this product";
-
-  }
-
-
-  if (message) {
-
-    message.textContent =
-      "Please log in with your email or sign up for an OINANCE account to access " +
-      productName +
-      ".";
-
-  }
-
-
-  const loginButton =
-    document.getElementById(
-      "productLoginButton"
-    );
-
-
-  const signupButton =
-    document.getElementById(
-      "productSignupButton"
-    );
-
-
-  if (loginButton) {
-
-    loginButton.style.display =
-      "block";
-
-  }
-
-
-  if (signupButton) {
-
-    signupButton.style.display =
-      "block";
-
-  }
-
-
-  const form =
-    document.getElementById(
-      "productAuthForm"
-    );
-
-
-  if (form) {
-
-    form.remove();
-
-  }
-
-
-  modal.classList.add(
-    "open"
-  );
-
-
-  modal.setAttribute(
-    "aria-hidden",
-    "false"
-  );
-
-
-  document.body.style.overflow =
-    "hidden";
-
-}
-
-
-/* ==================================================
-   CLOSE PRODUCT LOGIN MODAL
-================================================== */
-
-function closeProductLoginModal() {
-
-  const modal =
-    document.getElementById(
-      "productLoginModal"
-    );
-
-
-  if (!modal) {
-
+  if (!form || !emailInput) {
     return;
-
-  }
-
-
-  modal.classList.remove(
-    "open"
-  );
-
-
-  modal.setAttribute(
-    "aria-hidden",
-    "true"
-  );
-
-
-  document.body.style.overflow =
-    "";
-
-
-  const form =
-    document.getElementById(
-      "productAuthForm"
-    );
-
-
-  if (form) {
-
-    form.remove();
-
-  }
-
-
-  const loginButton =
-    document.getElementById(
-      "productLoginButton"
-    );
-
-
-  const signupButton =
-    document.getElementById(
-      "productSignupButton"
-    );
-
-
-  if (loginButton) {
-
-    loginButton.style.display =
-      "block";
-
-  }
-
-
-  if (signupButton) {
-
-    signupButton.style.display =
-      "block";
-
-  }
-
-}
-
-
-/* ==================================================
-   SHOW LOGIN / SIGN UP FORM
-================================================== */
-
-function showProductAuthForm(
-  mode
-) {
-
-  const modal =
-    document.getElementById(
-      "productLoginModal"
-    );
-
-
-  if (!modal) {
-
-    return;
-
-  }
-
-
-  const title =
-    document.getElementById(
-      "productLoginTitle"
-    );
-
-
-  const message =
-    document.getElementById(
-      "productLoginMessage"
-    );
-
-
-  const loginButton =
-    document.getElementById(
-      "productLoginButton"
-    );
-
-
-  const signupButton =
-    document.getElementById(
-      "productSignupButton"
-    );
-
-
-  if (loginButton) {
-
-    loginButton.style.display =
-      "none";
-
-  }
-
-
-  if (signupButton) {
-
-    signupButton.style.display =
-      "none";
-
-  }
-
-
-  if (title) {
-
-    title.textContent =
-      mode === "signup"
-        ? "Create your OINANCE account"
-        : "Login to OINANCE";
-
-  }
-
-
-  if (message) {
-
-    message.textContent =
-      mode === "signup"
-        ? "Create an account with your email and password to access OINANCE products."
-        : "Enter your email and password to continue.";
-
-  }
-
-
-  const oldForm =
-    document.getElementById(
-      "productAuthForm"
-    );
-
-
-  if (oldForm) {
-
-    oldForm.remove();
-
-  }
-
-
-  const form =
-    document.createElement(
-      "form"
-    );
-
-
-  form.id =
-    "productAuthForm";
-
-
-  form.innerHTML = `
-
-    <div class="product-auth-field">
-
-      <label for="productAuthEmail">
-        Email
-      </label>
-
-      <input
-        type="email"
-        id="productAuthEmail"
-        name="email"
-        placeholder="you@example.com"
-        autocomplete="email"
-        required
-      >
-
-    </div>
-
-
-    <div class="product-auth-field">
-
-      <label for="productAuthPassword">
-        Password
-      </label>
-
-      <input
-        type="password"
-        id="productAuthPassword"
-        name="password"
-        placeholder="Enter your password"
-        autocomplete="${
-          mode === "signup"
-            ? "new-password"
-            : "current-password"
-        }"
-        minlength="6"
-        required
-      >
-
-    </div>
-
-
-    ${
-      mode === "signup"
-        ? `
-          <div class="product-auth-field">
-
-            <label for="productAuthPasswordConfirm">
-              Confirm Password
-            </label>
-
-            <input
-              type="password"
-              id="productAuthPasswordConfirm"
-              name="password_confirm"
-              placeholder="Confirm your password"
-              autocomplete="new-password"
-              minlength="6"
-              required
-            >
-
-          </div>
-        `
-        : ""
-    }
-
-
-    <div
-      id="productAuthMessage"
-      class="product-auth-message"
-      aria-live="polite"
-    ></div>
-
-
-    <button
-      type="submit"
-      class="product-auth-submit"
-    >
-      ${
-        mode === "signup"
-          ? "Create Account"
-          : "Login"
-      }
-    </button>
-
-
-    <button
-      type="button"
-      class="product-auth-back"
-      id="productAuthBack"
-    >
-      ← Back
-    </button>
-
-  `;
-
-
-  const actions =
-    modal.querySelector(
-      ".product-login-actions"
-    );
-
-
-  if (actions) {
-
-    actions.parentNode.insertBefore(
-      form,
-      actions
-    );
-
-  } else {
-
-    const box =
-      modal.querySelector(
-        ".product-login-box"
-      );
-
-
-    if (box) {
-
-      box.appendChild(
-        form
-      );
-
-    }
-
-  }
-
-
-  const backButton =
-    document.getElementById(
-      "productAuthBack"
-    );
-
-
-  if (backButton) {
-
-    backButton.addEventListener(
-      "click",
-      function () {
-
-        showProductLoginChoice();
-
-      }
-    );
-
   }
 
 
   form.addEventListener(
     "submit",
-    async function (event) {
+    async event => {
 
       event.preventDefault();
-
-
-      const emailInput =
-        document.getElementById(
-          "productAuthEmail"
-        );
-
-
-      const passwordInput =
-        document.getElementById(
-          "productAuthPassword"
-        );
-
-
-      const messageBox =
-        document.getElementById(
-          "productAuthMessage"
-        );
 
 
       const email =
@@ -2280,268 +1538,82 @@ function showProductAuthForm(
           .toLowerCase();
 
 
-      const password =
-        passwordInput.value;
+      if (!email) {
 
+        if (message) {
 
-      if (
-        !email ||
-        !password
-      ) {
-
-        messageBox.textContent =
-          "Please enter your email and password.";
-
-        return;
-
-      }
-
-
-      if (
-        password.length < 6
-      ) {
-
-        messageBox.textContent =
-          "Password must be at least 6 characters.";
-
-        return;
-
-      }
-
-
-      if (
-        mode === "signup"
-      ) {
-
-        const confirmInput =
-          document.getElementById(
-            "productAuthPasswordConfirm"
-          );
-
-
-        const confirmPassword =
-          confirmInput
-            ? confirmInput.value
-            : "";
-
-
-        if (
-          password !==
-          confirmPassword
-        ) {
-
-          messageBox.textContent =
-            "Passwords do not match.";
-
-          return;
+          message.textContent =
+            "Please enter your email.";
 
         }
 
-      }
-
-
-      messageBox.textContent =
-        mode === "signup"
-          ? "Creating your account..."
-          : "Logging in...";
-
-
-      const submitButton =
-        form.querySelector(
-          ".product-auth-submit"
-        );
-
-
-      if (submitButton) {
-
-        submitButton.disabled =
-          true;
-
-        submitButton.textContent =
-          mode === "signup"
-            ? "Creating Account..."
-            : "Logging In...";
+        return;
 
       }
 
 
       try {
 
-        if (
-          mode === "signup"
-        ) {
-
-          const {
-            data,
-            error
-          } =
-            await supabaseClient.auth.signUp({
-              email: email,
-              password: password
-            });
+        const { error } =
+          await supabaseClient
+            .from(
+              "newsletter_subscribers"
+            )
+            .insert([
+              {
+                email: email
+              }
+            ]);
 
 
-          if (error) {
-
-            throw error;
-
-          }
-
+        if (error) {
 
           if (
-            data &&
-            data.session
+            String(error.message)
+              .toLowerCase()
+              .includes("duplicate")
           ) {
 
-            messageBox.textContent =
-              "Account created. Opening product...";
+            if (message) {
 
+              message.textContent =
+                "You are already subscribed.";
 
-            const productUrl =
-              modal.dataset.productUrl;
-
-
-            setTimeout(
-              function () {
-
-                if (productUrl) {
-
-                  window.location.href =
-                    productUrl;
-
-                }
-
-              },
-              500
-            );
-
+            }
 
             return;
 
           }
 
 
-          messageBox.textContent =
-            "Account created. Please check your email to confirm your account, then log in.";
-
-          form.reset();
-
-
-        } else {
-
-          const {
-            data,
-            error
-          } =
-            await supabaseClient.auth.signInWithPassword({
-              email: email,
-              password: password
-            });
-
-
-          if (error) {
-
-            throw error;
-
-          }
-
-
-          if (
-            data &&
-            data.session
-          ) {
-
-            messageBox.textContent =
-              "Login successful. Opening product...";
-
-
-            const productUrl =
-              modal.dataset.productUrl;
-
-
-            setTimeout(
-              function () {
-
-                if (productUrl) {
-
-                  window.location.href =
-                    productUrl;
-
-                }
-
-              },
-              400
-            );
-
-          }
+          throw error;
 
         }
+
+
+        if (message) {
+
+          message.textContent =
+            "You are now subscribed to OINANCE.";
+
+        }
+
+
+        form.reset();
 
 
       } catch (error) {
 
         console.error(
-          "OINANCE product authentication error:",
+          "Newsletter error:",
           error
         );
 
 
-        let errorMessage =
-          "Something went wrong. Please try again.";
+        if (message) {
 
-
-        if (
-          error &&
-          error.message
-        ) {
-
-          errorMessage =
-            error.message;
-
-        }
-
-
-        if (
-          errorMessage
-            .toLowerCase()
-            .includes(
-              "invalid login credentials"
-            )
-        ) {
-
-          errorMessage =
-            "Incorrect email or password.";
-
-        }
-
-
-        if (
-          errorMessage
-            .toLowerCase()
-            .includes(
-              "user already registered"
-            )
-        ) {
-
-          errorMessage =
-            "This email already has an account. Please log in.";
-
-        }
-
-
-        messageBox.textContent =
-          errorMessage;
-
-
-        if (submitButton) {
-
-          submitButton.disabled =
-            false;
-
-          submitButton.textContent =
-            mode === "signup"
-              ? "Create Account"
-              : "Login";
+          message.textContent =
+            "Something went wrong. Please try again.";
 
         }
 
@@ -2550,47 +1622,14 @@ function showProductAuthForm(
     }
   );
 
-
-  setTimeout(
-    function () {
-
-      const emailInput =
-        document.getElementById(
-          "productAuthEmail"
-        );
-
-
-      if (emailInput) {
-
-        emailInput.focus();
-
-      }
-
-    },
-    100
-  );
-
 }
 
 
-/* ==================================================
-   RETURN TO LOGIN / SIGNUP CHOICE
-================================================== */
+/* =========================================================
+   PRODUCT PROTECTION
+   ========================================================= */
 
-function showProductLoginChoice() {
-
-  const form =
-    document.getElementById(
-      "productAuthForm"
-    );
-
-
-  if (form) {
-
-    form.remove();
-
-  }
-
+function setupProductProtection() {
 
   const modal =
     document.getElementById(
@@ -2598,29 +1637,261 @@ function showProductLoginChoice() {
     );
 
 
-  if (!modal) {
+  const closeButton =
+    document.getElementById(
+      "closeProductLogin"
+    );
 
-    return;
+
+  const form =
+    document.getElementById(
+      "productLoginForm"
+    );
+
+
+  const emailInput =
+    document.getElementById(
+      "productLoginEmail"
+    );
+
+
+  const passwordInput =
+    document.getElementById(
+      "productLoginPassword"
+    );
+
+
+  const errorMessage =
+    document.getElementById(
+      "productLoginError"
+    );
+
+
+  if (!modal) return;
+
+
+  let pendingProductUrl =
+    null;
+
+
+  let pendingProductName =
+    null;
+
+
+  document
+    .querySelectorAll(
+      ".product-protected"
+    )
+    .forEach(link => {
+
+      link.addEventListener(
+        "click",
+        async event => {
+
+          event.preventDefault();
+
+
+          pendingProductUrl =
+            link.dataset.productUrl ||
+            link.getAttribute("href");
+
+
+          pendingProductName =
+            link.dataset.productName ||
+            "OINANCE Product";
+
+
+          try {
+
+            const {
+              data
+            } =
+              await supabaseClient
+                .auth
+                .getSession();
+
+
+            if (
+              data &&
+              data.session
+            ) {
+
+              window.location.href =
+                pendingProductUrl;
+
+              return;
+
+            }
+
+
+            modal.setAttribute(
+              "aria-hidden",
+              "false"
+            );
+
+
+            if (errorMessage) {
+
+              errorMessage.textContent =
+                "";
+
+            }
+
+
+            if (emailInput) {
+
+              emailInput.focus();
+
+            }
+
+
+          } catch (error) {
+
+            console.error(
+              "Product session error:",
+              error
+            );
+
+
+            modal.setAttribute(
+              "aria-hidden",
+              "false"
+            );
+
+          }
+
+        }
+      );
+
+    });
+
+
+  if (closeButton) {
+
+    closeButton.addEventListener(
+      "click",
+      () => {
+
+        closeProductModal();
+
+      }
+    );
 
   }
 
 
-  const title =
-    document.getElementById(
-      "productLoginTitle"
+  modal.addEventListener(
+    "click",
+    event => {
+
+      if (
+        event.target === modal
+      ) {
+
+        closeProductModal();
+
+      }
+
+    }
+  );
+
+
+  if (form) {
+
+    form.addEventListener(
+      "submit",
+      async event => {
+
+        event.preventDefault();
+
+
+        if (errorMessage) {
+
+          errorMessage.textContent =
+            "";
+
+        }
+
+
+        const email =
+          emailInput
+            ? emailInput.value.trim()
+            : "";
+
+
+        const password =
+          passwordInput
+            ? passwordInput.value
+            : "";
+
+
+        if (!email || !password) {
+
+          if (errorMessage) {
+
+            errorMessage.textContent =
+              "Enter your email and password.";
+
+          }
+
+          return;
+
+        }
+
+
+        try {
+
+          const {
+            data,
+            error
+          } =
+            await supabaseClient
+              .auth
+              .signInWithPassword({
+                email,
+                password
+              });
+
+
+          if (error) {
+
+            throw error;
+
+          }
+
+
+          if (
+            data &&
+            data.session &&
+            pendingProductUrl
+          ) {
+
+            window.location.href =
+              pendingProductUrl;
+
+          }
+
+        } catch (error) {
+
+          console.error(
+            "Product login error:",
+            error
+          );
+
+
+          if (errorMessage) {
+
+            errorMessage.textContent =
+              "Login failed. Please check your email and password.";
+
+          }
+
+        }
+
+      }
     );
 
-
-  const message =
-    document.getElementById(
-      "productLoginMessage"
-    );
-
-
-  const loginButton =
-    document.getElementById(
-      "productLoginButton"
-    );
+  }
 
 
   const signupButton =
@@ -2629,50 +1900,217 @@ function showProductLoginChoice() {
     );
 
 
-  const productName =
-    modal.dataset.productName ||
-    "this product";
-
-
-  if (title) {
-
-    title.textContent =
-      "Login to access this product";
-
-  }
-
-
-  if (message) {
-
-    message.textContent =
-      "Please log in with your email or sign up for an OINANCE account to access " +
-      productName +
-      ".";
-
-  }
-
-
-  if (loginButton) {
-
-    loginButton.style.display =
-      "block";
-
-  }
-
-
   if (signupButton) {
 
-    signupButton.style.display =
-      "block";
+    signupButton.addEventListener(
+      "click",
+      async () => {
+
+        const email =
+          emailInput
+            ? emailInput.value.trim()
+            : "";
+
+
+        const password =
+          passwordInput
+            ? passwordInput.value
+            : "";
+
+
+        if (!email || !password) {
+
+          if (errorMessage) {
+
+            errorMessage.textContent =
+              "Enter an email and password first.";
+
+          }
+
+          return;
+
+        }
+
+
+        try {
+
+          const {
+            error
+          } =
+            await supabaseClient
+              .auth
+              .signUp({
+                email,
+                password
+              });
+
+
+          if (error) {
+
+            throw error;
+
+          }
+
+
+          if (errorMessage) {
+
+            errorMessage.textContent =
+              "Account created. You can now sign in.";
+
+          }
+
+        } catch (error) {
+
+          console.error(
+            "Product signup error:",
+            error
+          );
+
+
+          if (errorMessage) {
+
+            errorMessage.textContent =
+              error.message ||
+              "Could not create account.";
+
+          }
+
+        }
+
+      }
+    );
+
+  }
+
+
+  function closeProductModal() {
+
+    modal.setAttribute(
+      "aria-hidden",
+      "true"
+    );
+
+
+    if (errorMessage) {
+
+      errorMessage.textContent =
+        "";
+
+    }
 
   }
 
 }
 
 
-/* ==================================================
-   OINANCE LINK APP SERVICE WORKER
-================================================== */
+/* =========================================================
+   HTML ESCAPING
+   ========================================================= */
+
+function escapeHTML(value) {
+
+  return String(value || "")
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;")
+    .replace(/'/g, "&#039;");
+
+}
+
+
+function escapeAttribute(value) {
+
+  return escapeHTML(value);
+
+}
+
+
+/* =========================================================
+   ARTICLE PREVIEW
+   ========================================================= */
+
+function createPreview(
+  text,
+  maxLength = 160
+) {
+
+  let clean =
+    String(text || "");
+
+
+  clean =
+    clean.replace(
+      /<[^>]*>/g,
+      " "
+    );
+
+
+  clean =
+    clean.replace(
+      /\s+/g,
+      " "
+    )
+    .trim();
+
+
+  if (
+    clean.length <= maxLength
+  ) {
+
+    return escapeHTML(clean);
+
+  }
+
+
+  return (
+    escapeHTML(
+      clean.slice(
+        0,
+        maxLength
+      )
+    )
+    + "..."
+  );
+
+}
+
+
+/* =========================================================
+   DATE FORMAT
+   ========================================================= */
+
+function formatDate(dateValue) {
+
+  if (!dateValue) {
+    return "";
+  }
+
+
+  const date =
+    new Date(dateValue);
+
+
+  if (Number.isNaN(date.getTime())) {
+    return "";
+  }
+
+
+  return date.toLocaleDateString(
+    "en-US",
+    {
+      month: "short",
+      day: "numeric",
+      year: "numeric"
+    }
+  );
+
+}
+
+
+/* =========================================================
+   SERVICE WORKER
+   ========================================================= */
 
 if (
   "serviceWorker" in navigator
@@ -2687,24 +2125,23 @@ if (
           "./service-worker.js"
         )
         .then(
-          () => {
+          registration => {
 
             console.log(
-              "OINANCE LINK app service worker registered."
+              "OINANCE service worker registered:",
+              registration.scope
             );
 
           }
         )
-        .catch(
-          (error) => {
+        .catch(error => {
 
-            console.error(
-              "OINANCE LINK service worker registration failed:",
-              error
-            );
+          console.error(
+            "Service worker registration failed:",
+            error
+          );
 
-          }
-        );
+        });
 
     }
   );
@@ -2712,9 +2149,9 @@ if (
 }
 
 
-/* ==================================================
-   OINANCE LINK APP LAUNCH SCREEN
-================================================== */
+/* =========================================================
+   SPLASH SCREEN
+   ========================================================= */
 
 window.addEventListener(
   "load",
@@ -2726,11 +2163,7 @@ window.addEventListener(
       );
 
 
-    if (!splash) {
-
-      return;
-
-    }
+    if (!splash) return;
 
 
     setTimeout(
@@ -2738,6 +2171,7 @@ window.addEventListener(
 
         splash.style.transition =
           "opacity 0.6s ease";
+
 
         splash.style.opacity =
           "0";

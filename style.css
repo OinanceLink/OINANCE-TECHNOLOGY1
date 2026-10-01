@@ -2298,3 +2298,63 @@ input {
   }
 
 }
+
+/* ==================================================
+   FORCE HOMEPAGE NEWS IMAGE SIZE
+   FINAL OVERRIDE
+================================================== */
+
+.news-card img,
+.news-grid .news-card img,
+.top-news-grid .news-card img,
+.editorial-news-grid .news-card img {
+  width: 100% !important;
+  height: 180px !important;
+  min-height: 180px !important;
+  max-height: 180px !important;
+  object-fit: cover !important;
+  display: block !important;
+}
+
+/* Keep the main featured story large */
+.featured-article img,
+.featured-image {
+  height: 420px !important;
+  min-height: 420px !important;
+  max-height: 420px !important;
+  object-fit: cover !important;
+}
+
+/* Top News first/main card */
+.top-news-grid .news-card:first-child img {
+  height: 300px !important;
+  min-height: 300px !important;
+  max-height: 300px !important;
+  object-fit: cover !important;
+}
+
+/* Mobile */
+@media (max-width: 600px) {
+
+  .news-card img,
+  .news-grid .news-card img,
+  .editorial-news-grid .news-card img {
+    height: 165px !important;
+    min-height: 165px !important;
+    max-height: 165px !important;
+    object-fit: cover !important;
+  }
+
+  .top-news-grid .news-card:first-child img {
+    height: 190px !important;
+    min-height: 190px !important;
+    max-height: 190px !important;
+  }
+
+  .featured-article img,
+  .featured-image {
+    height: 350px !important;
+    min-height: 350px !important;
+    max-height: 350px !important;
+  }
+}

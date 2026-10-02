@@ -1960,6 +1960,111 @@
 
 <script src="script.js"></script>
 
+  <script>
+document.addEventListener("DOMContentLoaded", function () {
+
+  /* ================================
+     MOBILE MENU
+  ================================= */
+
+  const menuButton = document.getElementById("menuToggle");
+  const mobileMenu = document.getElementById("mobileMenu");
+
+  if (menuButton && mobileMenu) {
+
+    menuButton.addEventListener("click", function (event) {
+      event.preventDefault();
+      event.stopPropagation();
+
+      mobileMenu.classList.toggle("open");
+
+      if (mobileMenu.classList.contains("open")) {
+        menuButton.innerHTML = "✕";
+        menuButton.setAttribute("aria-expanded", "true");
+      } else {
+        menuButton.innerHTML = "☰";
+        menuButton.setAttribute("aria-expanded", "false");
+      }
+    });
+
+    /* Close menu when a menu link is tapped */
+    mobileMenu.querySelectorAll("a").forEach(function (link) {
+      link.addEventListener("click", function () {
+        mobileMenu.classList.remove("open");
+        menuButton.innerHTML = "☰";
+        menuButton.setAttribute("aria-expanded", "false");
+      });
+    });
+  }
+
+
+  /* ================================
+     SEARCH BUTTON
+  ================================= */
+
+  const searchButton = document.getElementById("searchToggle");
+  const searchPanel = document.getElementById("searchPanel");
+
+  if (searchButton && searchPanel) {
+
+    searchButton.addEventListener("click", function (event) {
+      event.preventDefault();
+      event.stopPropagation();
+
+      searchPanel.classList.toggle("open");
+
+      if (searchPanel.classList.contains("open")) {
+
+        searchButton.setAttribute("aria-expanded", "true");
+
+        const searchInput =
+          searchPanel.querySelector("input");
+
+        if (searchInput) {
+          setTimeout(function () {
+            searchInput.focus();
+          }, 100);
+        }
+
+      } else {
+
+        searchButton.setAttribute("aria-expanded", "false");
+      }
+    });
+  }
+
+
+  /* ================================
+     CLOSE SEARCH WITH ESC
+  ================================= */
+
+  document.addEventListener("keydown", function (event) {
+
+    if (event.key === "Escape") {
+
+      if (searchPanel) {
+        searchPanel.classList.remove("open");
+      }
+
+      if (mobileMenu) {
+        mobileMenu.classList.remove("open");
+      }
+
+      if (menuButton) {
+        menuButton.innerHTML = "☰";
+        menuButton.setAttribute("aria-expanded", "false");
+      }
+
+      if (searchButton) {
+        searchButton.setAttribute("aria-expanded", "false");
+      }
+    }
+
+  });
+
+});
+  </script>
+
 
 </body>
 

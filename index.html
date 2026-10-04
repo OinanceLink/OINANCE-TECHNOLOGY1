@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+
   <meta charset="UTF-8">
 
   <meta
@@ -17,20 +18,28 @@
 
   <title>OINANCE LINK — Technology & News</title>
 
-  <link rel="stylesheet" href="style.css">
+  <!-- Main stylesheet -->
+  <link rel="stylesheet" href="style.css?v=3">
+
 </head>
 
 <body>
 
-  <!-- =========================================
+
+  <!-- ==================================================
        HEADER
-  ========================================== -->
+  ================================================== -->
 
   <header class="site-header">
 
     <div class="header-inner">
 
-      <a href="index.html" class="brand">
+      <!-- LOGO -->
+
+      <a
+        href="index.html"
+        class="brand"
+      >
 
         <img
           src="IMG_20260916_192545.jpg"
@@ -39,8 +48,15 @@
         >
 
         <div class="brand-text">
-          <strong>OINANCE LINK</strong>
-          <span>TECHNOLOGY & NEWS</span>
+
+          <strong>
+            OINANCE LINK
+          </strong>
+
+          <span>
+            TECHNOLOGY & NEWS
+          </span>
+
         </div>
 
       </a>
@@ -48,34 +64,48 @@
 
       <!-- DESKTOP NAVIGATION -->
 
-      <nav class="desktop-nav">
+      <nav
+        class="desktop-nav"
+        aria-label="Main navigation"
+      >
 
-        <a href="#news">News</a>
+        <a href="#news">
+          News
+        </a>
 
-        <a href="#markets">Markets</a>
+        <a href="#markets">
+          Markets
+        </a>
 
-        <a href="#technology">Technology</a>
+        <a href="#technology">
+          Technology
+        </a>
 
-        <a href="#business">Business</a>
+        <a href="#business">
+          Business
+        </a>
 
-        <a href="#about">About</a>
+        <a href="#about">
+          About
+        </a>
 
       </nav>
 
 
-      <!-- SEARCH -->
+      <!-- SEARCH BUTTON -->
 
       <button
         type="button"
         class="search-button"
         id="searchToggle"
         aria-label="Open search"
+        aria-expanded="false"
       >
         🔎
       </button>
 
 
-      <!-- MOBILE MENU -->
+      <!-- MOBILE MENU BUTTON -->
 
       <button
         type="button"
@@ -90,7 +120,9 @@
     </div>
 
 
-    <!-- SEARCH PANEL -->
+    <!-- ==================================================
+         SEARCH PANEL
+    ================================================== -->
 
     <div
       class="search-panel"
@@ -119,48 +151,68 @@
     </div>
 
 
-    <!-- MOBILE NAVIGATION -->
+    <!-- ==================================================
+         MOBILE MENU
+    ================================================== -->
 
-    <div
+    <nav
       class="mobile-menu"
       id="mobileMenu"
+      aria-label="Mobile navigation"
     >
 
-      <a href="#news">News</a>
+      <a href="#news">
+        News
+      </a>
 
-      <a href="#markets">Markets</a>
+      <a href="#markets">
+        Markets
+      </a>
 
-      <a href="#technology">Technology</a>
+      <a href="#technology">
+        Technology
+      </a>
 
-      <a href="#business">Business</a>
+      <a href="#business">
+        Business
+      </a>
 
-      <a href="#about">About</a>
+      <a href="#about">
+        About
+      </a>
 
-    </div>
+    </nav>
 
   </header>
 
 
-
-  <!-- =========================================
+  <!-- ==================================================
        MAIN
-  ========================================== -->
+  ================================================== -->
 
   <main>
 
 
-    <!-- =======================================
+    <!-- ==================================================
          HERO
-    ======================================== -->
+    ================================================== -->
 
     <section class="hero">
 
       <div class="hero-inner">
 
         <div class="hero-label">
-          OINANCE LINK
-          <span>NEWSROOM</span>
+
+          <span>
+            OINANCE LINK
+          </span>
+
+          <strong>
+            NEWSROOM
+          </strong>
+
         </div>
+
 
         <h1>
           Technology, markets
@@ -168,10 +220,11 @@
           the future.
         </h1>
 
+
         <p>
-          Independent coverage of technology, finance,
-          business, economics, markets and the people
-          building what comes next.
+          Independent coverage of technology,
+          finance, business, economics, markets
+          and the people building what comes next.
         </p>
 
       </div>
@@ -179,10 +232,9 @@
     </section>
 
 
-
-    <!-- =======================================
+    <!-- ==================================================
          MARKET BAR
-    ======================================== -->
+    ================================================== -->
 
     <section
       class="market-bar"
@@ -191,13 +243,19 @@
 
       <div class="market-bar-inner">
 
+
         <div class="market-label">
           MARKETS
         </div>
 
+
+        <!-- BTC -->
+
         <div class="market-item">
 
-          <span>BTC</span>
+          <span>
+            BTC
+          </span>
 
           <strong id="btcPrice">
             Loading...
@@ -210,9 +268,13 @@
         </div>
 
 
+        <!-- ETH -->
+
         <div class="market-item">
 
-          <span>ETH</span>
+          <span>
+            ETH
+          </span>
 
           <strong id="ethPrice">
             Loading...
@@ -225,9 +287,13 @@
         </div>
 
 
+        <!-- BNB -->
+
         <div class="market-item">
 
-          <span>BNB</span>
+          <span>
+            BNB
+          </span>
 
           <strong id="bnbPrice">
             Loading...
@@ -240,9 +306,13 @@
         </div>
 
 
+        <!-- SOL -->
+
         <div class="market-item">
 
-          <span>SOL</span>
+          <span>
+            SOL
+          </span>
 
           <strong id="solPrice">
             Loading...
@@ -259,10 +329,9 @@
     </section>
 
 
-
-    <!-- =======================================
+    <!-- ==================================================
          NEWS
-    ======================================== -->
+    ================================================== -->
 
     <section
       class="section"
@@ -286,7 +355,7 @@
       </div>
 
 
-      <!-- FEATURED ARTICLE -->
+      <!-- FEATURED -->
 
       <div
         class="featured-news"
@@ -327,6 +396,7 @@
 
         </article>
 
+
         <article class="news-card">
 
           <div class="news-placeholder">
@@ -334,6 +404,7 @@
           </div>
 
         </article>
+
 
         <article class="news-card">
 
@@ -348,10 +419,9 @@
     </section>
 
 
-
-    <!-- =======================================
+    <!-- ==================================================
          TECHNOLOGY
-    ======================================== -->
+    ================================================== -->
 
     <section
       class="section dark-section"
@@ -369,8 +439,9 @@
         </h2>
 
         <p>
-          AI, software, digital products, innovation
-          and the technologies shaping tomorrow.
+          AI, software, digital products,
+          innovation and the technologies
+          shaping tomorrow.
         </p>
 
       </div>
@@ -378,9 +449,12 @@
 
       <div class="simple-grid">
 
+
         <article class="feature-box">
 
-          <span>01</span>
+          <span>
+            01
+          </span>
 
           <h3>
             Artificial Intelligence
@@ -396,7 +470,9 @@
 
         <article class="feature-box">
 
-          <span>02</span>
+          <span>
+            02
+          </span>
 
           <h3>
             Digital Innovation
@@ -412,7 +488,9 @@
 
         <article class="feature-box">
 
-          <span>03</span>
+          <span>
+            03
+          </span>
 
           <h3>
             Future Technology
@@ -430,10 +508,9 @@
     </section>
 
 
-
-    <!-- =======================================
+    <!-- ==================================================
          BUSINESS
-    ======================================== -->
+    ================================================== -->
 
     <section
       class="section"
@@ -461,6 +538,7 @@
 
       <div class="business-layout">
 
+
         <div class="business-main">
 
           <div class="business-placeholder">
@@ -473,17 +551,30 @@
         <div class="business-side">
 
           <article>
-            <span>MARKETS</span>
+
+            <span>
+              MARKETS
+            </span>
+
             <h3>
-              Global markets and financial developments.
+              Global markets and financial
+              developments.
             </h3>
+
           </article>
 
+
           <article>
-            <span>ECONOMICS</span>
+
+            <span>
+              ECONOMICS
+            </span>
+
             <h3>
-              Understanding the forces shaping economies.
+              Understanding the forces
+              shaping economies.
             </h3>
+
           </article>
 
         </div>
@@ -493,10 +584,9 @@
     </section>
 
 
-
-    <!-- =======================================
+    <!-- ==================================================
          ABOUT
-    ======================================== -->
+    ================================================== -->
 
     <section
       class="section about-section"
@@ -526,10 +616,9 @@
     </section>
 
 
-
-    <!-- =======================================
+    <!-- ==================================================
          NEWSLETTER
-    ======================================== -->
+    ================================================== -->
 
     <section class="newsletter">
 
@@ -558,6 +647,7 @@
             type="email"
             id="newsletterEmail"
             placeholder="Your email address"
+            autocomplete="email"
             required
           >
 
@@ -574,14 +664,14 @@
   </main>
 
 
-
-  <!-- =========================================
+  <!-- ==================================================
        FOOTER
-  ========================================== -->
+  ================================================== -->
 
   <footer class="site-footer">
 
     <div class="footer-inner">
+
 
       <a
         href="index.html"
@@ -638,7 +728,8 @@
     <div class="footer-bottom">
 
       <span>
-        © <span id="currentYear"></span>
+        ©
+        <span id="currentYear"></span>
         OINANCE LINK
       </span>
 
@@ -651,9 +742,18 @@
   </footer>
 
 
-  <!-- JavaScript will be added in Step 3 -->
+  <!-- ==================================================
+       JAVASCRIPT
+       
+       ?v=3 forces the browser/GitHub Pages
+       to request the newest JavaScript.
+  ================================================== -->
 
-  <script src="script.js"></script>
+  <script
+    src="script.js?v=3"
+    defer
+  ></script>
+
 
 </body>
 </html>

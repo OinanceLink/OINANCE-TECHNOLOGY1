@@ -1,7 +1,7 @@
 /* =========================================================
    OINANCE LINK
    TECHNOLOGY & NEWS
-   CLEAN FOUNDATION
+   CLEAN NEWSROOM DESIGN
 ========================================================= */
 
 * {
@@ -20,19 +20,14 @@ body {
   line-height: 1.5;
 }
 
-body,
-button,
-input {
-  font-family: Arial, Helvetica, sans-serif;
-}
-
 a {
   color: inherit;
   text-decoration: none;
 }
 
-button {
-  cursor: pointer;
+button,
+input {
+  font: inherit;
 }
 
 
@@ -46,10 +41,10 @@ button {
   z-index: 1000;
 
   background: rgba(5, 5, 5, 0.96);
-  border-bottom: 1px solid #242424;
 
-  backdrop-filter: blur(16px);
-  -webkit-backdrop-filter: blur(16px);
+  border-bottom: 1px solid #252525;
+
+  backdrop-filter: blur(14px);
 }
 
 .header-inner {
@@ -64,7 +59,7 @@ button {
   display: flex;
   align-items: center;
 
-  gap: 30px;
+  gap: 28px;
 }
 
 
@@ -78,16 +73,16 @@ button {
 
   gap: 13px;
 
-  min-width: 250px;
+  min-width: 235px;
 }
 
 .brand-logo {
   width: 48px;
   height: 48px;
 
-  display: block;
-
   object-fit: cover;
+
+  display: block;
 
   border-radius: 10px;
 }
@@ -98,30 +93,26 @@ button {
 }
 
 .brand-text strong {
-  color: #fff;
-
   font-size: 20px;
-  font-weight: 700;
 
-  letter-spacing: 4px;
+  letter-spacing: 3px;
 
   line-height: 1;
 }
 
 .brand-text span {
-  margin-top: 7px;
+  margin-top: 6px;
 
   color: #777;
 
-  font-size: 9px;
-  font-weight: 600;
+  font-size: 10px;
 
-  letter-spacing: 4px;
+  letter-spacing: 3px;
 }
 
 
 /* =========================================================
-   DESKTOP NAV
+   DESKTOP NAVIGATION
 ========================================================= */
 
 .desktop-nav {
@@ -130,17 +121,17 @@ button {
   display: flex;
   align-items: center;
 
-  gap: 28px;
+  gap: 24px;
 }
 
 .desktop-nav a {
   color: #aaa;
 
-  font-size: 13px;
+  font-size: 14px;
+
   font-weight: 600;
 
-  transition:
-    color 0.2s ease;
+  transition: color 0.2s ease;
 }
 
 .desktop-nav a:hover {
@@ -159,12 +150,16 @@ button {
   flex-shrink: 0;
 
   border: 1px solid #333;
-  border-radius: 9px;
+
+  border-radius: 8px;
 
   background: #111;
+
   color: #fff;
 
-  font-size: 18px;
+  cursor: pointer;
+
+  font-size: 19px;
 
   transition:
     background 0.2s ease,
@@ -173,29 +168,8 @@ button {
 
 .search-button:hover {
   background: #181818;
+
   border-color: #555;
-}
-
-
-/* =========================================================
-   MOBILE MENU BUTTON
-========================================================= */
-
-.menu-button {
-  display: none;
-
-  width: 44px;
-  height: 44px;
-
-  flex-shrink: 0;
-
-  border: 1px solid #333;
-  border-radius: 9px;
-
-  background: #111;
-  color: #fff;
-
-  font-size: 22px;
 }
 
 
@@ -206,14 +180,19 @@ button {
 .search-panel {
   display: none;
 
-  width: 100%;
+  position: fixed;
 
-  padding: 18px 28px;
+  top: 78px;
+  left: 0;
+  right: 0;
+
+  z-index: 999;
+
+  padding: 20px;
 
   background: #0b0b0b;
 
-  border-top: 1px solid #222;
-  border-bottom: 1px solid #292929;
+  border-bottom: 1px solid #333;
 }
 
 .search-panel.open {
@@ -227,6 +206,7 @@ button {
   margin: 0 auto;
 
   display: flex;
+
   gap: 10px;
 }
 
@@ -235,11 +215,12 @@ button {
 
   min-width: 0;
 
-  padding: 15px 17px;
+  padding: 15px 16px;
 
-  background: #151515;
+  background: #171717;
 
   border: 1px solid #333;
+
   border-radius: 7px;
 
   color: #fff;
@@ -248,23 +229,21 @@ button {
 }
 
 .search-inner input:focus {
-  border-color: #666;
-}
-
-.search-inner input::placeholder {
-  color: #666;
+  border-color: #777;
 }
 
 .search-inner button {
   width: 50px;
 
   border: 1px solid #333;
+
   border-radius: 7px;
 
-  background: #151515;
+  background: #171717;
+
   color: #fff;
 
-  font-size: 16px;
+  cursor: pointer;
 }
 
 
@@ -272,10 +251,29 @@ button {
    MOBILE MENU
 ========================================================= */
 
-.mobile-menu {
+.menu-button {
   display: none;
 
-  padding: 8px 22px 20px;
+  width: 44px;
+  height: 44px;
+
+  flex-shrink: 0;
+
+  border: 1px solid #333;
+
+  border-radius: 8px;
+
+  background: #111;
+
+  color: #fff;
+
+  font-size: 22px;
+
+  cursor: pointer;
+}
+
+.mobile-menu {
+  display: none;
 
   background: #080808;
 
@@ -289,22 +287,19 @@ button {
 .mobile-menu a {
   display: block;
 
-  padding: 15px 0;
-
-  color: #bbb;
-
-  font-size: 15px;
-  font-weight: 600;
+  padding: 16px 25px;
 
   border-bottom: 1px solid #222;
-}
 
-.mobile-menu a:last-child {
-  border-bottom: 0;
+  color: #ccc;
+
+  font-size: 15px;
 }
 
 .mobile-menu a:hover {
   color: #fff;
+
+  background: #101010;
 }
 
 
@@ -324,7 +319,7 @@ button {
 
   margin: 0 auto;
 
-  padding: 90px 28px 82px;
+  padding: 95px 28px 85px;
 }
 
 .hero-label {
@@ -333,18 +328,25 @@ button {
 
   gap: 12px;
 
-  margin-bottom: 24px;
+  margin-bottom: 22px;
 
   color: #777;
 
   font-size: 11px;
-  font-weight: 700;
+
+  font-weight: bold;
 
   letter-spacing: 4px;
 }
 
 .hero-label span {
+  color: #777;
+}
+
+.hero-label strong {
   color: #e33;
+
+  font-weight: bold;
 }
 
 .hero h1 {
@@ -352,24 +354,21 @@ button {
 
   margin: 0;
 
-  color: #f7f7f7;
-
-  font-size: clamp(48px, 7vw, 92px);
-  font-weight: 700;
+  font-size: clamp(48px, 7vw, 88px);
 
   line-height: 0.98;
 
-  letter-spacing: -5px;
+  letter-spacing: -4px;
 }
 
 .hero p {
-  max-width: 720px;
+  max-width: 760px;
 
   margin: 30px 0 0;
 
   color: #888;
 
-  font-size: 19px;
+  font-size: 20px;
 
   line-height: 1.7;
 }
@@ -382,77 +381,70 @@ button {
 .market-bar {
   width: 100%;
 
+  overflow: hidden;
+
   background: #101010;
 
   border-bottom: 1px solid #292929;
-
-  overflow: hidden;
 }
 
 .market-bar-inner {
-  width: 100%;
-  max-width: 1450px;
+  width: max-content;
+  min-width: 100%;
 
-  min-height: 55px;
-
-  margin: 0 auto;
+  min-height: 58px;
 
   padding: 0 28px;
 
   display: flex;
   align-items: center;
 
-  gap: 34px;
-
-  overflow-x: auto;
-
-  scrollbar-width: none;
-}
-
-.market-bar-inner::-webkit-scrollbar {
-  display: none;
+  gap: 42px;
 }
 
 .market-label {
-  flex-shrink: 0;
-
   color: #777;
 
-  font-size: 10px;
-  font-weight: 700;
+  font-size: 11px;
+
+  font-weight: bold;
 
   letter-spacing: 3px;
+
+  white-space: nowrap;
 }
 
 .market-item {
-  flex-shrink: 0;
-
   display: flex;
   align-items: center;
 
-  gap: 8px;
+  gap: 9px;
 
-  font-size: 13px;
+  white-space: nowrap;
 }
 
 .market-item span {
-  color: #aaa;
+  color: #888;
 
-  font-weight: 700;
+  font-size: 12px;
+
+  font-weight: bold;
 }
 
 .market-item strong {
   color: #eee;
 
-  font-weight: 700;
+  font-size: 14px;
 }
 
 .market-item em {
   color: #24c76b;
 
+  font-size: 12px;
+
   font-style: normal;
 
-  font-weight: 700;
+  font-weight: bold;
 }
 
 .market-up {
@@ -465,7 +457,7 @@ button {
 
 
 /* =========================================================
-   GENERAL SECTION
+   COMMON SECTION
 ========================================================= */
 
 .section {
@@ -482,10 +474,11 @@ button {
 }
 
 .eyebrow {
-  color: #e33;
+  color: #777;
 
-  font-size: 10px;
-  font-weight: 700;
+  font-size: 11px;
+
+  font-weight: bold;
 
   letter-spacing: 3px;
 }
@@ -493,16 +486,15 @@ button {
 .section-heading h2 {
   max-width: 850px;
 
-  margin: 12px 0 14px;
+  margin: 12px 0;
 
-  color: #f5f5f5;
+  color: #fff;
 
-  font-size: clamp(36px, 5vw, 58px);
-  font-weight: 700;
+  font-size: clamp(36px, 5vw, 55px);
 
-  line-height: 1.02;
+  line-height: 1.05;
 
-  letter-spacing: -3px;
+  letter-spacing: -2px;
 }
 
 .section-heading p {
@@ -525,23 +517,24 @@ button {
 .featured-news {
   width: 100%;
 
-  margin-bottom: 25px;
+  margin-bottom: 28px;
 }
 
 .featured-placeholder {
   min-height: 420px;
 
-  padding: 40px;
+  padding: 35px;
 
   display: flex;
   flex-direction: column;
+
   justify-content: flex-end;
 
   background:
     linear-gradient(
       135deg,
       #151515,
-      #0c0c0c
+      #090909
     );
 
   border: 1px solid #292929;
@@ -552,8 +545,9 @@ button {
 .featured-placeholder span {
   color: #e33;
 
-  font-size: 10px;
-  font-weight: 700;
+  font-size: 11px;
+
+  font-weight: bold;
 
   letter-spacing: 3px;
 }
@@ -566,11 +560,11 @@ button {
   font-size: clamp(30px, 5vw, 52px);
 
   line-height: 1.05;
-
-  letter-spacing: -2px;
 }
 
 .featured-placeholder p {
+  max-width: 700px;
+
   margin: 0;
 
   color: #888;
@@ -586,19 +580,20 @@ button {
 .news-grid {
   display: grid;
 
-  grid-template-columns: repeat(3, minmax(0, 1fr));
+  grid-template-columns:
+    repeat(3, minmax(0, 1fr));
 
-  gap: 20px;
+  gap: 22px;
 }
 
 .news-card {
+  min-width: 0;
+
   overflow: hidden;
 
   background: #101010;
 
   border: 1px solid #292929;
-
-  border-radius: 2px;
 
   transition:
     transform 0.2s ease,
@@ -620,16 +615,74 @@ button {
   align-items: center;
   justify-content: center;
 
-  color: #666;
-
-  font-size: 13px;
+  color: #555;
 
   text-align: center;
+
+  font-size: 14px;
+}
+
+.news-image {
+  width: 100%;
+
+  height: 210px;
+
+  display: block;
+
+  object-fit: cover;
+
+  background: #151515;
+}
+
+.news-content {
+  padding: 23px;
+}
+
+.news-category {
+  color: #e33;
+
+  font-size: 10px;
+
+  font-weight: bold;
+
+  letter-spacing: 2px;
+}
+
+.news-content h3 {
+  margin: 10px 0;
+
+  color: #fff;
+
+  font-size: 24px;
+
+  line-height: 1.15;
+}
+
+.news-content p {
+  margin: 0;
+
+  color: #999;
+
+  font-size: 15px;
+
+  line-height: 1.65;
+}
+
+.news-meta {
+  margin-top: 18px;
+
+  padding-top: 14px;
+
+  border-top: 1px solid #292929;
+
+  color: #666;
+
+  font-size: 11px;
 }
 
 
 /* =========================================================
-   TECHNOLOGY
+   DARK SECTIONS
 ========================================================= */
 
 .dark-section {
@@ -637,8 +690,9 @@ button {
 
   background: #0a0a0a;
 
-  border-top: 1px solid #242424;
-  border-bottom: 1px solid #242424;
+  border-top: 1px solid #252525;
+
+  border-bottom: 1px solid #252525;
 }
 
 .dark-section > .section-heading,
@@ -648,17 +702,27 @@ button {
 
   margin-left: auto;
   margin-right: auto;
+
+  padding-left: 28px;
+  padding-right: 28px;
 }
+
+.dark-section > .section-heading {
+  padding-top: 0;
+}
+
+
+/* =========================================================
+   TECHNOLOGY GRID
+========================================================= */
 
 .simple-grid {
   display: grid;
 
-  grid-template-columns: repeat(3, minmax(0, 1fr));
+  grid-template-columns:
+    repeat(3, minmax(0, 1fr));
 
   gap: 18px;
-
-  padding-left: 28px;
-  padding-right: 28px;
 }
 
 .feature-box {
@@ -685,15 +749,16 @@ button {
   color: #e33;
 
   font-size: 11px;
-  font-weight: 700;
+
+  font-weight: bold;
 
   letter-spacing: 2px;
 }
 
 .feature-box h3 {
-  margin: 70px 0 12px;
+  margin: 65px 0 12px;
 
-  font-size: 25px;
+  font-size: 24px;
 
   line-height: 1.15;
 }
@@ -705,7 +770,7 @@ button {
 
   font-size: 14px;
 
-  line-height: 1.7;
+  line-height: 1.6;
 }
 
 
@@ -716,74 +781,75 @@ button {
 .business-layout {
   display: grid;
 
-  grid-template-columns: 1.5fr 1fr;
+  grid-template-columns:
+    minmax(0, 1.5fr)
+    minmax(280px, 0.8fr);
 
-  gap: 20px;
+  gap: 25px;
 }
 
 .business-main {
-  min-height: 380px;
+  min-height: 400px;
 }
 
 .business-placeholder {
   width: 100%;
   height: 100%;
-  min-height: 380px;
-
-  padding: 30px;
+  min-height: 400px;
 
   display: flex;
-  align-items: flex-end;
+  align-items: center;
+  justify-content: center;
 
   background:
     linear-gradient(
       135deg,
       #151515,
-      #090909
+      #0b0b0b
     );
 
   border: 1px solid #292929;
 
-  color: #e33;
+  color: #555;
 
-  font-size: 11px;
-  font-weight: 700;
+  font-size: 12px;
 
-  letter-spacing: 3px;
+  font-weight: bold;
+
+  letter-spacing: 4px;
 }
 
 .business-side {
   display: flex;
   flex-direction: column;
 
-  gap: 20px;
+  border-top: 1px solid #292929;
 }
 
 .business-side article {
-  flex: 1;
+  padding: 25px 0;
 
-  padding: 28px;
-
-  background: #101010;
-
-  border: 1px solid #292929;
+  border-bottom: 1px solid #292929;
 }
 
-.business-side article span {
+.business-side span {
   color: #e33;
 
   font-size: 10px;
-  font-weight: 700;
+
+  font-weight: bold;
 
   letter-spacing: 2px;
 }
 
-.business-side article h3 {
-  margin: 18px 0 0;
+.business-side h3 {
+  margin: 9px 0 0;
 
-  font-size: 25px;
+  color: #ddd;
 
-  line-height: 1.2;
+  font-size: 20px;
+
+  line-height: 1.3;
 }
 
 
@@ -792,7 +858,6 @@ button {
 ========================================================= */
 
 .about-section {
-  border-top: 1px solid #252525;
   border-bottom: 1px solid #252525;
 }
 
@@ -801,25 +866,25 @@ button {
 }
 
 .about-content h2 {
-  margin: 15px 0 25px;
+  margin: 14px 0 25px;
 
-  font-size: clamp(40px, 6vw, 70px);
+  color: #fff;
 
-  line-height: 0.98;
+  font-size: clamp(38px, 5vw, 62px);
 
-  letter-spacing: -4px;
+  line-height: 1;
+
+  letter-spacing: -3px;
 }
 
 .about-content p {
-  max-width: 760px;
-
-  margin: 0;
+  max-width: 780px;
 
   color: #888;
 
   font-size: 18px;
 
-  line-height: 1.8;
+  line-height: 1.75;
 }
 
 
@@ -828,16 +893,20 @@ button {
 ========================================================= */
 
 .newsletter {
+  width: 100%;
+
   padding: 90px 28px;
 
-  background: #111;
+  background: #101010;
+
+  border-top: 1px solid #292929;
 
   border-bottom: 1px solid #292929;
 }
 
 .newsletter-inner {
   width: 100%;
-  max-width: 800px;
+  max-width: 850px;
 
   margin: 0 auto;
 
@@ -845,16 +914,17 @@ button {
 }
 
 .newsletter-inner h2 {
-  margin: 12px 0;
+  margin: 13px 0;
 
-  font-size: clamp(38px, 5vw, 60px);
+  font-size: clamp(36px, 5vw, 52px);
 
   line-height: 1;
-  letter-spacing: -3px;
 }
 
 .newsletter-inner p {
-  margin: 0;
+  max-width: 650px;
+
+  margin: 0 auto;
 
   color: #888;
 
@@ -877,12 +947,13 @@ button {
 
   min-width: 0;
 
-  padding: 15px 17px;
+  padding: 15px;
 
   background: #050505;
 
   border: 1px solid #333;
-  border-radius: 6px;
+
+  border-radius: 5px;
 
   color: #fff;
 
@@ -890,24 +961,25 @@ button {
 }
 
 .newsletter-form input:focus {
-  border-color: #666;
-}
-
-.newsletter-form input::placeholder {
-  color: #666;
+  border-color: #777;
 }
 
 .newsletter-form button {
   padding: 15px 22px;
 
   border: 0;
-  border-radius: 6px;
+
+  border-radius: 5px;
 
   background: #e33;
 
   color: #fff;
 
-  font-weight: 700;
+  font-weight: bold;
+
+  cursor: pointer;
+
+  transition: background 0.2s ease;
 }
 
 .newsletter-form button:hover {
@@ -920,6 +992,8 @@ button {
 ========================================================= */
 
 .site-footer {
+  width: 100%;
+
   padding: 45px 28px 25px;
 
   background: #050505;
@@ -932,8 +1006,9 @@ button {
   margin: 0 auto;
 
   display: flex;
-  align-items: center;
+
   justify-content: space-between;
+  align-items: center;
 
   gap: 30px;
 }
@@ -949,8 +1024,6 @@ button {
   width: 45px;
   height: 45px;
 
-  display: block;
-
   object-fit: cover;
 
   border-radius: 9px;
@@ -962,10 +1035,6 @@ button {
 }
 
 .footer-brand strong {
-  color: #ddd;
-
-  font-size: 13px;
-
   letter-spacing: 2px;
 }
 
@@ -974,7 +1043,7 @@ button {
 
   color: #666;
 
-  font-size: 8px;
+  font-size: 9px;
 
   letter-spacing: 2px;
 }
@@ -983,13 +1052,13 @@ button {
   display: flex;
   flex-wrap: wrap;
 
-  align-items: center;
+  gap: 20px;
 
-  gap: 22px;
+  align-items: center;
 }
 
 .footer-links a {
-  color: #666;
+  color: #777;
 
   font-size: 12px;
 
@@ -1009,9 +1078,8 @@ button {
   padding-top: 20px;
 
   display: flex;
-  justify-content: space-between;
 
-  gap: 20px;
+  justify-content: space-between;
 
   border-top: 1px solid #222;
 
@@ -1028,27 +1096,21 @@ button {
 @media (max-width: 1000px) {
 
   .desktop-nav {
-    gap: 18px;
+    gap: 15px;
   }
 
   .desktop-nav a {
     font-size: 12px;
   }
 
-  .brand {
-    min-width: 220px;
-  }
-
   .news-grid {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
+    grid-template-columns:
+      repeat(2, minmax(0, 1fr));
   }
 
   .simple-grid {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-  }
-
-  .business-layout {
-    grid-template-columns: 1fr;
+    grid-template-columns:
+      repeat(2, minmax(0, 1fr));
   }
 
 }
@@ -1058,41 +1120,45 @@ button {
    MOBILE
 ========================================================= */
 
-@media (max-width: 800px) {
+@media (max-width: 900px) {
+
+  .desktop-nav {
+    display: none;
+  }
+
+  .menu-button {
+    display: block;
+
+    margin-left: 0;
+  }
 
   .header-inner {
-    min-height: 70px;
-
-    padding: 0 16px;
+    padding: 0 18px;
 
     gap: 10px;
   }
 
   .brand {
-    min-width: 0;
-
     flex: 1;
+
+    min-width: 0;
   }
 
   .brand-logo {
-    width: 43px;
-    height: 43px;
+    width: 46px;
+    height: 46px;
   }
 
   .brand-text strong {
-    font-size: 16px;
+    font-size: 17px;
 
     letter-spacing: 3px;
   }
 
   .brand-text span {
-    font-size: 8px;
+    font-size: 9px;
 
-    letter-spacing: 2.5px;
-  }
-
-  .desktop-nav {
-    display: none;
+    letter-spacing: 2px;
   }
 
   .search-button {
@@ -1100,87 +1166,51 @@ button {
     height: 44px;
   }
 
-  .menu-button {
-    display: block;
-  }
-
-  .search-panel {
-    padding: 14px 16px;
-  }
-
-  .mobile-menu {
-    padding-left: 18px;
-    padding-right: 18px;
-  }
-
   .hero-inner {
-    padding: 65px 20px 60px;
+    padding: 70px 18px 65px;
   }
 
   .hero h1 {
-    font-size: clamp(45px, 13vw, 70px);
+    font-size: clamp(44px, 12vw, 65px);
 
     letter-spacing: -3px;
   }
 
   .hero p {
-    font-size: 16px;
-  }
-
-  .market-bar-inner {
-    padding: 0 18px;
-
-    gap: 25px;
+    font-size: 17px;
   }
 
   .section {
-    padding: 65px 20px;
+    padding: 70px 18px;
   }
 
-  .section-heading h2 {
-    font-size: 40px;
+  .featured-placeholder {
+    min-height: 350px;
 
-    letter-spacing: -2px;
+    padding: 25px;
   }
 
   .news-grid {
     grid-template-columns: 1fr;
   }
 
+  .business-layout {
+    grid-template-columns: 1fr;
+  }
+
   .simple-grid {
     grid-template-columns: 1fr;
-
-    padding-left: 20px;
-    padding-right: 20px;
   }
 
-  .feature-box {
-    min-height: 220px;
-  }
-
-  .business-placeholder {
-    min-height: 300px;
-  }
-
-  .newsletter {
-    padding: 70px 20px;
-  }
-
-  .newsletter-form {
-    flex-direction: column;
-  }
-
-  .newsletter-form button {
-    width: 100%;
+  .dark-section > .section-heading,
+  .dark-section > .simple-grid {
+    padding-left: 18px;
+    padding-right: 18px;
   }
 
   .footer-inner {
     align-items: flex-start;
 
-    flex-direction: column;
-  }
-
-  .footer-bottom {
     flex-direction: column;
   }
 
@@ -1191,7 +1221,46 @@ button {
    SMALL MOBILE
 ========================================================= */
 
-@media (max-width: 500px) {
+@media (max-width: 600px) {
+
+  .header-inner {
+    min-height: 72px;
+  }
+
+  .search-panel {
+    top: 72px;
+
+    padding: 14px;
+  }
+
+  .brand-logo {
+    width: 43px;
+    height: 43px;
+  }
+
+  .brand-text strong {
+    font-size: 15px;
+
+    letter-spacing: 2.5px;
+  }
+
+  .brand-text span {
+    margin-top: 5px;
+
+    font-size: 8px;
+
+    letter-spacing: 2px;
+  }
+
+  .search-button,
+  .menu-button {
+    width: 42px;
+    height: 42px;
+  }
+
+  .hero-inner {
+    padding: 60px 18px 55px;
+  }
 
   .hero-label {
     font-size: 9px;
@@ -1200,33 +1269,109 @@ button {
   }
 
   .hero h1 {
-    font-size: 46px;
+    font-size: 47px;
+
+    line-height: 1.02;
 
     letter-spacing: -2.5px;
   }
 
   .hero p {
-    font-size: 15px;
+    margin-top: 25px;
+
+    font-size: 16px;
+
+    line-height: 1.7;
+  }
+
+  .market-bar-inner {
+    min-height: 54px;
+
+    padding: 0 18px;
+
+    gap: 28px;
+  }
+
+  .market-label {
+    font-size: 9px;
+
+    letter-spacing: 2px;
+  }
+
+  .market-item {
+    gap: 7px;
+  }
+
+  .market-item span {
+    font-size: 11px;
+  }
+
+  .market-item strong {
+    font-size: 13px;
+  }
+
+  .market-item em {
+    font-size: 11px;
+  }
+
+  .section {
+    padding: 60px 18px;
+  }
+
+  .section-heading {
+    margin-bottom: 28px;
   }
 
   .section-heading h2 {
-    font-size: 35px;
+    font-size: 38px;
+
+    letter-spacing: -2px;
+  }
+
+  .section-heading p {
+    font-size: 16px;
   }
 
   .featured-placeholder {
-    min-height: 330px;
+    min-height: 320px;
 
-    padding: 25px;
+    padding: 22px;
   }
 
   .featured-placeholder h2 {
-    font-size: 30px;
+    font-size: 31px;
+  }
+
+  .news-image {
+    height: 185px;
+  }
+
+  .news-content {
+    padding: 20px;
+  }
+
+  .news-content h3 {
+    font-size: 23px;
+  }
+
+  .news-content p {
+    font-size: 14px;
+  }
+
+  .feature-box {
+    min-height: 220px;
+
+    padding: 22px;
   }
 
   .feature-box h3 {
-    margin-top: 50px;
+    margin-top: 45px;
 
-    font-size: 23px;
+    font-size: 22px;
+  }
+
+  .business-placeholder {
+    min-height: 300px;
   }
 
   .about-content h2 {
@@ -1239,8 +1384,28 @@ button {
     font-size: 16px;
   }
 
+  .newsletter {
+    padding: 65px 18px;
+  }
+
+  .newsletter-form {
+    flex-direction: column;
+  }
+
+  .newsletter-form button {
+    width: 100%;
+  }
+
   .footer-links {
-    gap: 15px;
+    gap: 14px;
+  }
+
+  .footer-bottom {
+    align-items: flex-start;
+
+    flex-direction: column;
+
+    gap: 8px;
   }
 
 }
